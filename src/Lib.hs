@@ -42,26 +42,21 @@ $(deriveJSON defaultOptions { fieldLabelModifier = snakeCase . drop 8 } ''Custom
 
 ---- API ENDPOINTS ----
 
-type StripeAPI = ChargeList :<|> CustomerList
+type StripeAPI = "v1" :> (ChargeList :<|> CustomerList)
 
 type ChargeList =
-  "v1" :> "charges"
+  "charges"
   :> Header "Stripe-Version" StripeVersion
   :> Header "Authorization"  StripeSecretKey
   :> Header "Stripe-Account" StripeAccountId
-  :> Get '[JSON] (Stripe [Charge])
+  :> Get '[JSON] (StripeResp [Charge])
 
 type CustomerList =
-  "v1" :> "customers"
+  "customers"
   :> Header "Stripe-Version" StripeVersion
   :> Header "Authorization"  StripeSecretKey
   :> Header "Stripe-Account" StripeAccountId
-  :> Get '[JSON] (Stripe [Customer])
-
--- type StripeAPI    = "v1" :> StripeHeaders :> StripeAPI'
--- type StripeAPI'   = ChargeList :<|> CustomerList
--- type ChargeList   = "charges" :> GetS '[JSON] [Charge]
--- type CustomerList = "customers" :> GetS '[JSON] [Customers]
+  :> Get '[JSON] (StripeResp [Customer])
 
 -- -- TODO possible ?
 -- type StripeAPI =
@@ -71,17 +66,21 @@ type CustomerList =
 --   "v1" :> StripeAPI'
 --
 -- type StripeAPI' =
---        "charges" :> Get '[JSON] (Stripe Charge)
---   :<|> "customers" :> Get '[JSON] (Stripe Customer)
+--        "charges" :> Get '[JSON] (StripeResp Charge)
+--   :<|> "customers" :> Get '[JSON] (StripeResp Customer)
 
 ---- ENDPOINT FUNCS ----
 
--- getCharges :: Maybe StripeSecretKey -> Maybe StripeVersion -> Maybe StripeAccountId -> ClientM (Stripe Charge)
--- getCustomers :: Maybe StripeSecretKey -> Maybe StripeVersion -> Maybe StripeAccountId -> ClientM (Stripe Customer)
+-- getCharges :: Maybe StripeSecretKey -> Maybe StripeVersion -> Maybe StripeAccountId -> ClientM (StripeResp Charge)
+-- getCustomers :: Maybe StripeSecretKey -> Maybe StripeVersion -> Maybe StripeAccountId -> ClientM (StripeResp Customer)
 -- getCharges :<|> getCustomers = client (Proxy :: Proxy StripeAPI)
 
-getCharges :: Maybe StripeAccountId -> ClientM (Stripe [Charge])
-getCustomers :: Maybe StripeAccountId -> ClientM (Stripe [Customer])
+type StripeConnect'  = Maybe StripeAccountId
+type StripeClient' a = StripeConnect' -> StripeClient a
+type StripeClient  a = ClientM (StripeResp a)
+
+getCharges :: StripeConnect' -> StripeClient [Charge]
+getCustomers :: StripeConnect' -> StripeClient [Customer]
 getCharges :<|> getCustomers = buildClientFuncs
   where
     buildClientFuncs = applyTo (Just secretKey) . applyTo (Just stripeVer) . client $ api
@@ -91,11 +90,11 @@ getCharges :<|> getCustomers = buildClientFuncs
 
 
 -- TODO
---   * flesh out data types
---   * add endpoints
 --   * errors
 --   * pagination
 --   * metadata
+--   ! flesh out data types
+--   ! (define needed and) add endpoints
 --   ? request IDs
 --   ? idempotency
 
@@ -114,14 +113,24 @@ instance ToHttpApiData StripeVersion where
 
 ---- GENERAL STRIPE DATA TYPES ----
 
-data Stripe a = Stripe
-  { stripeObject  :: String
-  , stripeUrl     :: String
-  , stripeHasMore :: Bool
-  , stripeData    :: a
+data StripeResp a = StripeResp
+  { stripeRespObject  :: String
+  , stripeRespUrl     :: String
+  , stripeRespHasMore :: Bool
+  , stripeRespData    :: a
   } deriving (Show, Generic)
 
-$(deriveJSON defaultOptions { fieldLabelModifier = snakeCase . drop 6 } ''Stripe)
+$(deriveJSON defaultOptions { fieldLabelModifier = snakeCase . drop 10 } ''StripeResp)
+
+data StripeConnect
+  = WithoutConnect
+  | WithConnect StripeAccountId
+
+connectToMaybe :: StripeConnect -> Maybe StripeAccountId
+connectToMaybe s =
+  case s of
+    WithoutConnect  -> Nothing
+    WithConnect id' -> Just id'
 
 -- type ResourceId = String
 -- data Pagination = Pagination
@@ -132,23 +141,12 @@ $(deriveJSON defaultOptions { fieldLabelModifier = snakeCase . drop 6 } ''Stripe
 -- pagination :: Pagination
 -- pagination = Pagination Nothing Nothing Nothing
 
--- data StripeConnect
---   = WithoutConnect
---   | WithConnect StripeAccountId
--- stripeConnectToMaybe :: StripeConnect -> Maybe StripeAccountId
--- stripeConnectToMaybe s =
---   case s of
---     WithoutConnect  -> Nothing
---     WithConnect id' -> Just id'
 
 
 ---- CLIENT RUNNER ----
 
-data StripeClient a = ClientM (Stripe a)
-
-stripe :: Maybe StripeAccountId -> (Maybe StripeAccountId -> ClientM a) -> IO (Either ServantError a)
-stripe mAccountId clientM = do
-  clientEnv >>= runClientM (clientM mAccountId)
+stripe :: StripeConnect -> StripeClient' a -> IO (Either ServantError (StripeResp a))
+stripe connect clientM = clientEnv >>= runClientM (clientM . connectToMaybe $ connect)
   where
     clientEnv = do
       manager <- newTlsManagerWith tlsManagerSettings
