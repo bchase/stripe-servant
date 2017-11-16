@@ -4,6 +4,7 @@
 {-# LANGUAGE DuplicateRecordFields      #-}
 {-# LANGUAGE NamedFieldPuns             #-}
 {-# LANGUAGE OverloadedStrings          #-}
+{-# LANGUAGE RecordWildCards            #-}
 {-# LANGUAGE ScopedTypeVariables        #-}
 {-# LANGUAGE TemplateHaskell            #-}
 {-# LANGUAGE TypeOperators              #-}
@@ -22,10 +23,64 @@ import           Servant.Client          (ServantError, ClientM, Scheme (Https),
                                           ClientEnv (ClientEnv), BaseUrl (BaseUrl),
                                           runClientM, client)
 
-import           Util                    (applyTo)
+
+-- TODO
+--   * errors
+-- X * pagination
+--   * metadata
+--   ! flesh out data types
+--   ! (define needed and) add endpoints
+--   ? request IDs
+--   ? idempotency
+--   - mv things to Stripe.Client/Stripe.Data/etc.
+--   - Persistent-style TH for type definitions/JSON
 
 
----- STRIPE DATA TYPES ----
+---- PAGINATION ----
+
+---- PUBLIC PAGINATION ----
+
+newtype ResourceId = ResourceId String
+
+data Pagination
+  = PaginateBy Int -- Nat
+  | PaginateStartingAfter ResourceId
+  | PaginateEndingBefore ResourceId
+
+---- PRIVATE PAGINATION ----
+
+newtype PaginationLimit         = PaginateBy' Int                   deriving (Generic)
+newtype PaginationStartingAfter = PaginateStartingAfter' ResourceId deriving (Generic)
+newtype PaginationEndingBefore  = PaginateEndingBefore' ResourceId  deriving (Generic)
+
+data Pagination' = Pagination'
+  { paginateBy            :: Maybe PaginationLimit
+  , paginateStartingAfter :: Maybe PaginationStartingAfter
+  , paginateEndingBefore  :: Maybe PaginationEndingBefore
+  }
+
+buildPagination :: [Pagination] -> Pagination'
+buildPagination = foldl updatePagination emptyPagination
+  where
+    emptyPagination = Pagination' Nothing Nothing Nothing
+    updatePagination p' p =
+      case p of
+        PaginateBy num            -> p' { paginateBy            = Just . PaginateBy'            $ num }
+        PaginateStartingAfter id' -> p' { paginateStartingAfter = Just . PaginateStartingAfter' $ id' }
+        PaginateEndingBefore id'  -> p' { paginateEndingBefore  = Just . PaginateEndingBefore'  $ id' }
+
+instance ToHttpApiData PaginationLimit where
+  toUrlPiece (PaginateBy' num) = T.pack . show $ num
+instance ToHttpApiData PaginationStartingAfter where
+  toUrlPiece (PaginateStartingAfter' (ResourceId id')) = T.pack . show $ id'
+instance ToHttpApiData PaginationEndingBefore where
+  toUrlPiece (PaginateEndingBefore' (ResourceId id')) = T.pack . show $ id'
+
+---- END PAGINATION ----
+
+
+
+---- STRIPE API DATA TYPES ----
 
 data Charge = Charge
   { chargeId       :: String
@@ -40,63 +95,39 @@ data Customer = Customer
   } deriving (Show, Generic)
 $(deriveJSON defaultOptions { fieldLabelModifier = snakeCase . drop 8 } ''Customer)
 
----- API ENDPOINTS ----
+---- STRIPE API ENDPOINTS ----
 
 type StripeAPI = "v1" :> (ChargeList :<|> CustomerList)
 
-type ChargeList =
-  "charges"
-  :> Header "Stripe-Version" StripeVersion
-  :> Header "Authorization"  StripeSecretKey
-  :> Header "Stripe-Account" StripeAccountId
-  :> Get '[JSON] (StripeResp [Charge])
+type StripeRoute route =
+     Header     "Stripe-Version" StripeVersion
+  :> Header     "Authorization"  StripeSecretKey
+  :> Header     "Stripe-Account" StripeAccountId
+  :> QueryParam "limit"          PaginationLimit
+  :> QueryParam "starting_after" PaginationStartingAfter
+  :> QueryParam "ending_before"  PaginationEndingBefore
+  :> route
 
-type CustomerList =
-  "customers"
-  :> Header "Stripe-Version" StripeVersion
-  :> Header "Authorization"  StripeSecretKey
-  :> Header "Stripe-Account" StripeAccountId
-  :> Get '[JSON] (StripeResp [Customer])
+type ChargeList = StripeRoute ("charges" :> Get '[JSON] (StripeJSON [Charge]))
+type CustomerList = StripeRoute ("customers" :> Get '[JSON] (StripeJSON [Customer]))
 
--- -- TODO possible ?
--- type StripeAPI =
---   Header "Authorization"  StripeSecretKey :>
---   Header "Stripe-Version" StripeVersion :>
---   Header "Stripe-Account" StripeAccountId :>
---   "v1" :> StripeAPI'
---
--- type StripeAPI' =
---        "charges" :> Get '[JSON] (StripeResp Charge)
---   :<|> "customers" :> Get '[JSON] (StripeResp Customer)
+---- STRIPE ENDPOINT FUNCS ----
 
----- ENDPOINT FUNCS ----
+type StripeClient a =
+     Maybe StripeVersion
+  -> Maybe StripeSecretKey
+  -> Maybe StripeAccountId
+  -> Maybe PaginationLimit
+  -> Maybe PaginationStartingAfter
+  -> Maybe PaginationEndingBefore
+  -> ClientM (StripeJSON a)
 
--- getCharges :: Maybe StripeSecretKey -> Maybe StripeVersion -> Maybe StripeAccountId -> ClientM (StripeResp Charge)
--- getCustomers :: Maybe StripeSecretKey -> Maybe StripeVersion -> Maybe StripeAccountId -> ClientM (StripeResp Customer)
--- getCharges :<|> getCustomers = client (Proxy :: Proxy StripeAPI)
-
-type StripeConnect'  = Maybe StripeAccountId
-type StripeClient' a = StripeConnect' -> StripeClient a
-type StripeClient  a = ClientM (StripeResp a)
-
-getCharges :: StripeConnect' -> StripeClient [Charge]
-getCustomers :: StripeConnect' -> StripeClient [Customer]
-getCharges :<|> getCustomers = buildClientFuncs
-  where
-    buildClientFuncs = applyTo (Just secretKey) . applyTo (Just stripeVer) . client $ api
-    api       = Proxy :: Proxy StripeAPI
-    stripeVer = StripeVersion'2017'08'15
-    secretKey = StripeSecretKey "sk_test_BQokikJOvBiI2HlWgH4olfQ2"
+getCharges :: StripeClient [Charge]
+getCustomers :: StripeClient [Customer]
+getCharges :<|> getCustomers = client (Proxy :: Proxy StripeAPI)
 
 
--- TODO
---   * errors
---   * pagination
---   * metadata
---   ! flesh out data types
---   ! (define needed and) add endpoints
---   ? request IDs
---   ? idempotency
+---- GENERAL STRIPE DATA TYPES ----
 
 ---- HEADER TYPES ----
 
@@ -111,45 +142,43 @@ instance ToHttpApiData StripeAccountId where
 instance ToHttpApiData StripeVersion where
   toUrlPiece StripeVersion'2017'08'15 = "2017-08-15"
 
----- GENERAL STRIPE DATA TYPES ----
 
-data StripeResp a = StripeResp
-  { stripeRespObject  :: String
-  , stripeRespUrl     :: String
-  , stripeRespHasMore :: Bool
-  , stripeRespData    :: a
+data StripeJSON a = StripeJSON
+  { stripeJsonObject  :: String
+  , stripeJsonUrl     :: String
+  , stripeJsonHasMore :: Bool
+  , stripeJsonData    :: a
   } deriving (Show, Generic)
 
-$(deriveJSON defaultOptions { fieldLabelModifier = snakeCase . drop 10 } ''StripeResp)
+$(deriveJSON defaultOptions { fieldLabelModifier = snakeCase . drop 10 } ''StripeJSON)
 
 data StripeConnect
   = WithoutConnect
   | WithConnect StripeAccountId
 
-connectToMaybe :: StripeConnect -> Maybe StripeAccountId
-connectToMaybe s =
-  case s of
-    WithoutConnect  -> Nothing
-    WithConnect id' -> Just id'
-
--- type ResourceId = String
--- data Pagination = Pagination
---   { pLimit         :: Maybe Int
---   , pStartingAfter :: Maybe ResourceId
---   , pEndingBefore  :: Maybe ResourceId
---   }
--- pagination :: Pagination
--- pagination = Pagination Nothing Nothing Nothing
-
 
 
 ---- CLIENT RUNNER ----
 
-stripe :: StripeConnect -> StripeClient' a -> IO (Either ServantError (StripeResp a))
-stripe connect clientM = clientEnv >>= runClientM (clientM . connectToMaybe $ connect)
+stripe :: StripeConnect -> [Pagination] -> StripeClient a -> IO (Either ServantError (StripeJSON a))
+stripe connect pagination clientM = clientEnv >>= runClientM clientM'
   where
+    clientM' =
+      clientM
+        (Just StripeVersion'2017'08'15)
+        (Just . StripeSecretKey $ "sk_test_BQokikJOvBiI2HlWgH4olfQ2")
+        (connectToMaybe connect)
+        paginateBy
+        paginateStartingAfter
+        paginateEndingBefore
+      where Pagination'{..} = buildPagination pagination
+
     clientEnv = do
       manager <- newTlsManagerWith tlsManagerSettings
-      let basePath = ""
-          url = BaseUrl Https "api.stripe.com" 443 basePath
+      let url = BaseUrl Https "api.stripe.com" 443 ""
       return $ ClientEnv manager url
+
+    connectToMaybe s =
+      case s of
+        WithoutConnect  -> Nothing
+        WithConnect id' -> Just id'
