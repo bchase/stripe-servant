@@ -12,29 +12,45 @@
 
 module Lib where
 
-import qualified Data.Text               as T
-import           Data.Proxy              (Proxy (Proxy))
-import           GHC.Generics            (Generic)
+import qualified Data.Text                 as T
+import qualified Data.ByteString           as B
+import qualified Data.ByteString.Char8     as C
+import qualified Data.Sequence             as Seq
+import           Data.CaseInsensitive      as CI
+import           Data.Maybe                (maybe)
+import           Data.Proxy                (Proxy (Proxy))
+import           GHC.Generics              (Generic)
 
-import           Data.Aeson.Casing       (snakeCase)
-import           Data.Aeson.TH           (Options (..), defaultOptions, deriveJSON)
-import           Network.HTTP.Client.TLS (newTlsManagerWith, tlsManagerSettings)
+import qualified Data.Aeson                as J
+import           Data.Aeson.Casing         (snakeCase)
+import           Data.Aeson.TH             (Options (..), defaultOptions, deriveJSON, deriveFromJSON)
+import           Network.HTTP.Client.TLS   (newTlsManagerWith, tlsManagerSettings)
+import qualified Network.HTTP.Types.Status as HTTP
+import qualified Network.HTTP.Types.Header as HTTP
 import           Servant.API
-import           Servant.Client          (ServantError, ClientM, Scheme (Https),
-                                          ClientEnv (ClientEnv), BaseUrl (BaseUrl),
-                                          runClientM, client)
+import           Servant.Client            (ServantError (..), ClientM, ClientEnv (ClientEnv),
+                                            Response (..), Scheme (Https), BaseUrl (BaseUrl),
+                                            runClientM, client)
 
 
+-- { "error":
+--   { "type": "invalid_request_error"    -- ErrorType
+--   , "message": "Invalid integer: asdf" -- String
+--   , "param": "amount"                  -- Param
+--   }
+-- }
+--
 -- TODO
 --   * errors
 -- X * pagination
 --   * metadata
+-- X ? request IDs
+--   ? idempotency
 --   ! flesh out data types
 --   ! (define needed and) add endpoints
---   ? request IDs
---   ? idempotency
 --   - mv things to Stripe.Client/Stripe.Data/etc.
 --   - Persistent-style TH for type definitions/JSON
+--   - change `String` to `Text`
 
 
 ---- PAGINATION ----
@@ -42,6 +58,7 @@ import           Servant.Client          (ServantError, ClientM, Scheme (Https),
 ---- PUBLIC PAGINATION ----
 
 newtype ResourceId = ResourceId String
+  deriving (Show, Generic, J.FromJSON)
 
 data Pagination
   = PaginateBy Int -- Nat
@@ -144,9 +161,10 @@ instance ToHttpApiData StripeVersion where
   toUrlPiece StripeVersion'2017'08'15 = "2017-08-15"
 
 
+type RequestId = String -- TODO newtype ?
 type StripeResp a = Headers '[Header "Request-Id" String] (StripeJSON a)
 data Stripe a = Stripe
-  { stripeRequestId :: String
+  { stripeRequestId :: RequestId
   , stripeJson      :: StripeJSON a
   } deriving (Show, Generic)
 
@@ -167,8 +185,10 @@ data StripeConnect
 
 ---- CLIENT RUNNER ----
 
-stripe :: StripeConnect -> [Pagination] -> StripeClient a -> IO (Either ServantError (Stripe a))
-stripe connect pagination clientM = clientEnv >>= runClientM clientM' >>= return . fmap stripeFromResp
+
+-- stripe :: StripeConnect -> [Pagination] -> StripeClient a -> IO (Either Error (Stripe a))
+stripe :: StripeConnect -> [Pagination] -> StripeClient a -> IO (Either StripeFailure (Stripe a))
+stripe connect pagination clientM = clientEnv >>= runClientM clientM' >>= buildStripe
   where
     clientM' =
       clientM
@@ -180,13 +200,6 @@ stripe connect pagination clientM = clientEnv >>= runClientM clientM' >>= return
         paginateEndingBefore
       where Pagination'{..} = buildPagination pagination
 
-    stripeFromResp :: StripeResp a -> Stripe a
-    stripeFromResp (Headers a hs) = Stripe (mReqId hs) a
-      where
-        mReqId :: HList '[Header "Request-Id" String] -> String
-        mReqId ((Header id' :: Header "Request-Id" String) `HCons` HNil) = id'
-        mReqId _ = ""
-
     clientEnv = do
       manager <- newTlsManagerWith tlsManagerSettings
       let url = BaseUrl Https "api.stripe.com" 443 ""
@@ -196,3 +209,45 @@ stripe connect pagination clientM = clientEnv >>= runClientM clientM' >>= return
       case s of
         WithoutConnect  -> Nothing
         WithConnect id' -> Just id'
+
+    -- buildStripe :: Either ServantError (StripeResp a) -> IO (Either Error (Stripe a))
+    buildStripe :: Either ServantError (StripeResp a) -> IO (Either StripeFailure (Stripe a))
+    buildStripe eResp =
+      case eResp of
+        Right resp -> return . Right . stripeFromResp $ resp
+        -- Left  err  -> return . Left . Error $ err
+        Left  err  -> return . Left . stripeError . Error $ err
+      where
+        stripeFromResp :: StripeResp a -> Stripe a
+        stripeFromResp (Headers a hs) = Stripe (mReqId hs) a
+
+        mReqId :: HList '[Header "Request-Id" String] -> String
+        mReqId ((Header id' :: Header "Request-Id" String) `HCons` HNil) = id'
+        mReqId _ = ""
+
+
+
+-- explType :: StripeErrorType -> String
+-- explType ApiConnectionError  = "Failure to connect to Stripe's API."
+-- explType ApiError            = "API errors cover any other type of problem (e.g., a temporary problem with Stripe's servers) and are extremely uncommon."
+-- explType AuthenticationError = "Failure to properly authenticate yourself in the request."
+-- explType CardError           = "Card errors are the most common type of error you should expect to handle. They result when the user enters a card that can't be charged for some reason."
+-- explType IdempotencyError    = "Idempotency errors occur when an Idempotency-Key is re-used on a request that does not match the API endpoint and parameters of the first."
+-- explType InvalidRequestError = "Invalid request errors arise when your request has invalid parameters."
+-- explType RateLimitError      = "Too many requests hit the API too quickly."
+-- explType ValidationError     = "Errors triggered by our client-side libraries when failing to validate fields (e.g., when a card number or expiration date is invalid or incomplete)."
+-- explType (UnrecognizedErrorType t) = t -- mconcat [ "[[stripe-client]] could not parse the following error type: \"", t , "\"" ]
+
+-- explCode :: StripeErrorCode -> String
+-- explCode InvalidNumber      = "The card number is not a valid credit card number."
+-- explCode InvalidExpiryMonth = "The card's expiration month is invalid."
+-- explCode InvalidExpiryYear  = "The card's expiration year is invalid."
+-- explCode InvalidCvc         = "The card's security code is invalid."
+-- explCode InvalidSwipeData   = "The card's swipe data is invalid."
+-- explCode IncorrectNumber    = "The card number is incorrect."
+-- explCode ExpiredCard        = "The card has expired."
+-- explCode IncorrectCvc       = "The card's security code is incorrect."
+-- explCode IncorrectZip       = "The card's zip code failed validation."
+-- explCode CardDeclined       = "The card was declined."
+-- explCode Missing            = "The re is no card on a customer that is being charged."
+-- explCode ProcessingError    = "An error occurred while processing the card."

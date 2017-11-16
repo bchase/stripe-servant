@@ -16,13 +16,18 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   exposed-modules:     Lib
+                     , Stripe.Error
                      , Util
   build-depends:       base >= 4.7 && < 5
                      , aeson
                      , aeson-casing
+                     , bytestring
+                     , case-insensitive
+                     , containers
                      , either
                      , http-client
                      , http-client-tls
+                     , http-types
                      , servant >= 0.12 && < 0.13
                      , servant-server >= 0.12 && < 0.13
                      , servant-client >= 0.12 && < 0.13
