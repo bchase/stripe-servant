@@ -7,6 +7,7 @@
 {-# LANGUAGE RecordWildCards            #-}
 {-# LANGUAGE ScopedTypeVariables        #-}
 {-# LANGUAGE TemplateHaskell            #-}
+{-# LANGUAGE TypeFamilies               #-}
 {-# LANGUAGE TypeOperators              #-}
 
 module Lib where
@@ -108,8 +109,8 @@ type StripeRoute route =
   :> QueryParam "ending_before"  PaginationEndingBefore
   :> route
 
-type ChargeList = StripeRoute ("charges" :> Get '[JSON] (StripeJSON [Charge]))
-type CustomerList = StripeRoute ("customers" :> Get '[JSON] (StripeJSON [Customer]))
+type ChargeList = StripeRoute ("charges" :> Get '[JSON] (StripeResp [Charge]))
+type CustomerList = StripeRoute ("customers" :> Get '[JSON] (StripeResp [Customer]))
 
 ---- STRIPE ENDPOINT FUNCS ----
 
@@ -120,7 +121,7 @@ type StripeClient a =
   -> Maybe PaginationLimit
   -> Maybe PaginationStartingAfter
   -> Maybe PaginationEndingBefore
-  -> ClientM (StripeJSON a)
+  -> ClientM (StripeResp a)
 
 getCharges :: StripeClient [Charge]
 getCustomers :: StripeClient [Customer]
@@ -143,6 +144,12 @@ instance ToHttpApiData StripeVersion where
   toUrlPiece StripeVersion'2017'08'15 = "2017-08-15"
 
 
+type StripeResp a = Headers '[Header "Request-Id" String] (StripeJSON a)
+data Stripe a = Stripe
+  { stripeRequestId :: String
+  , stripeJson      :: StripeJSON a
+  } deriving (Show, Generic)
+
 data StripeJSON a = StripeJSON
   { stripeJsonObject  :: String
   , stripeJsonUrl     :: String
@@ -160,8 +167,8 @@ data StripeConnect
 
 ---- CLIENT RUNNER ----
 
-stripe :: StripeConnect -> [Pagination] -> StripeClient a -> IO (Either ServantError (StripeJSON a))
-stripe connect pagination clientM = clientEnv >>= runClientM clientM'
+stripe :: StripeConnect -> [Pagination] -> StripeClient a -> IO (Either ServantError (Stripe a))
+stripe connect pagination clientM = clientEnv >>= runClientM clientM' >>= return . fmap stripeFromResp
   where
     clientM' =
       clientM
@@ -172,6 +179,13 @@ stripe connect pagination clientM = clientEnv >>= runClientM clientM'
         paginateStartingAfter
         paginateEndingBefore
       where Pagination'{..} = buildPagination pagination
+
+    stripeFromResp :: StripeResp a -> Stripe a
+    stripeFromResp (Headers a hs) = Stripe (mReqId hs) a
+      where
+        mReqId :: HList '[Header "Request-Id" String] -> String
+        mReqId ((Header id' :: Header "Request-Id" String) `HCons` HNil) = id'
+        mReqId _ = ""
 
     clientEnv = do
       manager <- newTlsManagerWith tlsManagerSettings
