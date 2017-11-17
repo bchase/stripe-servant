@@ -10,38 +10,26 @@
 {-# LANGUAGE TypeFamilies               #-}
 {-# LANGUAGE TypeOperators              #-}
 
-module Lib where
+module Stripe where
 
 import qualified Data.Text                 as T
-import qualified Data.ByteString           as B
-import qualified Data.ByteString.Char8     as C
-import qualified Data.Sequence             as Seq
-import           Data.CaseInsensitive      as CI
-import           Data.Maybe                (maybe)
 import           Data.Proxy                (Proxy (Proxy))
 import           GHC.Generics              (Generic)
 
-import qualified Data.Aeson                as J
 import           Data.Aeson.Casing         (snakeCase)
-import           Data.Aeson.TH             (Options (..), defaultOptions, deriveJSON, deriveFromJSON)
+import           Data.Aeson.TH             (Options (..), defaultOptions, deriveFromJSON)
 import           Network.HTTP.Client.TLS   (newTlsManagerWith, tlsManagerSettings)
-import qualified Network.HTTP.Types.Status as HTTP
-import qualified Network.HTTP.Types.Header as HTTP
 import           Servant.API
-import           Servant.Client            (ServantError (..), ClientM, ClientEnv (ClientEnv),
-                                            Response (..), Scheme (Https), BaseUrl (BaseUrl),
-                                            runClientM, client)
+import           Servant.Client            (ClientM, ClientEnv (ClientEnv),
+                                            Scheme (Https), BaseUrl (BaseUrl),
+                                            ServantError (..), runClientM, client)
+
+import           Stripe.Types              (ResourceId (ResourceId), RequestId)
+import           Stripe.Error              (StripeFailure (..), stripeError)
 
 
--- { "error":
---   { "type": "invalid_request_error"    -- ErrorType
---   , "message": "Invalid integer: asdf" -- String
---   , "param": "amount"                  -- Param
---   }
--- }
---
 -- TODO
---   * errors
+-- \ * errors
 -- X * pagination
 --   * metadata
 -- X ? request IDs
@@ -56,9 +44,6 @@ import           Servant.Client            (ServantError (..), ClientM, ClientEn
 ---- PAGINATION ----
 
 ---- PUBLIC PAGINATION ----
-
-newtype ResourceId = ResourceId String
-  deriving (Show, Generic, J.FromJSON)
 
 data Pagination
   = PaginateBy Int -- Nat
@@ -105,13 +90,13 @@ data Charge = Charge
   , chargeAmount   :: Int
   , chargeCurrency :: String
   } deriving (Show, Generic)
-$(deriveJSON defaultOptions { fieldLabelModifier = snakeCase . drop 6 } ''Charge)
+$(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 6 } ''Charge)
 
 data Customer = Customer
   { customerId    :: String
   , customerEmail :: Maybe String
   } deriving (Show, Generic)
-$(deriveJSON defaultOptions { fieldLabelModifier = snakeCase . drop 8 } ''Customer)
+$(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 8 } ''Customer)
 
 ---- STRIPE API ENDPOINTS ----
 
@@ -161,7 +146,6 @@ instance ToHttpApiData StripeVersion where
   toUrlPiece StripeVersion'2017'08'15 = "2017-08-15"
 
 
-type RequestId = String -- TODO newtype ?
 type StripeResp a = Headers '[Header "Request-Id" String] (StripeJSON a)
 data Stripe a = Stripe
   { stripeRequestId :: RequestId
@@ -175,7 +159,7 @@ data StripeJSON a = StripeJSON
   , stripeJsonData    :: a
   } deriving (Show, Generic)
 
-$(deriveJSON defaultOptions { fieldLabelModifier = snakeCase . drop 10 } ''StripeJSON)
+$(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 10 } ''StripeJSON)
 
 data StripeConnect
   = WithoutConnect
@@ -216,7 +200,7 @@ stripe connect pagination clientM = clientEnv >>= runClientM clientM' >>= buildS
       case eResp of
         Right resp -> return . Right . stripeFromResp $ resp
         -- Left  err  -> return . Left . Error $ err
-        Left  err  -> return . Left . stripeError . Error $ err
+        Left  err  -> return . Left . stripeError $ err
       where
         stripeFromResp :: StripeResp a -> Stripe a
         stripeFromResp (Headers a hs) = Stripe (mReqId hs) a
@@ -224,30 +208,3 @@ stripe connect pagination clientM = clientEnv >>= runClientM clientM' >>= buildS
         mReqId :: HList '[Header "Request-Id" String] -> String
         mReqId ((Header id' :: Header "Request-Id" String) `HCons` HNil) = id'
         mReqId _ = ""
-
-
-
--- explType :: StripeErrorType -> String
--- explType ApiConnectionError  = "Failure to connect to Stripe's API."
--- explType ApiError            = "API errors cover any other type of problem (e.g., a temporary problem with Stripe's servers) and are extremely uncommon."
--- explType AuthenticationError = "Failure to properly authenticate yourself in the request."
--- explType CardError           = "Card errors are the most common type of error you should expect to handle. They result when the user enters a card that can't be charged for some reason."
--- explType IdempotencyError    = "Idempotency errors occur when an Idempotency-Key is re-used on a request that does not match the API endpoint and parameters of the first."
--- explType InvalidRequestError = "Invalid request errors arise when your request has invalid parameters."
--- explType RateLimitError      = "Too many requests hit the API too quickly."
--- explType ValidationError     = "Errors triggered by our client-side libraries when failing to validate fields (e.g., when a card number or expiration date is invalid or incomplete)."
--- explType (UnrecognizedErrorType t) = t -- mconcat [ "[[stripe-client]] could not parse the following error type: \"", t , "\"" ]
-
--- explCode :: StripeErrorCode -> String
--- explCode InvalidNumber      = "The card number is not a valid credit card number."
--- explCode InvalidExpiryMonth = "The card's expiration month is invalid."
--- explCode InvalidExpiryYear  = "The card's expiration year is invalid."
--- explCode InvalidCvc         = "The card's security code is invalid."
--- explCode InvalidSwipeData   = "The card's swipe data is invalid."
--- explCode IncorrectNumber    = "The card number is incorrect."
--- explCode ExpiredCard        = "The card has expired."
--- explCode IncorrectCvc       = "The card's security code is incorrect."
--- explCode IncorrectZip       = "The card's zip code failed validation."
--- explCode CardDeclined       = "The card was declined."
--- explCode Missing            = "The re is no card on a customer that is being charged."
--- explCode ProcessingError    = "An error occurred while processing the card."

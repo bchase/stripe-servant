@@ -1,6 +1,7 @@
 module Main where
 
-import           Lib
+import           Stripe (StripeConnect (..), Pagination (..),
+                         stripe, getCustomers)
 
 
 main :: IO ()
