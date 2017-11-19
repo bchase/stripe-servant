@@ -15,6 +15,7 @@ module Stripe where
 import           Prelude                     hiding (ReadS)
 import qualified Data.Text                   as T
 import           Data.Proxy                  (Proxy (Proxy))
+import           Data.Either                 (either)
 import           GHC.Generics                (Generic)
 
 -- import           GHC.TypeLits                (Symbol)
@@ -26,7 +27,7 @@ import           Web.Internal.FormUrlEncoded (ToForm)
 import           Servant.API
 import           Servant.Client              (ClientM, ClientEnv (ClientEnv),
                                               Scheme (Https), BaseUrl (BaseUrl),
-                                              ServantError (..), runClientM, client)
+                                              runClientM, client)
 
 import           Stripe.Types                (ResourceId (ResourceId), RequestId)
 import           Stripe.Error                (StripeFailure (..), stripeError)
@@ -61,27 +62,27 @@ data StripeConnect
 
 ---- PUBLIC PAGINATION ----
 
-data Pagination
+data PaginationOpt
   = PaginateBy Int -- Nat
   | PaginateStartingAfter ResourceId
   | PaginateEndingBefore ResourceId
 
 ---- PRIVATE PAGINATION ----
 
-newtype PaginationLimit         = PaginateBy' Int                   deriving (Generic)
+newtype PaginationLimit         = PaginateBy'            Int        deriving (Generic)
 newtype PaginationStartingAfter = PaginateStartingAfter' ResourceId deriving (Generic)
-newtype PaginationEndingBefore  = PaginateEndingBefore' ResourceId  deriving (Generic)
+newtype PaginationEndingBefore  = PaginateEndingBefore'  ResourceId deriving (Generic)
 
-data Pagination' = Pagination'
+data PaginationOpts = PaginationOpts
   { paginateBy            :: Maybe PaginationLimit
   , paginateStartingAfter :: Maybe PaginationStartingAfter
   , paginateEndingBefore  :: Maybe PaginationEndingBefore
   }
 
-buildPagination :: [Pagination] -> Pagination'
+buildPagination :: [PaginationOpt] -> PaginationOpts
 buildPagination = foldl updatePagination emptyPagination
   where
-    emptyPagination = Pagination' Nothing Nothing Nothing
+    emptyPagination = PaginationOpts Nothing Nothing Nothing
     updatePagination p' p =
       case p of
         PaginateBy num            -> p' { paginateBy            = Just . PaginateBy'            $ num }
@@ -303,12 +304,14 @@ $(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 14 } ''S
 
 stripeList' :: StripeSecretKey
             -> StripeConnect
-            -> [Pagination]
+            -> [PaginationOpt]
             -> PreRunnableStripeListClient resp
             -> IO (Either StripeFailure (StripeList resp))
-stripeList' secretKey connect pagination clientM = clientEnv >>= runClientM clientM' >>= buildStripe
+stripeList' secretKey connect pagination clientM =
+  clientEnv >>= runClientM clientM' >>= return . either (Left . stripeError) (Right . stripeListFromResp)
+
   where
-    Pagination'{..} = buildPagination pagination
+    PaginationOpts{..} = buildPagination pagination
 
     clientM' =
       clientM
@@ -317,60 +320,45 @@ stripeList' secretKey connect pagination clientM = clientEnv >>= runClientM clie
         paginateEndingBefore
         (connectToMaybe connect)
         (Just secretKey)
-        (Just StripeVersion'2017'08'15)
+        (Just version)
 
-    clientEnv = do
-      manager <- newTlsManagerWith tlsManagerSettings
-      let url = BaseUrl Https "api.stripe.com" 443 ""
-      return $ ClientEnv manager url
+    stripeListFromResp :: StripeListResp a -> StripeList a
+    stripeListFromResp (Headers StripeListJSON{stripeListJsonHasMore, stripeListJsonData} hs) =
+      StripeList (getReqId hs) stripeListJsonHasMore stripeListJsonData
 
-    connectToMaybe s =
-      case s of
-        WithoutConnect  -> Nothing
-        WithConnect id' -> Just id'
-
-    buildStripe :: Either ServantError (StripeListResp a) -> IO (Either StripeFailure (StripeList a))
-    buildStripe eResp =
-      case eResp of
-        Right resp -> return . Right . stripeFromResp $ resp
-        Left  err  -> return . Left . stripeError $ err
-      where
-        stripeFromResp :: StripeListResp a -> StripeList a
-        stripeFromResp (Headers StripeListJSON{stripeListJsonHasMore, stripeListJsonData} hs) =
-          StripeList (mReqId hs) stripeListJsonHasMore stripeListJsonData
-
-        mReqId :: HList '[Header "Request-Id" String] -> String
-        mReqId ((Header id' :: Header "Request-Id" String) `HCons` HNil) = id'
-        mReqId _ = ""
-
-stripe' :: StripeSecretKey -> StripeConnect -> PreRunnableStripeClient resp -> IO (Either StripeFailure (Stripe resp))
-stripe' secretKey connect clientM = clientEnv >>= runClientM clientM' >>= buildStripe
+stripe' :: StripeSecretKey
+        -> StripeConnect
+        -> PreRunnableStripeClient resp
+        -> IO (Either StripeFailure (Stripe resp))
+stripe' secretKey connect clientM =
+  clientEnv >>= runClientM clientM' >>= return . either (Left . stripeError) (Right . stripeFromResp)
   where
     clientM' =
       clientM
         (connectToMaybe connect)
         (Just secretKey)
-        (Just StripeVersion'2017'08'15)
+        (Just version)
 
-    clientEnv = do
-      manager <- newTlsManagerWith tlsManagerSettings
-      let url = BaseUrl Https "api.stripe.com" 443 ""
-      return $ ClientEnv manager url
+    stripeFromResp :: StripeResp a -> Stripe a
+    stripeFromResp (Headers a hs) = Stripe (getReqId hs) a
 
-    connectToMaybe s =
-      case s of
-        WithoutConnect  -> Nothing
-        WithConnect id' -> Just id'
+---- CLIENT RUNNER HELPERS ----
 
-    buildStripe :: Either ServantError (StripeResp a) -> IO (Either StripeFailure (Stripe a))
-    buildStripe eResp =
-      case eResp of
-        Right resp -> return . Right . stripeFromResp $ resp
-        Left  err  -> return . Left . stripeError $ err
-      where
-        stripeFromResp :: StripeResp a -> Stripe a
-        stripeFromResp (Headers a hs) = Stripe (mReqId hs) a
+version :: StripeVersion
+version = StripeVersion'2017'08'15
 
-        mReqId :: HList '[Header "Request-Id" String] -> String
-        mReqId ((Header id' :: Header "Request-Id" String) `HCons` HNil) = id'
-        mReqId _ = ""
+getReqId :: HList '[Header "Request-Id" String] -> String
+getReqId ((Header id' :: Header "Request-Id" String) `HCons` HNil) = id'
+getReqId _ = ""
+
+connectToMaybe :: StripeConnect -> Maybe StripeAccountId
+connectToMaybe s =
+  case s of
+    WithoutConnect  -> Nothing
+    WithConnect id' -> Just id'
+
+clientEnv :: IO ClientEnv
+clientEnv = do
+  manager <- newTlsManagerWith tlsManagerSettings
+  let url = BaseUrl Https "api.stripe.com" 443 ""
+  return $ ClientEnv manager url
