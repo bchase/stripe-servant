@@ -165,10 +165,10 @@ type API =
 type CapId t = Capture "id" t
 type RBody t = ReqBody '[FormUrlEncoded] t
 
-type GetListS a = Get    '[JSON] (StripeResp a)
-type GetS     a = Get    '[JSON] (StripeResp a)
-type PostS    a = Post   '[JSON] (StripeResp a)
-type DeleteS  a = Delete '[JSON] (StripeResp a)
+type GetListS a = Get    '[JSON] (StripeListResp a)
+type GetS     a = Get    '[JSON] (StripeResp     a)
+type PostS    a = Post   '[JSON] (StripeResp     a)
+type DeleteS  a = Delete '[JSON] (StripeResp     a)
 
 type CustomerCreate =
      "v1"
@@ -216,12 +216,27 @@ type CustomerList =
   :> Header "Stripe-Account" StripeAccountId
   :> Header "Authorization"  StripeSecretKey
   :> Header "Stripe-Version" StripeVersion
-  :> GetS [Customer]
+  :> GetListS [Customer]
 
 
 ---- STRIPE ENDPOINT FUNCS ----
 
-type RunnableStripeClient a = ClientM (StripeResp a)
+type RunnableStripeListClient a = ClientM (StripeListResp a)
+type RunnableStripeClient     a = ClientM (StripeResp     a)
+
+type PreRunnableStripeListClient resp =
+     Maybe PaginationLimit
+  -> Maybe PaginationStartingAfter
+  -> Maybe PaginationEndingBefore
+  -> Maybe StripeAccountId
+  -> Maybe StripeSecretKey
+  -> Maybe StripeVersion
+  -> RunnableStripeListClient resp
+-- type PaginatedPreRunnableStripeClient resp =
+--      Maybe PaginationLimit
+--   -> Maybe PaginationStartingAfter
+--   -> Maybe PaginationEndingBefore
+--   -> PreRunnableStripeListClient resp
 
 type PreRunnableStripeClient resp =
      Maybe StripeAccountId
@@ -229,17 +244,11 @@ type PreRunnableStripeClient resp =
   -> Maybe StripeVersion
   -> RunnableStripeClient resp
 
-type PaginatedPreRunnableStripeClient resp =
-     Maybe PaginationLimit
-  -> Maybe PaginationStartingAfter
-  -> Maybe PaginationEndingBefore
-  -> PreRunnableStripeClient resp
-
-type ListS           resp =              PaginatedPreRunnableStripeClient resp
-type CreateS     req resp =       req -> PreRunnableStripeClient          resp
-type UpdateS  id req resp = id -> req -> PreRunnableStripeClient          resp
-type ReadS    id     resp = id ->        PreRunnableStripeClient          resp
-type DestroyS id     resp = id ->        PreRunnableStripeClient          resp
+type ListS           resp =              PreRunnableStripeListClient resp
+type CreateS     req resp =       req -> PreRunnableStripeClient     resp
+type UpdateS  id req resp = id -> req -> PreRunnableStripeClient     resp
+type ReadS    id     resp = id ->        PreRunnableStripeClient     resp
+type DestroyS id     resp = id ->        PreRunnableStripeClient     resp
 
 createCustomer :: CreateS CustomerCreateReq Customer
 readCustomer :: ReadS CustomerId Customer
@@ -247,26 +256,6 @@ updateCustomer :: UpdateS CustomerId CustomerUpdateReq Customer
 destroyCustomer :: DestroyS CustomerId Customer
 listCustomers :: ListS [Customer]
 createCustomer :<|> readCustomer :<|> updateCustomer :<|> destroyCustomer :<|> listCustomers = client (Proxy :: Proxy API)
-
-
--- stripe'' :: StripeSecretKey -> StripeConnect -> PreRunnableStripeClient resp -> IO (Either StripeFailure (Stripe resp))
--- stripe'' = undefined
---
--- stripe' :: StripeConnect -> PreRunnableStripeClient resp -> IO (Either StripeFailure (Stripe resp))
--- stripe' = stripe'' (StripeSecretKey "")
---
--- stripeList' :: StripeConnect -> [Pagination] -> PaginatedPreRunnableStripeClient resp -> IO (Either StripeFailure (Stripe resp))
--- stripeList' = undefined
---
---
--- -- foo :: IO ()
--- -- foo = do
--- --   let id' = CustomerId ""
--- --       req = CustomerUpdateReq Nothing Nothing
--- --   eCustomer <- stripe' WithoutConnect $ updateCustomer id' req
--- --   print eCustomer
--- --   return ()
-
 
 
 ---- GENERAL STRIPE DATA TYPES ----
@@ -285,7 +274,13 @@ instance ToHttpApiData StripeVersion where
   toUrlPiece StripeVersion'2017'08'15 = "2017-08-15"
 
 
-type StripeResp a = Headers '[Header "Request-Id" String] (StripeListJSON a)
+type StripeResp     a = Headers '[Header "Request-Id" String]                 a
+type StripeListResp a = Headers '[Header "Request-Id" String] (StripeListJSON a)
+
+data Stripe a = Stripe
+  { stripeRequestId :: RequestId
+  , stripeData      :: a
+  } deriving (Show, Generic)
 
 data StripeList a = StripeList
   { stripeListRequestId :: RequestId
@@ -306,7 +301,11 @@ $(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 14 } ''S
 
 ---- CLIENT RUNNER ----
 
-stripeList' :: StripeSecretKey -> StripeConnect -> [Pagination] -> PaginatedPreRunnableStripeClient resp -> IO (Either StripeFailure (StripeList resp))
+stripeList' :: StripeSecretKey
+            -> StripeConnect
+            -> [Pagination]
+            -> PreRunnableStripeListClient resp
+            -> IO (Either StripeFailure (StripeList resp))
 stripeList' secretKey connect pagination clientM = clientEnv >>= runClientM clientM' >>= buildStripe
   where
     Pagination'{..} = buildPagination pagination
@@ -319,7 +318,6 @@ stripeList' secretKey connect pagination clientM = clientEnv >>= runClientM clie
         (connectToMaybe connect)
         (Just secretKey)
         (Just StripeVersion'2017'08'15)
-        -- StripeSecretKey "sk_test_BQokikJOvBiI2HlWgH4olfQ2"
 
     clientEnv = do
       manager <- newTlsManagerWith tlsManagerSettings
@@ -331,13 +329,13 @@ stripeList' secretKey connect pagination clientM = clientEnv >>= runClientM clie
         WithoutConnect  -> Nothing
         WithConnect id' -> Just id'
 
-    buildStripe :: Either ServantError (StripeResp a) -> IO (Either StripeFailure (StripeList a))
+    buildStripe :: Either ServantError (StripeListResp a) -> IO (Either StripeFailure (StripeList a))
     buildStripe eResp =
       case eResp of
         Right resp -> return . Right . stripeFromResp $ resp
         Left  err  -> return . Left . stripeError $ err
       where
-        stripeFromResp :: StripeResp a -> StripeList a
+        stripeFromResp :: StripeListResp a -> StripeList a
         stripeFromResp (Headers StripeListJSON{stripeListJsonHasMore, stripeListJsonData} hs) =
           StripeList (mReqId hs) stripeListJsonHasMore stripeListJsonData
 
@@ -345,36 +343,34 @@ stripeList' secretKey connect pagination clientM = clientEnv >>= runClientM clie
         mReqId ((Header id' :: Header "Request-Id" String) `HCons` HNil) = id'
         mReqId _ = ""
 
--- stripe' :: StripeSecretKey -> StripeConnect -> PreRunnableStripeClient resp -> IO (Either StripeFailure (Stripe resp))
--- stripe' secretKey connect clientM = clientEnv >>= runClientM clientM' >>= buildStripe
---   where
---     clientM' =
---       clientM
---         (connectToMaybe connect)
---         (Just secretKey)
---         (Just StripeVersion'2017'08'15)
---         -- StripeSecretKey "sk_test_BQokikJOvBiI2HlWgH4olfQ2"
---
---     clientEnv = do
---       manager <- newTlsManagerWith tlsManagerSettings
---       let url = BaseUrl Https "api.stripe.com" 443 ""
---       return $ ClientEnv manager url
---
---     connectToMaybe s =
---       case s of
---         WithoutConnect  -> Nothing
---         WithConnect id' -> Just id'
---
---     buildStripe :: Either ServantError (StripeResp a) -> IO (Either StripeFailure (Stripe a))
---     buildStripe eResp =
---       case eResp of
---         Right resp -> return . Right . stripeFromResp $ resp
---         -- Left  err  -> return . Left . Error $ err
---         Left  err  -> return . Left . stripeError $ err
---       where
---         stripeFromResp :: StripeResp a -> Stripe a
---         stripeFromResp (Headers a hs) = Stripe (mReqId hs) a
---
---         mReqId :: HList '[Header "Request-Id" String] -> String
---         mReqId ((Header id' :: Header "Request-Id" String) `HCons` HNil) = id'
---         mReqId _ = ""
+stripe' :: StripeSecretKey -> StripeConnect -> PreRunnableStripeClient resp -> IO (Either StripeFailure (Stripe resp))
+stripe' secretKey connect clientM = clientEnv >>= runClientM clientM' >>= buildStripe
+  where
+    clientM' =
+      clientM
+        (connectToMaybe connect)
+        (Just secretKey)
+        (Just StripeVersion'2017'08'15)
+
+    clientEnv = do
+      manager <- newTlsManagerWith tlsManagerSettings
+      let url = BaseUrl Https "api.stripe.com" 443 ""
+      return $ ClientEnv manager url
+
+    connectToMaybe s =
+      case s of
+        WithoutConnect  -> Nothing
+        WithConnect id' -> Just id'
+
+    buildStripe :: Either ServantError (StripeResp a) -> IO (Either StripeFailure (Stripe a))
+    buildStripe eResp =
+      case eResp of
+        Right resp -> return . Right . stripeFromResp $ resp
+        Left  err  -> return . Left . stripeError $ err
+      where
+        stripeFromResp :: StripeResp a -> Stripe a
+        stripeFromResp (Headers a hs) = Stripe (mReqId hs) a
+
+        mReqId :: HList '[Header "Request-Id" String] -> String
+        mReqId ((Header id' :: Header "Request-Id" String) `HCons` HNil) = id'
+        mReqId _ = ""

@@ -8,7 +8,7 @@ import           Stripe
 main :: IO ()
 main = do
   stripeList WithoutConnect [ PaginateBy 10 ] listCustomers >>= print
-  stripe WithoutConnect (createCustomer createReq) >>= print
+  stripe WithoutConnect (createCustomer createReq)          >>= print
 
   -- -- create customer
   -- eCustomer <- stripe WithoutConnect (createCustomer createReq)
@@ -37,7 +37,7 @@ main = do
 
   where
     key = StripeSecretKey "sk_test_BQokikJOvBiI2HlWgH4olfQ2"
-    -- stripe = stripe' key
+    stripe = stripe' key
     stripeList = stripeList' key
-    -- token = Token "tok_mastercard"
-    -- createReq = minCustomerCreateReq token
+    token = Token "tok_mastercard"
+    createReq = minCustomerCreateReq token
