@@ -8,7 +8,7 @@ import           Stripe
 main :: IO ()
 main = do
   stripeList WithoutConnect [ PaginateBy 10 ] listCustomers >>= print
-  -- stripe WithoutConnect (createCustomer createReq) >>= print
+  stripe WithoutConnect (createCustomer createReq) >>= print
 
   -- -- create customer
   -- eCustomer <- stripe WithoutConnect (createCustomer createReq)
