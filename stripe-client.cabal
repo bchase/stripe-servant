@@ -26,6 +26,7 @@ library
                      , case-insensitive
                      , containers
                      , either
+                     , http-api-data
                      , http-client
                      , http-client-tls
                      , http-types
