@@ -46,7 +46,7 @@ import           Stripe.Error                (StripeFailure (..), stripeError)
 --   - change `String` to `Text`
 --
 -- TODO
---   - nested lists
+--   - nested CRUD
 --   - hardcode query param?
 --   e.g.
 --   GET https://api.stripe.com/v1/customers/{CUSTOMER_ID}/sources?object=bank_account
@@ -166,57 +166,27 @@ type CapId t = Capture "id" t
 type RBody t = ReqBody '[FormUrlEncoded] t
 
 type GetListS a = Get    '[JSON] (StripeListResp   a)
-type GetS     a = Get    '[JSON] (StripeResp       a)
+type GetShowS a = Get    '[JSON] (StripeResp       a)
 type PostS    a = Post   '[JSON] (StripeResp       a)
 type DeleteS  a = Delete '[JSON] (StripeDeleteResp a)
 
-type CustomerCreate =
-     "v1"
-  :> "customers"
-  :> RBody CustomerCreateReq
-  :> Header "Stripe-Account" StripeAccountId
+type StripeHeaders resp =
+     Header "Stripe-Account" StripeAccountId
   :> Header "Authorization"  StripeSecretKey
   :> Header "Stripe-Version" StripeVersion
-  :> PostS Customer
+  :> resp
 
-type CustomerRead =
-     "v1"
-  :> "customers"
-  :> CapId CustomerId
-  :> Header "Stripe-Account" StripeAccountId
-  :> Header "Authorization"  StripeSecretKey
-  :> Header "Stripe-Version" StripeVersion
-  :> GetS Customer
-
-type CustomerUpdate =
-     "v1"
-  :> "customers"
-  :> CapId CustomerId
-  :> RBody CustomerUpdateReq
-  :> Header "Stripe-Account" StripeAccountId
-  :> Header "Authorization"  StripeSecretKey
-  :> Header "Stripe-Version" StripeVersion
-  :> PostS Customer
-
-type CustomerDestroy =
-     "v1"
-  :> "customers"
-  :> CapId CustomerId
-  :> Header "Stripe-Account" StripeAccountId
-  :> Header "Authorization"  StripeSecretKey
-  :> Header "Stripe-Version" StripeVersion
-  :> DeleteS CustomerId
-
-type CustomerList =
-     "v1"
-  :> "customers"
-  :> QueryParam "limit"          PaginationLimit
+type StripePaginationQueryParams resp =
+     QueryParam "limit"          PaginationLimit
   :> QueryParam "starting_after" PaginationStartingAfter
   :> QueryParam "ending_before"  PaginationEndingBefore
-  :> Header "Stripe-Account" StripeAccountId
-  :> Header "Authorization"  StripeSecretKey
-  :> Header "Stripe-Version" StripeVersion
-  :> GetListS [Customer]
+  :> resp
+
+type CustomerCreate  = "v1" :> "customers" :> RBody CustomerCreateReq :> StripeHeaders (PostS Customer)
+type CustomerRead    = "v1" :> "customers" :> CapId CustomerId :> StripeHeaders (GetShowS Customer)
+type CustomerUpdate  = "v1" :> "customers" :> CapId CustomerId :> RBody CustomerUpdateReq :> StripeHeaders (PostS Customer)
+type CustomerDestroy = "v1" :> "customers" :> CapId CustomerId :> StripeHeaders (DeleteS CustomerId)
+type CustomerList    = "v1" :> "customers" :> StripePaginationQueryParams (StripeHeaders (GetListS [Customer]))
 
 
 ---- STRIPE ENDPOINT FUNCS ----
@@ -334,24 +304,6 @@ stripeList' secretKey connect pagination clientM =
     stripeListFromResp :: StripeListResp a -> StripeList a
     stripeListFromResp (Headers StripeListJSON{stripeListJsonHasMore, stripeListJsonData} hs) =
       StripeList (getReqId hs) stripeListJsonHasMore stripeListJsonData
-
--- stripeDelete' :: StripeSecretKey
---               -> StripeConnect
---               -> PreRunnableStripeListClient resp
---               -> IO (Either StripeFailure (StripeDelete resp))
--- stripeDelete' secretKey connect pagination clientM =
---   clientEnv >>= runClientM clientM' >>= return . either (Left . stripeError) (Right . stripeListFromResp)
---   where
---     clientM' =
---       clientM
---         (connectToMaybe connect)
---         (Just secretKey)
---         (Just version)
---
---     stripeDeleteResp :: StripeDeleteResp a -> StripeDelete a
---     stripeDeleteResp = undefined
---     -- stripeDeleteResp (Headers StripeListJSON{stripeListJsonHasMore, stripeListJsonData} hs) =
---     --   StripeList (getReqId hs) stripeListJsonHasMore stripeListJsonData
 
 stripeDelete' :: StripeSecretKey
               -> StripeConnect
