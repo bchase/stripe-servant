@@ -9,6 +9,8 @@ import           Stripe
 main :: IO ()
 main = do
   -- CREATE
+  let token = Token "tok_mastercard"
+      createReq = minCustomerCreateReq token
   (Right createResp) <- stripe WithoutConnect $ createCustomer createReq
   putStrLn . ((++) "[CREATE RESP] CUSTOMER DESCRIPTION: ") . show . customerDescription . stripeData $ createResp
 
@@ -36,11 +38,9 @@ main = do
   putStrLn . ((++) "[LIST RESP] CONTAINS CUSTOMER ID: ") . show . containsCustomerId custId . stripeListData $ listResp'
 
   where
-    containsCustomerId id' = any (\Customer{customerId} -> customerId == id')
+    containsCustomerId id' = any ((==) id' . customerId)
 
     key = StripeSecretKey "sk_test_BQokikJOvBiI2HlWgH4olfQ2"
     stripe = stripe' key
     stripeList = stripeList' key
     stripeDelete = stripeDelete' key
-    token = Token "tok_mastercard"
-    createReq = minCustomerCreateReq token

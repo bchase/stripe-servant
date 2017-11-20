@@ -221,29 +221,7 @@ type CustomerList =
 
 ---- STRIPE ENDPOINT FUNCS ----
 
-type RunnableStripeClient        a = ClientM (StripeResp        a)
-type RunnableStripeListClient    a = ClientM (StripeListResp    a)
-type RunnableStripeDeleteClient id = ClientM (StripeDeleteResp id)
-
-type PreRunnableStripeListClient resp =
-     Maybe PaginationLimit
-  -> Maybe PaginationStartingAfter
-  -> Maybe PaginationEndingBefore
-  -> Maybe StripeAccountId
-  -> Maybe StripeSecretKey
-  -> Maybe StripeVersion
-  -> RunnableStripeListClient resp
--- type PaginatedPreRunnableStripeClient resp =
---      Maybe PaginationLimit
---   -> Maybe PaginationStartingAfter
---   -> Maybe PaginationEndingBefore
---   -> PreRunnableStripeListClient resp
-
-type PreRunnableStripeDeleteClient id =
-     Maybe StripeAccountId
-  -> Maybe StripeSecretKey
-  -> Maybe StripeVersion
-  -> RunnableStripeDeleteClient id
+type RunnableStripeClient a = ClientM a
 
 type PreRunnableStripeClient resp =
      Maybe StripeAccountId
@@ -251,10 +229,22 @@ type PreRunnableStripeClient resp =
   -> Maybe StripeVersion
   -> RunnableStripeClient resp
 
+type PreRunnableStripeListClient resp =
+     Maybe PaginationLimit
+  -> Maybe PaginationStartingAfter
+  -> Maybe PaginationEndingBefore
+  -> PreRunnableStripeClient (StripeListResp resp)
+
+type PreRunnableStripeDeleteClient id =
+  PreRunnableStripeClient (StripeDeleteResp id)
+
+type PreRunnableStripeScalarClient resp =
+  PreRunnableStripeClient (StripeResp resp)
+
 type ListS           resp =              PreRunnableStripeListClient   resp
-type CreateS     req resp =       req -> PreRunnableStripeClient       resp
-type UpdateS  id req resp = id -> req -> PreRunnableStripeClient       resp
-type ReadS    id     resp = id ->        PreRunnableStripeClient       resp
+type CreateS     req resp =       req -> PreRunnableStripeScalarClient resp
+type UpdateS  id req resp = id -> req -> PreRunnableStripeScalarClient resp
+type ReadS    id     resp = id ->        PreRunnableStripeScalarClient resp
 type DestroyS id          = id ->        PreRunnableStripeDeleteClient   id
 
 createCustomer :: CreateS CustomerCreateReq Customer
@@ -382,7 +372,7 @@ stripeDelete' secretKey connect clientM =
 
 stripe' :: StripeSecretKey
         -> StripeConnect
-        -> PreRunnableStripeClient resp
+        -> PreRunnableStripeScalarClient resp
         -> IO (Either StripeFailure (Stripe resp))
 stripe' secretKey connect clientM =
   clientEnv >>= runClientM clientM' >>= return . either (Left . stripeError) (Right . stripeFromResp)
