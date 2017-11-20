@@ -1,6 +1,6 @@
-{-# LANGUAGE DeriveGeneric              #-}
-{-# LANGUAGE OverloadedStrings          #-}
-{-# LANGUAGE TemplateHaskell            #-}
+{-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell   #-}
 
 module Stripe.Error ( stripeError ) where
 
