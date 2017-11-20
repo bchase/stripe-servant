@@ -29,8 +29,8 @@ import           Servant.Client              (ClientM, ClientEnv (ClientEnv),
                                               Scheme (Https), BaseUrl (BaseUrl),
                                               runClientM, client)
 
-import           Stripe.Types                (ResourceId (ResourceId), RequestId)
-import           Stripe.Error                (StripeFailure (..), stripeError)
+import           Stripe.Error                (stripeError)
+import           Stripe.Types
 
 
 -- TODO
