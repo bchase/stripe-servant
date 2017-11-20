@@ -39,7 +39,6 @@ import           Stripe.Util                 (fromJsonString)
 --   ! (define needed and) add endpoints
 -- X - mv things to Stripe.Client/Stripe.Data/etc.
 --   - mv things to e.g. Resource/Customer.hs, Request/Customer.hs
---   - Persistent-style TH for type definitions/JSON -- TODO TODO TODO TODO ... use Persistent to generate resource/req types+json?
 --
 -- TODO mv most of this to `Stripe.API` and just reexport public API via this module
 --
@@ -58,6 +57,20 @@ import           Stripe.Util                 (fromJsonString)
 newtype ChargeId   = ChargeId   { unChargeId   :: T.Text } deriving (Eq, Show, Generic)
 newtype CustomerId = CustomerId { unCustomerId :: T.Text } deriving (Eq, Show, Generic)
 
+newtype Token = Token { unToken :: T.Text } deriving (Show, Generic)
+
+instance J.FromJSON ChargeId where
+  parseJSON = fromJsonString ChargeId
+instance J.FromJSON CustomerId where
+  parseJSON = fromJsonString CustomerId
+
+instance ToHttpApiData ChargeId where
+  toQueryParam = unChargeId
+instance ToHttpApiData CustomerId where
+  toQueryParam = unCustomerId
+instance ToHttpApiData Token where
+  toUrlPiece = unToken
+
 data Charge = Charge
   { chargeId       :: ChargeId
   , chargeAmount   :: Int
@@ -73,8 +86,6 @@ data Customer = Customer
 $(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 8 } ''Customer)
 
 -- Requests
-
-newtype Token = Token { unToken :: String } deriving (Show, Generic)
 
 data CustomerCreateReq = CustomerCreateReq
   { customerCreateSource      :: Token
@@ -94,18 +105,6 @@ instance F.ToForm CustomerUpdateReq where
   toForm = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 14 }
 emptyCustomerUpdateReq :: CustomerUpdateReq
 emptyCustomerUpdateReq = CustomerUpdateReq Nothing Nothing
-
-instance J.FromJSON ChargeId where
-  parseJSON = fromJsonString ChargeId
-instance J.FromJSON CustomerId where
-  parseJSON = fromJsonString CustomerId
-
-instance ToHttpApiData ChargeId where
-  toQueryParam = unChargeId
-instance ToHttpApiData CustomerId where
-  toQueryParam = unCustomerId
-instance ToHttpApiData Token where
-  toUrlPiece = T.pack . unToken
 
 
 ---- STRIPE API TYPE ----

@@ -53,14 +53,14 @@ instance ToHttpApiData PaginationEndingBefore where
 
 -- -- HEADER TYPES -- --
 
-newtype StripeSecretKey = StripeSecretKey String
-newtype StripeAccountId = StripeAccountId String
+newtype StripeSecretKey = StripeSecretKey { unStripeSecretKey :: T.Text }
+newtype StripeAccountId = StripeAccountId { unStripeAccountId :: T.Text }
 data    StripeVersion   = StripeVersion'2017'08'15
 
 instance ToHttpApiData StripeSecretKey where
-  toUrlPiece (StripeSecretKey key) = T.pack . mconcat $ [ "Bearer ", key ] -- TODO ++
+  toUrlPiece = mappend "Bearer " . unStripeSecretKey
 instance ToHttpApiData StripeAccountId where
-  toUrlPiece (StripeAccountId id') = T.pack id' -- TODO convert to {...} and `un*`
+  toUrlPiece = unStripeAccountId
 instance ToHttpApiData StripeVersion where
   toUrlPiece StripeVersion'2017'08'15 = "2017-08-15"
 
