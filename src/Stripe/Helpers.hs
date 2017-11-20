@@ -32,7 +32,7 @@ stripeDelete' = stripeRunner stripeDeleteFromResp
     stripeDeleteFromResp (Headers StripeDeleteJSON{stripeDeleteJsonId, stripeDeleteJsonDeleted} hs) =
       StripeDelete (getReqId hs) stripeDeleteJsonId stripeDeleteJsonDeleted
 
-stripeList' :: StripeSecretKey -> StripeConnect -> [PaginationOpt] -> StripeListClient a -> IO (StripeL a)
+stripeList' :: StripeSecretKey -> StripeConnect -> [PaginationOpt] -> StripeClientPaginated (StripeListResp a) -> IO (StripeL a)
 stripeList' secretKey connect pagination clientM =
   stripeRunner stripeListFromResp secretKey connect clientM'
   where

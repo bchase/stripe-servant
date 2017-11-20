@@ -29,16 +29,18 @@ import           Stripe.Util                 (fromJsonString)
 
 
 -- TODO
--- \ * errors -- TODO add status code `Int` to `StripeDecodeFailure`
+-- \ * errors -- TODO better Either (esp decode fail)
 -- X * pagination
 --   * metadata
 -- X ? request IDs
 --   ? idempotency
+--   ? change `String` to `Text`
 --   ! flesh out data types
 --   ! (define needed and) add endpoints
---   - mv things to Stripe.Client/Stripe.Data/etc.
+-- \ - mv things to Stripe.Client/Stripe.Data/etc.
 --   - Persistent-style TH for type definitions/JSON
---   - change `String` to `Text`
+--
+-- TODO mv most of this to `Stripe.API` and just reexport public API via this module
 --
 -- TODO
 --   - nested CRUD
@@ -50,23 +52,28 @@ import           Stripe.Util                 (fromJsonString)
 
 ---- STRIPE API DATA TYPES ----
 
+-- Resources
+
 newtype ChargeId   = ChargeId   { unChargeId   :: T.Text } deriving (Eq, Show, Generic)
 newtype CustomerId = CustomerId { unCustomerId :: T.Text } deriving (Eq, Show, Generic)
 
-instance ToHttpApiData ChargeId where
-  toQueryParam = unChargeId
-instance J.FromJSON ChargeId where
-  parseJSON = fromJsonString ChargeId
-instance ToHttpApiData CustomerId where
-  toQueryParam = unCustomerId
-instance J.FromJSON CustomerId where
-  parseJSON = fromJsonString CustomerId
+data Charge = Charge
+  { chargeId       :: ChargeId
+  , chargeAmount   :: Int
+  , chargeCurrency :: String
+  } deriving (Show, Generic)
+$(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 6 } ''Charge)
+
+data Customer = Customer
+  { customerId          :: CustomerId
+  , customerDescription :: Maybe String
+  , customerEmail       :: Maybe String
+  } deriving (Show, Generic)
+$(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 8 } ''Customer)
+
+-- Requests
 
 newtype Token = Token { unToken :: String } deriving (Show, Generic)
-
-instance ToHttpApiData Token where
-  toUrlPiece = T.pack . unToken
-
 
 data CustomerCreateReq = CustomerCreateReq
   { customerCreateSource      :: Token
@@ -87,22 +94,20 @@ instance F.ToForm CustomerUpdateReq where
 emptyCustomerUpdateReq :: CustomerUpdateReq
 emptyCustomerUpdateReq = CustomerUpdateReq Nothing Nothing
 
-data Charge = Charge
-  { chargeId       :: ChargeId
-  , chargeAmount   :: Int
-  , chargeCurrency :: String
-  } deriving (Show, Generic)
-$(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 6 } ''Charge)
+instance J.FromJSON ChargeId where
+  parseJSON = fromJsonString ChargeId
+instance J.FromJSON CustomerId where
+  parseJSON = fromJsonString CustomerId
 
-data Customer = Customer
-  { customerId          :: CustomerId
-  , customerDescription :: Maybe String
-  , customerEmail       :: Maybe String
-  } deriving (Show, Generic)
-$(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 8 } ''Customer)
+instance ToHttpApiData ChargeId where
+  toQueryParam = unChargeId
+instance ToHttpApiData CustomerId where
+  toQueryParam = unCustomerId
+instance ToHttpApiData Token where
+  toUrlPiece = T.pack . unToken
 
 
----- STRIPE API ENDPOINTS ----
+---- STRIPE API TYPE ----
 
 type API =
   CustomerCreate :<|> CustomerRead :<|> CustomerUpdate :<|> CustomerDestroy :<|> CustomerList
@@ -113,6 +118,7 @@ type CustomerUpdate  = "v1" :> "customers" :> CapId CustomerId :> RBody Customer
 type CustomerDestroy = "v1" :> "customers" :> CapId CustomerId :> StripeHeaders (DeleteS CustomerId)
 type CustomerList    = "v1" :> "customers" :> StripePaginationQueryParams (StripeHeaders (GetListS [Customer]))
 
+-- API Type Helper Types
 
 type CapId t = Capture "id" t
 type RBody t = ReqBody '[FormUrlEncoded] t
@@ -145,8 +151,10 @@ destroyCustomer :: DestroyS CustomerId
 listCustomers :: ListS [Customer]
 createCustomer :<|> readCustomer :<|> updateCustomer :<|> destroyCustomer :<|> listCustomers = client (Proxy :: Proxy API)
 
-type ListS           resp =              StripeListClient resp -- TODO
-type CreateS     req resp =       req -> StripeClient (StripeScalarResp resp)
-type UpdateS  id req resp = id -> req -> StripeClient (StripeScalarResp resp)
-type ReadS    id     resp = id ->        StripeClient (StripeScalarResp resp)
-type DestroyS id          = id ->        StripeClient (StripeDeleteResp   id)
+-- Endpoint Func Helper Types
+
+type ListS           resp =              StripeClientPaginated (StripeListResp   resp)
+type CreateS     req resp =       req -> StripeClient          (StripeScalarResp resp)
+type UpdateS  id req resp = id -> req -> StripeClient          (StripeScalarResp resp)
+type ReadS    id     resp = id ->        StripeClient          (StripeScalarResp resp)
+type DestroyS id          = id ->        StripeClient          (StripeDeleteResp   id)

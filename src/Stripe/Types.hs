@@ -215,8 +215,8 @@ type StripeClient resp =
   -> Maybe StripeVersion
   -> RunnableStripeClient resp
 
-type StripeListClient resp =
+type StripeClientPaginated resp =
      Maybe PaginationLimit
   -> Maybe PaginationStartingAfter
   -> Maybe PaginationEndingBefore
-  -> StripeClient (StripeListResp resp)
+  -> StripeClient resp
