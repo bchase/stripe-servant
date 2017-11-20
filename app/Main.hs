@@ -11,18 +11,18 @@ main = do
   -- CREATE
   let token = Token "tok_mastercard"
       createReq = minCustomerCreateReq token
-  (Right createResp) <- stripe WithoutConnect $ createCustomer createReq
+  (Right createResp) <- stripeScalar WithoutConnect $ createCustomer createReq
   putStrLn . ((++) "[CREATE RESP] CUSTOMER DESCRIPTION: ") . show . customerDescription . stripeData $ createResp
 
   let custId = customerId . stripeData $ createResp
 
   -- UPDATE
   let updateReq = emptyCustomerUpdateReq { customerUpdateDescription = Just "test" }
-  (Right updateResp) <- stripe WithoutConnect $ updateCustomer custId updateReq
+  (Right updateResp) <- stripeScalar WithoutConnect $ updateCustomer custId updateReq
   putStrLn . ((++) "[UPDATE RESP] CUSTOMER DESCRIPTION: ") . show . customerDescription . stripeData $ updateResp
 
   -- READ
-  (Right readResp) <- stripe WithoutConnect (readCustomer custId)
+  (Right readResp) <- stripeScalar WithoutConnect (readCustomer custId)
   putStrLn . ((++) "[READ RESP] CUSTOMER DESCRIPTION: ") . show . customerDescription . stripeData $ readResp
 
   -- LIST
@@ -41,6 +41,6 @@ main = do
     containsCustomerId id' = any ((==) id' . customerId)
 
     key = StripeSecretKey "sk_test_BQokikJOvBiI2HlWgH4olfQ2"
-    stripe = stripe' key
+    stripeScalar = stripeScalar' key
     stripeList = stripeList' key
     stripeDelete = stripeDelete' key

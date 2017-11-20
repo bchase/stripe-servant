@@ -45,6 +45,7 @@ import           Stripe.Error                (StripeFailure (..), stripeError)
 --   - Persistent-style TH for type definitions/JSON
 --   - change `String` to `Text`
 --
+-- TODO StripeListClient
 -- TODO
 --   - nested CRUD
 --   - hardcode query param?
@@ -166,8 +167,8 @@ type CapId t = Capture "id" t
 type RBody t = ReqBody '[FormUrlEncoded] t
 
 type GetListS a = Get    '[JSON] (StripeListResp   a)
-type GetShowS a = Get    '[JSON] (StripeResp       a)
-type PostS    a = Post   '[JSON] (StripeResp       a)
+type GetShowS a = Get    '[JSON] (StripeScalarResp a)
+type PostS    a = Post   '[JSON] (StripeScalarResp a)
 type DeleteS  a = Delete '[JSON] (StripeDeleteResp a)
 
 type StripeHeaders resp =
@@ -193,29 +194,24 @@ type CustomerList    = "v1" :> "customers" :> StripePaginationQueryParams (Strip
 
 type RunnableStripeClient a = ClientM a
 
-type PreRunnableStripeClient resp =
+type StripeClient resp =
      Maybe StripeAccountId
   -> Maybe StripeSecretKey
   -> Maybe StripeVersion
   -> RunnableStripeClient resp
 
-type PreRunnableStripeListClient resp =
+type StripeListClient resp =
      Maybe PaginationLimit
   -> Maybe PaginationStartingAfter
   -> Maybe PaginationEndingBefore
-  -> PreRunnableStripeClient (StripeListResp resp)
+  -> StripeClient (StripeListResp resp)
 
-type PreRunnableStripeDeleteClient id =
-  PreRunnableStripeClient (StripeDeleteResp id)
-
-type PreRunnableStripeScalarClient resp =
-  PreRunnableStripeClient (StripeResp resp)
-
-type ListS           resp =              PreRunnableStripeListClient   resp
-type CreateS     req resp =       req -> PreRunnableStripeScalarClient resp
-type UpdateS  id req resp = id -> req -> PreRunnableStripeScalarClient resp
-type ReadS    id     resp = id ->        PreRunnableStripeScalarClient resp
-type DestroyS id          = id ->        PreRunnableStripeDeleteClient   id
+-- type ListS           resp =              StripeClient (StripeListResp   resp)
+type ListS           resp =              StripeListClient resp
+type CreateS     req resp =       req -> StripeClient (StripeScalarResp resp)
+type UpdateS  id req resp = id -> req -> StripeClient (StripeScalarResp resp)
+type ReadS    id     resp = id ->        StripeClient (StripeScalarResp resp)
+type DestroyS id          = id ->        StripeClient (StripeDeleteResp   id)
 
 createCustomer :: CreateS CustomerCreateReq Customer
 readCustomer :: ReadS CustomerId Customer
@@ -241,11 +237,11 @@ instance ToHttpApiData StripeVersion where
   toUrlPiece StripeVersion'2017'08'15 = "2017-08-15"
 
 
-type StripeResp       a  = Headers '[Header "Request-Id" String]                    a
+type StripeScalarResp a  = Headers '[Header "Request-Id" String]                    a
 type StripeListResp   a  = Headers '[Header "Request-Id" String] (StripeListJSON    a)
 type StripeDeleteResp id = Headers '[Header "Request-Id" String] (StripeDeleteJSON id)
 
-data Stripe a = Stripe
+data StripeScalar a = StripeScalar
   { stripeRequestId :: RequestId
   , stripeData      :: a
   } deriving (Show, Generic)
@@ -282,61 +278,43 @@ $(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 16 } ''S
 
 ---- CLIENT RUNNER ----
 
-stripeList' :: StripeSecretKey
-            -> StripeConnect
-            -> [PaginationOpt]
-            -> PreRunnableStripeListClient resp
-            -> IO (Either StripeFailure (StripeList resp))
+type Stripe  a  = Either StripeFailure a
+type StripeS a  = Stripe (StripeScalar  a)
+type StripeL a  = Stripe (StripeList    a)
+type StripeD id = Stripe (StripeDelete id)
+
+
+stripeScalar' :: StripeSecretKey -> StripeConnect -> StripeClient (StripeScalarResp a) -> IO (StripeS a)
+stripeScalar' = stripeRunner stripeScalarFromResp
+  where
+    stripeScalarFromResp (Headers a hs) = StripeScalar (getReqId hs) a
+
+
+stripeList' :: StripeSecretKey -> StripeConnect -> [PaginationOpt] -> StripeListClient a -> IO (StripeL a)
 stripeList' secretKey connect pagination clientM =
-  clientEnv >>= runClientM clientM' >>= return . either (Left . stripeError) (Right . stripeListFromResp)
+  stripeRunner stripeListFromResp secretKey connect clientM'
   where
     PaginationOpts{..} = buildPagination pagination
+    clientM' = clientM paginateBy paginateStartingAfter paginateEndingBefore
 
-    clientM' =
-      clientM
-        paginateBy
-        paginateStartingAfter
-        paginateEndingBefore
-        (connectToMaybe connect)
-        (Just secretKey)
-        (Just version)
-
-    stripeListFromResp :: StripeListResp a -> StripeList a
     stripeListFromResp (Headers StripeListJSON{stripeListJsonHasMore, stripeListJsonData} hs) =
       StripeList (getReqId hs) stripeListJsonHasMore stripeListJsonData
 
-stripeDelete' :: StripeSecretKey
-              -> StripeConnect
-              -> PreRunnableStripeDeleteClient id
-              -> IO (Either StripeFailure (StripeDelete id))
-stripeDelete' secretKey connect clientM =
-  clientEnv >>= runClientM clientM' >>= return . either (Left . stripeError) (Right . stripeDeleteFromResp)
-  where
-    clientM' =
-      clientM
-        (connectToMaybe connect)
-        (Just secretKey)
-        (Just version)
 
-    stripeDeleteFromResp :: StripeDeleteResp a -> StripeDelete a
+stripeDelete' :: StripeSecretKey -> StripeConnect -> StripeClient (StripeDeleteResp id) -> IO (StripeD id)
+stripeDelete' = stripeRunner stripeDeleteFromResp
+  where
     stripeDeleteFromResp (Headers StripeDeleteJSON{stripeDeleteJsonId, stripeDeleteJsonDeleted} hs) =
       StripeDelete (getReqId hs) stripeDeleteJsonId stripeDeleteJsonDeleted
 
-stripe' :: StripeSecretKey
-        -> StripeConnect
-        -> PreRunnableStripeScalarClient resp
-        -> IO (Either StripeFailure (Stripe resp))
-stripe' secretKey connect clientM =
-  clientEnv >>= runClientM clientM' >>= return . either (Left . stripeError) (Right . stripeFromResp)
-  where
-    clientM' =
-      clientM
-        (connectToMaybe connect)
-        (Just secretKey)
-        (Just version)
 
-    stripeFromResp :: StripeResp a -> Stripe a
-    stripeFromResp (Headers a hs) = Stripe (getReqId hs) a
+stripeRunner :: (a -> b) -> StripeSecretKey -> StripeConnect -> StripeClient a -> IO (Either StripeFailure b)
+stripeRunner respToData secretKey connect clientM =
+  clientEnv >>= runClientM clientM' >>= return . either (Left . stripeError) (Right . respToData)
+  where
+    clientM' = clientM (connectToMaybe connect) (Just secretKey) (Just version)
+
+
 
 ---- CLIENT RUNNER HELPERS ----
 
