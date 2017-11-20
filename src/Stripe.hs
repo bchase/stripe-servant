@@ -165,10 +165,10 @@ type API =
 type CapId t = Capture "id" t
 type RBody t = ReqBody '[FormUrlEncoded] t
 
-type GetListS a = Get    '[JSON] (StripeListResp a)
-type GetS     a = Get    '[JSON] (StripeResp     a)
-type PostS    a = Post   '[JSON] (StripeResp     a)
-type DeleteS  a = Delete '[JSON] (StripeResp     a)
+type GetListS a = Get    '[JSON] (StripeListResp   a)
+type GetS     a = Get    '[JSON] (StripeResp       a)
+type PostS    a = Post   '[JSON] (StripeResp       a)
+type DeleteS  a = Delete '[JSON] (StripeDeleteResp a)
 
 type CustomerCreate =
      "v1"
@@ -205,7 +205,7 @@ type CustomerDestroy =
   :> Header "Stripe-Account" StripeAccountId
   :> Header "Authorization"  StripeSecretKey
   :> Header "Stripe-Version" StripeVersion
-  :> DeleteS Customer
+  :> DeleteS CustomerId
 
 type CustomerList =
      "v1"
@@ -221,8 +221,9 @@ type CustomerList =
 
 ---- STRIPE ENDPOINT FUNCS ----
 
-type RunnableStripeListClient a = ClientM (StripeListResp a)
-type RunnableStripeClient     a = ClientM (StripeResp     a)
+type RunnableStripeClient        a = ClientM (StripeResp        a)
+type RunnableStripeListClient    a = ClientM (StripeListResp    a)
+type RunnableStripeDeleteClient id = ClientM (StripeDeleteResp id)
 
 type PreRunnableStripeListClient resp =
      Maybe PaginationLimit
@@ -238,22 +239,28 @@ type PreRunnableStripeListClient resp =
 --   -> Maybe PaginationEndingBefore
 --   -> PreRunnableStripeListClient resp
 
+type PreRunnableStripeDeleteClient id =
+     Maybe StripeAccountId
+  -> Maybe StripeSecretKey
+  -> Maybe StripeVersion
+  -> RunnableStripeDeleteClient id
+
 type PreRunnableStripeClient resp =
      Maybe StripeAccountId
   -> Maybe StripeSecretKey
   -> Maybe StripeVersion
   -> RunnableStripeClient resp
 
-type ListS           resp =              PreRunnableStripeListClient resp
-type CreateS     req resp =       req -> PreRunnableStripeClient     resp
-type UpdateS  id req resp = id -> req -> PreRunnableStripeClient     resp
-type ReadS    id     resp = id ->        PreRunnableStripeClient     resp
-type DestroyS id     resp = id ->        PreRunnableStripeClient     resp
+type ListS           resp =              PreRunnableStripeListClient   resp
+type CreateS     req resp =       req -> PreRunnableStripeClient       resp
+type UpdateS  id req resp = id -> req -> PreRunnableStripeClient       resp
+type ReadS    id     resp = id ->        PreRunnableStripeClient       resp
+type DestroyS id          = id ->        PreRunnableStripeDeleteClient   id
 
 createCustomer :: CreateS CustomerCreateReq Customer
 readCustomer :: ReadS CustomerId Customer
 updateCustomer :: UpdateS CustomerId CustomerUpdateReq Customer
-destroyCustomer :: DestroyS CustomerId Customer
+destroyCustomer :: DestroyS CustomerId
 listCustomers :: ListS [Customer]
 createCustomer :<|> readCustomer :<|> updateCustomer :<|> destroyCustomer :<|> listCustomers = client (Proxy :: Proxy API)
 
@@ -274,8 +281,9 @@ instance ToHttpApiData StripeVersion where
   toUrlPiece StripeVersion'2017'08'15 = "2017-08-15"
 
 
-type StripeResp     a = Headers '[Header "Request-Id" String]                 a
-type StripeListResp a = Headers '[Header "Request-Id" String] (StripeListJSON a)
+type StripeResp       a  = Headers '[Header "Request-Id" String]                    a
+type StripeListResp   a  = Headers '[Header "Request-Id" String] (StripeListJSON    a)
+type StripeDeleteResp id = Headers '[Header "Request-Id" String] (StripeDeleteJSON id)
 
 data Stripe a = Stripe
   { stripeRequestId :: RequestId
@@ -288,6 +296,12 @@ data StripeList a = StripeList
   , stripeListData      :: a
   } deriving (Show, Generic)
 
+data StripeDelete id = StripeDelete
+  { stripeDeleteRequestId :: RequestId
+  , stripeDeleteId        :: id
+  , stripeDeleteDeleted   :: Bool
+  } deriving (Show, Generic)
+
 data StripeListJSON a = StripeListJSON
   { stripeListJsonObject  :: String
   , stripeListJsonUrl     :: String
@@ -295,7 +309,14 @@ data StripeListJSON a = StripeListJSON
   , stripeListJsonData    :: a
   } deriving (Show, Generic)
 
+data StripeDeleteJSON id = StripeDeleteJSON
+  { stripeDeleteJsonId      :: id
+  , stripeDeleteJsonDeleted :: Bool
+  } deriving (Show, Generic)
+
 $(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 14 } ''StripeListJSON)
+
+$(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 16 } ''StripeDeleteJSON)
 
 
 
@@ -323,6 +344,41 @@ stripeList' secretKey connect pagination clientM =
     stripeListFromResp :: StripeListResp a -> StripeList a
     stripeListFromResp (Headers StripeListJSON{stripeListJsonHasMore, stripeListJsonData} hs) =
       StripeList (getReqId hs) stripeListJsonHasMore stripeListJsonData
+
+-- stripeDelete' :: StripeSecretKey
+--               -> StripeConnect
+--               -> PreRunnableStripeListClient resp
+--               -> IO (Either StripeFailure (StripeDelete resp))
+-- stripeDelete' secretKey connect pagination clientM =
+--   clientEnv >>= runClientM clientM' >>= return . either (Left . stripeError) (Right . stripeListFromResp)
+--   where
+--     clientM' =
+--       clientM
+--         (connectToMaybe connect)
+--         (Just secretKey)
+--         (Just version)
+--
+--     stripeDeleteResp :: StripeDeleteResp a -> StripeDelete a
+--     stripeDeleteResp = undefined
+--     -- stripeDeleteResp (Headers StripeListJSON{stripeListJsonHasMore, stripeListJsonData} hs) =
+--     --   StripeList (getReqId hs) stripeListJsonHasMore stripeListJsonData
+
+stripeDelete' :: StripeSecretKey
+              -> StripeConnect
+              -> PreRunnableStripeDeleteClient id
+              -> IO (Either StripeFailure (StripeDelete id))
+stripeDelete' secretKey connect clientM =
+  clientEnv >>= runClientM clientM' >>= return . either (Left . stripeError) (Right . stripeDeleteFromResp)
+  where
+    clientM' =
+      clientM
+        (connectToMaybe connect)
+        (Just secretKey)
+        (Just version)
+
+    stripeDeleteFromResp :: StripeDeleteResp a -> StripeDelete a
+    stripeDeleteFromResp (Headers StripeDeleteJSON{stripeDeleteJsonId, stripeDeleteJsonDeleted} hs) =
+      StripeDelete (getReqId hs) stripeDeleteJsonId stripeDeleteJsonDeleted
 
 stripe' :: StripeSecretKey
         -> StripeConnect
