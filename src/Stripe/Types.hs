@@ -3,6 +3,7 @@
 {-# LANGUAGE DeriveAnyClass    #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell   #-}
+{-# LANGUAGE TypeOperators     #-}
 
 module Stripe.Types where
 
@@ -162,7 +163,8 @@ data StripeFailure
 
 -- -- RESPONSES -- --
 
-type Stripe  a  = Either StripeFailure a
+type Stripe a = Either StripeFailure a
+
 type StripeS a  = Stripe (StripeScalar  a)
 type StripeL a  = Stripe (StripeList    a)
 type StripeD id = Stripe (StripeDelete id)
@@ -172,8 +174,8 @@ type StripeListResp   a  = Headers '[Header "Request-Id" String] (StripeListJSON
 type StripeDeleteResp id = Headers '[Header "Request-Id" String] (StripeDeleteJSON id)
 
 data StripeScalar a = StripeScalar
-  { stripeRequestId :: RequestId
-  , stripeData      :: a
+  { stripeScalarRequestId :: RequestId
+  , stripeScalarData      :: a
   } deriving (Show, Generic)
 
 data StripeList a = StripeList
@@ -220,3 +222,33 @@ type StripeClientPaginated resp =
   -> Maybe PaginationStartingAfter
   -> Maybe PaginationEndingBefore
   -> StripeClient resp
+
+
+-- -- API TYPE / FUNC HELPERS -- --
+
+type CapId t = Capture "id" t
+type RBody t = ReqBody '[FormUrlEncoded] t
+
+type GetListS a = Get    '[JSON] (StripeListResp   a)
+type GetShowS a = Get    '[JSON] (StripeScalarResp a)
+type PostS    a = Post   '[JSON] (StripeScalarResp a)
+type DeleteS  a = Delete '[JSON] (StripeDeleteResp a)
+
+type StripeHeaders resp =
+     Header "Stripe-Account" StripeAccountId
+  :> Header "Authorization"  StripeSecretKey
+  :> Header "Stripe-Version" StripeVersion
+  :> resp
+
+type StripePaginationQueryParams resp =
+     QueryParam "limit"          PaginationLimit
+  :> QueryParam "starting_after" PaginationStartingAfter
+  :> QueryParam "ending_before"  PaginationEndingBefore
+  :> resp
+
+
+type ListS           resp =              StripeClientPaginated (StripeListResp   resp)
+type CreateS     req resp =       req -> StripeClient          (StripeScalarResp resp)
+type UpdateS  id req resp = id -> req -> StripeClient          (StripeScalarResp resp)
+type ReadS    id     resp = id ->        StripeClient          (StripeScalarResp resp)
+type DestroyS id          = id ->        StripeClient          (StripeDeleteResp   id)

@@ -12,18 +12,18 @@ main = do
   let token = Token "tok_mastercard"
       createReq = minCustomerCreateReq token
   (Right createResp) <- stripeScalar WithoutConnect $ createCustomer createReq
-  putStrLn . ((++) "[CREATE RESP] CUSTOMER DESCRIPTION: ") . show . customerDescription . stripeData $ createResp
+  putStrLn . ((++) "[CREATE RESP] CUSTOMER DESCRIPTION: ") . show . customerDescription . stripeScalarData $ createResp
 
-  let custId = customerId . stripeData $ createResp
+  let custId = customerId . stripeScalarData $ createResp
 
   -- UPDATE
   let updateReq = emptyCustomerUpdateReq { customerUpdateDescription = Just "test" }
   (Right updateResp) <- stripeScalar WithoutConnect $ updateCustomer custId updateReq
-  putStrLn . ((++) "[UPDATE RESP] CUSTOMER DESCRIPTION: ") . show . customerDescription . stripeData $ updateResp
+  putStrLn . ((++) "[UPDATE RESP] CUSTOMER DESCRIPTION: ") . show . customerDescription . stripeScalarData $ updateResp
 
   -- READ
   (Right readResp) <- stripeScalar WithoutConnect (readCustomer custId)
-  putStrLn . ((++) "[READ RESP] CUSTOMER DESCRIPTION: ") . show . customerDescription . stripeData $ readResp
+  putStrLn . ((++) "[READ RESP] CUSTOMER DESCRIPTION: ") . show . customerDescription . stripeScalarData $ readResp
 
   -- LIST
   (Right listResp) <- stripeList WithoutConnect [] listCustomers

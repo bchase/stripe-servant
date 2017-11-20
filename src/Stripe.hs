@@ -37,8 +37,9 @@ import           Stripe.Util                 (fromJsonString)
 --   ? change `String` to `Text`
 --   ! flesh out data types
 --   ! (define needed and) add endpoints
--- \ - mv things to Stripe.Client/Stripe.Data/etc.
---   - Persistent-style TH for type definitions/JSON
+-- X - mv things to Stripe.Client/Stripe.Data/etc.
+--   - mv things to e.g. Resource/Customer.hs, Request/Customer.hs
+--   - Persistent-style TH for type definitions/JSON -- TODO TODO TODO TODO ... use Persistent to generate resource/req types+json?
 --
 -- TODO mv most of this to `Stripe.API` and just reexport public API via this module
 --
@@ -118,28 +119,6 @@ type CustomerUpdate  = "v1" :> "customers" :> CapId CustomerId :> RBody Customer
 type CustomerDestroy = "v1" :> "customers" :> CapId CustomerId :> StripeHeaders (DeleteS CustomerId)
 type CustomerList    = "v1" :> "customers" :> StripePaginationQueryParams (StripeHeaders (GetListS [Customer]))
 
--- API Type Helper Types
-
-type CapId t = Capture "id" t
-type RBody t = ReqBody '[FormUrlEncoded] t
-
-type GetListS a = Get    '[JSON] (StripeListResp   a)
-type GetShowS a = Get    '[JSON] (StripeScalarResp a)
-type PostS    a = Post   '[JSON] (StripeScalarResp a)
-type DeleteS  a = Delete '[JSON] (StripeDeleteResp a)
-
-type StripeHeaders resp =
-     Header "Stripe-Account" StripeAccountId
-  :> Header "Authorization"  StripeSecretKey
-  :> Header "Stripe-Version" StripeVersion
-  :> resp
-
-type StripePaginationQueryParams resp =
-     QueryParam "limit"          PaginationLimit
-  :> QueryParam "starting_after" PaginationStartingAfter
-  :> QueryParam "ending_before"  PaginationEndingBefore
-  :> resp
-
 
 
 ---- STRIPE ENDPOINT FUNCS ----
@@ -150,11 +129,3 @@ updateCustomer :: UpdateS CustomerId CustomerUpdateReq Customer
 destroyCustomer :: DestroyS CustomerId
 listCustomers :: ListS [Customer]
 createCustomer :<|> readCustomer :<|> updateCustomer :<|> destroyCustomer :<|> listCustomers = client (Proxy :: Proxy API)
-
--- Endpoint Func Helper Types
-
-type ListS           resp =              StripeClientPaginated (StripeListResp   resp)
-type CreateS     req resp =       req -> StripeClient          (StripeScalarResp resp)
-type UpdateS  id req resp = id -> req -> StripeClient          (StripeScalarResp resp)
-type ReadS    id     resp = id ->        StripeClient          (StripeScalarResp resp)
-type DestroyS id          = id ->        StripeClient          (StripeDeleteResp   id)
