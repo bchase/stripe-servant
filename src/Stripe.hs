@@ -23,7 +23,7 @@ import           Data.Aeson                  as J
 import           Data.Aeson.Casing           (snakeCase)
 import           Data.Aeson.TH               (Options (..), defaultOptions, deriveFromJSON)
 import           Network.HTTP.Client.TLS     (newTlsManagerWith, tlsManagerSettings)
-import           Web.Internal.FormUrlEncoded (ToForm)
+import           Web.Internal.FormUrlEncoded as F
 import           Servant.API
 import           Servant.Client              (ClientM, ClientEnv (ClientEnv),
                                               Scheme (Https), BaseUrl (BaseUrl),
@@ -102,8 +102,8 @@ instance ToHttpApiData PaginationEndingBefore where
 
 ---- STRIPE API DATA TYPES ----
 
-newtype ChargeId   = ChargeId   { unChargeId   :: T.Text } deriving (Show, Generic)
-newtype CustomerId = CustomerId { unCustomerId :: T.Text } deriving (Show, Generic)
+newtype ChargeId   = ChargeId   { unChargeId   :: T.Text } deriving (Eq, Show, Generic)
+newtype CustomerId = CustomerId { unCustomerId :: T.Text } deriving (Eq, Show, Generic)
 
 instance ToHttpApiData ChargeId where
   toQueryParam = unChargeId
@@ -123,17 +123,13 @@ instance ToHttpApiData Token where
 
 
 data CustomerCreateReq = CustomerCreateReq
-  { source      :: Token
-  , email       :: Maybe String
-  , description :: Maybe String
+  { customerCreateSource      :: Token
+  , customerCreateEmail       :: Maybe String
+  , customerCreateDescription :: Maybe String
   } deriving (Generic)
--- data CustomerCreateReq = CustomerCreateReq
---   { customerCreateToken       :: Token
---   , customerCreateEmail       :: Maybe String
---   , customerCreateDescription :: Maybe String
---   } deriving (Generic)
 -- $(deriveToJSON defaultOptions { fieldLabelModifier = snakeCase . drop 14 } ''CustomerCreateReq)
-instance ToForm CustomerCreateReq
+instance F.ToForm CustomerCreateReq where
+  toForm = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 14 }
 minCustomerCreateReq :: Token -> CustomerCreateReq
 minCustomerCreateReq token = CustomerCreateReq token Nothing Nothing
 
@@ -142,7 +138,10 @@ data CustomerUpdateReq = CustomerUpdateReq
   , customerUpdateDescription :: Maybe String
   } deriving (Generic)
 -- $(deriveToJSON defaultOptions { fieldLabelModifier = snakeCase . drop 14 } ''CustomerUpdateReq)
-instance ToForm CustomerUpdateReq
+instance F.ToForm CustomerUpdateReq where
+  toForm = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 14 }
+emptyCustomerUpdateReq :: CustomerUpdateReq
+emptyCustomerUpdateReq = CustomerUpdateReq Nothing Nothing
 
 data Charge = Charge
   { chargeId       :: ChargeId
@@ -309,7 +308,6 @@ stripeList' :: StripeSecretKey
             -> IO (Either StripeFailure (StripeList resp))
 stripeList' secretKey connect pagination clientM =
   clientEnv >>= runClientM clientM' >>= return . either (Left . stripeError) (Right . stripeListFromResp)
-
   where
     PaginationOpts{..} = buildPagination pagination
 
