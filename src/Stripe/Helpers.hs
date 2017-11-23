@@ -26,11 +26,11 @@ stripeScalar' = stripeRunner stripeScalarFromResp
   where
     stripeScalarFromResp (Headers a hs) = StripeScalar (getReqId hs) a
 
-stripeDelete' :: StripeSecretKey -> StripeConnect -> StripeClient (StripeDeleteResp id) -> IO (StripeD id)
+stripeDelete' :: StripeSecretKey -> StripeConnect -> StripeClient (StripeDestroyResp id) -> IO (StripeD id)
 stripeDelete' = stripeRunner stripeDeleteFromResp
   where
     stripeDeleteFromResp (Headers StripeDeleteJSON{stripeDeleteJsonId, stripeDeleteJsonDeleted} hs) =
-      StripeDelete (getReqId hs) stripeDeleteJsonId stripeDeleteJsonDeleted
+      StripeDestroy (getReqId hs) stripeDeleteJsonId stripeDeleteJsonDeleted
 
 stripeList' :: StripeSecretKey -> StripeConnect -> [PaginationOpt] -> StripeClientPaginated (StripeListResp a) -> IO (StripeL a)
 stripeList' secretKey connect pagination clientM =

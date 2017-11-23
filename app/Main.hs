@@ -47,7 +47,7 @@ main = do
   putStrLn . ((++) "[LIST CARDS] `last4`s: ") . show . map cardLast4 . stripeListData $ listCardsResp
   -- [CARD] DESTROY
   (Right deleteCardResp) <- stripeDelete WithoutConnect $ destroyCustomerCard custId cardId'
-  putStrLn . ((++) "[DESTROY CARD] `deleted`: ") . show . stripeDeleteDeleted $ deleteCardResp
+  putStrLn . ((++) "[DESTROY CARD] `deleted`: ") . show . stripeDestroyDeleted $ deleteCardResp
   -- [CARD] LIST
   (Right listCardsResp') <- stripeList WithoutConnect [] $ listCustomerCards custId
   putStrLn . ((++) "[LIST CARDS] `last4`s: ") . show . map cardLast4 . stripeListData $ listCardsResp'
@@ -55,7 +55,7 @@ main = do
 
   -- [CUSTOMER] DESTROY
   (Right deleteResp) <- stripeDelete WithoutConnect $ destroyCustomer custId
-  putStrLn . ((++) "[DESTROY CUSTOMER] CONTAINS CUSTOMER ID: ") . show $ custId == stripeDeleteId deleteResp
+  putStrLn . ((++) "[DESTROY CUSTOMER] CONTAINS CUSTOMER ID: ") . show $ custId == stripeDestroyId deleteResp
 
   -- [CUSTOMER] LIST
   (Right listResp') <- stripeList WithoutConnect [] listCustomers

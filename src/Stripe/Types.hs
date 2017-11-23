@@ -165,13 +165,13 @@ data StripeFailure
 
 type Stripe a = Either StripeFailure a
 
-type StripeS a  = Stripe (StripeScalar  a)
-type StripeL a  = Stripe (StripeList    a)
-type StripeD id = Stripe (StripeDelete id)
+type StripeS a  = Stripe (StripeScalar   a)
+type StripeL a  = Stripe (StripeList     a)
+type StripeD id = Stripe (StripeDestroy id)
 
-type StripeScalarResp a  = Headers '[Header "Request-Id" String]                    a
-type StripeListResp   a  = Headers '[Header "Request-Id" String] (StripeListJSON    a)
-type StripeDeleteResp id = Headers '[Header "Request-Id" String] (StripeDeleteJSON id)
+type StripeScalarResp   a = Headers '[Header "Request-Id" String]                    a
+type StripeListResp     a = Headers '[Header "Request-Id" String] (StripeListJSON    a)
+type StripeDestroyResp id = Headers '[Header "Request-Id" String] (StripeDeleteJSON id)
 
 data StripeScalar a = StripeScalar
   { stripeScalarRequestId :: RequestId
@@ -184,10 +184,10 @@ data StripeList a = StripeList
   , stripeListData      :: a
   } deriving (Show, Generic)
 
-data StripeDelete id = StripeDelete
-  { stripeDeleteRequestId :: RequestId
-  , stripeDeleteId        :: id
-  , stripeDeleteDeleted   :: Bool
+data StripeDestroy id = StripeDestroy
+  { stripeDestroyRequestId :: RequestId
+  , stripeDestroyId        :: id
+  , stripeDestroyDeleted   :: Bool
   } deriving (Show, Generic)
 
 data StripeListJSON a = StripeListJSON
@@ -229,10 +229,10 @@ type StripeClientPaginated resp =
 type CapId t = Capture "id" t
 type RBody t = ReqBody '[FormUrlEncoded] t
 
-type GetListS a = Get    '[JSON] (StripeListResp   a)
-type GetShowS a = Get    '[JSON] (StripeScalarResp a)
-type PostS    a = Post   '[JSON] (StripeScalarResp a)
-type DeleteS  a = Delete '[JSON] (StripeDeleteResp a)
+type GetListS a = Get    '[JSON] (StripeListResp    a)
+type GetShowS a = Get    '[JSON] (StripeScalarResp  a)
+type PostS    a = Post   '[JSON] (StripeScalarResp  a)
+type DeleteS  a = Delete '[JSON] (StripeDestroyResp a)
 
 type StripeHeaders resp =
      Header "Stripe-Account" StripeAccountId
@@ -247,8 +247,8 @@ type StripePaginationQueryParams resp =
   :> resp
 
 
-type ListS           resp =              StripeClientPaginated (StripeListResp   resp)
-type CreateS     req resp =       req -> StripeClient          (StripeScalarResp resp)
-type UpdateS  id req resp = id -> req -> StripeClient          (StripeScalarResp resp)
-type ReadS    id     resp = id ->        StripeClient          (StripeScalarResp resp)
-type DestroyS id          = id ->        StripeClient          (StripeDeleteResp   id)
+type ListS           resp =              StripeClientPaginated (StripeListResp    resp)
+type CreateS     req resp =       req -> StripeClient          (StripeScalarResp  resp)
+type UpdateS  id req resp = id -> req -> StripeClient          (StripeScalarResp  resp)
+type ReadS    id     resp = id ->        StripeClient          (StripeScalarResp  resp)
+type DestroyS id          = id ->        StripeClient          (StripeDestroyResp   id)
