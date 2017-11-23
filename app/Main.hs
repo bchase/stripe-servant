@@ -8,34 +8,58 @@ import           Stripe
 
 main :: IO ()
 main = do
-  -- CREATE
+  -- [CUSTOMER] CREATE
   let token = Token "tok_mastercard"
       createReq = minCustomerCreateReq token
   (Right createResp) <- stripeScalar WithoutConnect $ createCustomer createReq
-  putStrLn . ((++) "[CREATE RESP] CUSTOMER DESCRIPTION: ") . show . customerDescription . stripeScalarData $ createResp
+  putStrLn . ((++) "[CREATE CUSTOMER] CUSTOMER DESCRIPTION: ") . show . customerDescription . stripeScalarData $ createResp
 
   let custId = customerId . stripeScalarData $ createResp
 
-  -- UPDATE
+  -- [CUSTOMER] UPDATE
   let updateReq = emptyCustomerUpdateReq { customerUpdateDescription = Just "test" }
   (Right updateResp) <- stripeScalar WithoutConnect $ updateCustomer custId updateReq
-  putStrLn . ((++) "[UPDATE RESP] CUSTOMER DESCRIPTION: ") . show . customerDescription . stripeScalarData $ updateResp
+  putStrLn . ((++) "[UPDATE CUSTOMER] CUSTOMER DESCRIPTION: ") . show . customerDescription . stripeScalarData $ updateResp
 
-  -- READ
-  (Right readResp) <- stripeScalar WithoutConnect (readCustomer custId)
-  putStrLn . ((++) "[READ RESP] CUSTOMER DESCRIPTION: ") . show . customerDescription . stripeScalarData $ readResp
+  -- [CUSTOMER] READ
+  (Right readResp) <- stripeScalar WithoutConnect $ readCustomer custId
+  putStrLn . ((++) "[READ CUSTOMER] CUSTOMER DESCRIPTION: ") . show . customerDescription . stripeScalarData $ readResp
 
-  -- LIST
+  -- [CUSTOMER] LIST
   (Right listResp) <- stripeList WithoutConnect [] listCustomers
-  putStrLn . ((++) "[LIST RESP] CONTAINS CUSTOMER ID: ") . show . containsCustomerId custId . stripeListData $ listResp
+  putStrLn . ((++) "[LIST CUSTOMER] CONTAINS CUSTOMER ID: ") . show . containsCustomerId custId . stripeListData $ listResp
 
-  -- DELETE
+
+  -- [CARD] CREATE
+  let createCardReq = minCardCreateReq . Token $ "tok_visa"
+  (Right createCardResp) <- stripeScalar WithoutConnect $ createCustomerCard custId createCardReq
+  putStrLn . ((++) "[CREATE CARD] `expYear`: ") . show . cardExpYear . stripeScalarData $ createCardResp
+  let cardId' = cardId . stripeScalarData $ createCardResp
+  -- [CARD] UPDATE
+  let updateCardReq = emptyCardUpdateReq { cardUpdateExpYear = Just 2025 }
+  (Right updateCardResp) <- stripeScalar WithoutConnect $ updateCustomerCard custId cardId' updateCardReq
+  putStrLn . ((++) "[UPDATE CARD] `expYear`: ") . show . cardExpYear . stripeScalarData $ updateCardResp
+  -- [CARD] READ
+  (Right readCardResp) <- stripeScalar WithoutConnect $ readCustomerCard custId cardId'
+  putStrLn . ((++) "[READ CARD] `expYear`: ") . show . cardExpYear . stripeScalarData $ readCardResp
+  -- [CARD] LIST
+  (Right listCardsResp) <- stripeList WithoutConnect [] $ listCustomerCards custId
+  putStrLn . ((++) "[LIST CARDS] `last4`s: ") . show . map cardLast4 . stripeListData $ listCardsResp
+  -- [CARD] DESTROY
+  (Right deleteCardResp) <- stripeDelete WithoutConnect $ destroyCustomerCard custId cardId'
+  putStrLn . ((++) "[DESTROY CARD] `deleted`: ") . show . stripeDeleteDeleted $ deleteCardResp
+  -- [CARD] LIST
+  (Right listCardsResp') <- stripeList WithoutConnect [] $ listCustomerCards custId
+  putStrLn . ((++) "[LIST CARDS] `last4`s: ") . show . map cardLast4 . stripeListData $ listCardsResp'
+
+
+  -- [CUSTOMER] DESTROY
   (Right deleteResp) <- stripeDelete WithoutConnect $ destroyCustomer custId
-  putStrLn . ((++) "[DELETE RESP] CONTAINS CUSTOMER ID: ") . show $ custId == stripeDeleteId deleteResp
+  putStrLn . ((++) "[DESTROY CUSTOMER] CONTAINS CUSTOMER ID: ") . show $ custId == stripeDeleteId deleteResp
 
-  -- LIST
+  -- [CUSTOMER] LIST
   (Right listResp') <- stripeList WithoutConnect [] listCustomers
-  putStrLn . ((++) "[LIST RESP] CONTAINS CUSTOMER ID: ") . show . containsCustomerId custId . stripeListData $ listResp'
+  putStrLn . ((++) "[LIST CUSTOMER] CONTAINS CUSTOMER ID: ") . show . containsCustomerId custId . stripeListData $ listResp'
 
   where
     containsCustomerId id' = any ((==) id' . customerId)
