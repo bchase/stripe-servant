@@ -41,8 +41,6 @@ import           Stripe.Util                 (fromJsonString)
 --     ! flesh out data types
 --     ! (define needed and) add endpoints
 --   CLEANUP
---     - uniform use of `destroy` & `delete`, esp among CRUD terms
---     - break client builder apart by resource e.g. `client Proxy :: Proxy CustomerAPI`
 --   X - mv things to Stripe.Client/Stripe.Data/etc.
 --     - mv things to e.g. Resource/Customer.hs, Request/Customer.hs
 --     - test/live key checks
@@ -141,13 +139,8 @@ emptyCustomerUpdateReq = CustomerUpdateReq Nothing Nothing
 
 ---- STRIPE API TYPE ----
 
-type API =
-       CustomerCreate :<|> CustomerRead :<|> CustomerUpdate :<|> CustomerDestroy :<|> CustomerList
-  :<|> CustomerCardCreate
-  :<|> CustomerCardRead
-  :<|> CustomerCardUpdate
-  :<|> CustomerCardDestroy
-  :<|> CustomerCardList
+type CustomerAPI     = CustomerCreate     :<|> CustomerRead     :<|> CustomerUpdate     :<|> CustomerDestroy     :<|> CustomerList
+type CustomerCardAPI = CustomerCardCreate :<|> CustomerCardRead :<|> CustomerCardUpdate :<|> CustomerCardDestroy :<|> CustomerCardList
 
 type CustomerCardCreate  = "v1" :> "customers" :> CapId CustomerId :> "cards" :> RBody CardCreateReq :> StripeHeaders (PostS Card)
 type CustomerCardRead    = "v1" :> "customers" :> CapId CustomerId :> "cards" :> CapId CardId :> StripeHeaders (GetShowS Card)
@@ -173,11 +166,11 @@ readCustomer :: ReadS CustomerId Customer
 updateCustomer :: UpdateS CustomerId CustomerUpdateReq Customer
 destroyCustomer :: DestroyS CustomerId
 listCustomers :: ListS [Customer]
+createCustomer :<|> readCustomer :<|> updateCustomer :<|> destroyCustomer :<|> listCustomers = client (Proxy :: Proxy CustomerAPI)
+
 createCustomerCard :: CustomerId -> CreateS CardCreateReq Card
 readCustomerCard :: CustomerId -> ReadS CardId Card
 updateCustomerCard :: CustomerId -> UpdateS CardId CardUpdateReq Card
 destroyCustomerCard :: CustomerId -> DestroyS CardId
 listCustomerCards :: CustomerId -> ListS [Card]
-createCustomer :<|> readCustomer :<|> updateCustomer :<|> destroyCustomer :<|> listCustomers :<|>
-  createCustomerCard :<|> readCustomerCard :<|> updateCustomerCard :<|> destroyCustomerCard :<|> listCustomerCards
-    = client (Proxy :: Proxy API)
+createCustomerCard :<|> readCustomerCard :<|> updateCustomerCard :<|> destroyCustomerCard :<|> listCustomerCards = client (Proxy :: Proxy CustomerCardAPI)
