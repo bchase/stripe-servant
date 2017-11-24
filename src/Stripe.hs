@@ -1,6 +1,7 @@
 {-# LANGUAGE DataKinds             #-}
 {-# LANGUAGE DeriveGeneric         #-}
 {-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE OverloadedLists       #-}
 {-# LANGUAGE OverloadedStrings     #-}
 {-# LANGUAGE TemplateHaskell       #-}
 {-# LANGUAGE TypeOperators         #-}
@@ -85,9 +86,10 @@ instance ToHttpApiData Token where
 
 data BankAccount = BankAccount
   { bankAccountId                :: BankAccountId
-  , bankAccountLast4             :: String
   , bankAccountAccountHolderName :: String
   , bankAccountAccountHolderType :: String
+  , bankAccountLast4             :: String
+  , bankAccountStatus            :: String
   } deriving (Show, Generic)
 $(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 11 } ''BankAccount)
 
@@ -132,6 +134,16 @@ instance F.ToForm BankAccountUpdateReq where
 emptyBankAccountUpdateReq :: BankAccountUpdateReq
 emptyBankAccountUpdateReq = BankAccountUpdateReq Nothing Nothing
 
+data BankAccountVerifyReq = BankAccountVerifyReq
+  { bankAccountVerifyAmount1 :: Int
+  , bankAccountVerifyAmount2 :: Int
+  } deriving (Generic)
+instance F.ToForm BankAccountVerifyReq where
+  toForm req =
+    [ ("amounts[]", toQueryParam . bankAccountVerifyAmount1 $ req)
+    , ("amounts[]", toQueryParam . bankAccountVerifyAmount2 $ req)
+    ]
+
 data CardCreateReq = CardCreateReq
   { cardCreateSource :: Token
   } deriving (Generic)
@@ -173,7 +185,7 @@ emptyCustomerUpdateReq = CustomerUpdateReq Nothing Nothing
 
 type CustomerAPI = CustomerCreate :<|> CustomerRead :<|> CustomerUpdate :<|> CustomerDestroy :<|> CustomerList
 type CustomerCardAPI = CustomerCardCreate :<|> CustomerCardRead :<|> CustomerCardUpdate :<|> CustomerCardDestroy :<|> CustomerCardList
-type CustomerBankAccountAPI = CustomerBankAccountCreate :<|> CustomerBankAccountRead :<|> CustomerBankAccountUpdate :<|> CustomerBankAccountDestroy :<|> CustomerBankAccountList
+type CustomerBankAccountAPI = CustomerBankAccountCreate :<|> CustomerBankAccountRead :<|> CustomerBankAccountUpdate :<|> CustomerBankAccountDestroy :<|> CustomerBankAccountList :<|> CustomerBankAccountVerify
 
 
 type CustomerCreate  = "v1" :> "customers" :> RBody CustomerCreateReq :> StripeHeaders (PostS Customer)
@@ -193,6 +205,7 @@ type CustomerBankAccountRead    = "v1" :> "customers" :> CapId CustomerId :> "ba
 type CustomerBankAccountUpdate  = "v1" :> "customers" :> CapId CustomerId :> "bank_accounts" :> CapId BankAccountId :> RBody BankAccountUpdateReq :> StripeHeaders (PostS BankAccount)
 type CustomerBankAccountDestroy = "v1" :> "customers" :> CapId CustomerId :> "bank_accounts" :> CapId BankAccountId :> StripeHeaders (DeleteS BankAccountId)
 type CustomerBankAccountList    = "v1" :> "customers" :> CapId CustomerId :> "bank_accounts" :> StripePaginationQueryParams (StripeHeaders (GetListS [BankAccount]))
+type CustomerBankAccountVerify  = "v1" :> "customers" :> CapId CustomerId :> "bank_accounts" :> CapId BankAccountId :> "verify" :> RBody BankAccountVerifyReq :> StripeHeaders (PostS BankAccount)
 
 
 
@@ -203,21 +216,25 @@ readCustomer :: ReadS CustomerId Customer
 updateCustomer :: UpdateS CustomerId CustomerUpdateReq Customer
 destroyCustomer :: DestroyS CustomerId
 listCustomers :: ListS [Customer]
-createCustomer :<|> readCustomer :<|> updateCustomer :<|> destroyCustomer :<|> listCustomers = client (Proxy :: Proxy CustomerAPI)
+createCustomer :<|> readCustomer :<|> updateCustomer :<|> destroyCustomer :<|> listCustomers =
+  client (Proxy :: Proxy CustomerAPI)
 
 createCustomerCard :: CustomerId -> CreateS CardCreateReq Card
 readCustomerCard :: CustomerId -> ReadS CardId Card
 updateCustomerCard :: CustomerId -> UpdateS CardId CardUpdateReq Card
 destroyCustomerCard :: CustomerId -> DestroyS CardId
 listCustomerCards :: CustomerId -> ListS [Card]
-createCustomerCard :<|> readCustomerCard :<|> updateCustomerCard :<|> destroyCustomerCard :<|> listCustomerCards = client (Proxy :: Proxy CustomerCardAPI)
+createCustomerCard :<|> readCustomerCard :<|> updateCustomerCard :<|> destroyCustomerCard :<|> listCustomerCards =
+  client (Proxy :: Proxy CustomerCardAPI)
 
 createCustomerBankAccount :: CustomerId -> CreateS BankAccountCreateReq BankAccount
 readCustomerBankAccount :: CustomerId -> ReadS BankAccountId BankAccount
 updateCustomerBankAccount :: CustomerId -> UpdateS BankAccountId BankAccountUpdateReq BankAccount
 destroyCustomerBankAccount :: CustomerId -> DestroyS BankAccountId
 listCustomerBankAccounts :: CustomerId -> ListS [BankAccount]
-createCustomerBankAccount :<|> readCustomerBankAccount :<|> updateCustomerBankAccount :<|> destroyCustomerBankAccount :<|> listCustomerBankAccounts = client (Proxy :: Proxy CustomerBankAccountAPI)
+verifyCustomerBankAccount :: CustomerId -> UpdateS BankAccountId BankAccountVerifyReq BankAccount
+createCustomerBankAccount :<|> readCustomerBankAccount :<|> updateCustomerBankAccount :<|> destroyCustomerBankAccount :<|> listCustomerBankAccounts :<|> verifyCustomerBankAccount =
+  client (Proxy :: Proxy CustomerBankAccountAPI)
 
 
 

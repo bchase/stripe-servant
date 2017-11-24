@@ -66,6 +66,14 @@ main = do
   -- [BANK ACCOUNT] READ
   (Right readBankAccountResp) <- stripeScalar WithoutConnect $ readCustomerBankAccount custId bankAccountId'
   putStrLn . ((++) "[READ BANK ACCOUNT] `accountHolderName`: ") . show . bankAccountAccountHolderName . stripeScalarData $ readBankAccountResp
+  putStrLn . ((++) "[READ BANK ACCOUNT] `status`: ") . show . bankAccountStatus . stripeScalarData $ readBankAccountResp
+  -- [BANK ACCOUNT] VERIFY
+  (Right verifyBankAccountResp) <- stripeScalar WithoutConnect $ verifyCustomerBankAccount custId bankAccountId' $ BankAccountVerifyReq 32 45
+  putStrLn . ((++) "[VERIFY BANK ACCOUNT] `status`: ") . show . bankAccountStatus . stripeScalarData $ verifyBankAccountResp
+  -- [BANK ACCOUNT] READ
+  (Right readBankAccountResp') <- stripeScalar WithoutConnect $ readCustomerBankAccount custId bankAccountId'
+  putStrLn . ((++) "[READ BANK ACCOUNT] `accountHolderName`: ") . show . bankAccountAccountHolderName . stripeScalarData $ readBankAccountResp'
+  putStrLn . ((++) "[READ BANK ACCOUNT] `status`: ") . show . bankAccountStatus . stripeScalarData $ readBankAccountResp'
   -- [BANK ACCOUNT] LIST
   (Right listBankAccountsResp) <- stripeList WithoutConnect [] $ listCustomerBankAccounts custId
   putStrLn . ((++) "[LIST BANK ACCOUNTS] `accountHolderName`s: ") . show . map bankAccountAccountHolderName . stripeListData $ listBankAccountsResp
