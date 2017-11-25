@@ -35,6 +35,7 @@ library
                      , servant-server >= 0.12 && < 0.13
                      , servant-client >= 0.12 && < 0.13
                      , scientific
+                     , template-haskell
                      , text
                      , time
                      , unordered-containers

@@ -25,7 +25,6 @@ import           GHC.Generics                (Generic)
 
 import           Data.Aeson                  as J
 import           Data.Aeson.Casing           (snakeCase)
-import           Data.Aeson.TH               (Options (..), defaultOptions, deriveFromJSON)
 import           Web.Internal.FormUrlEncoded as F
 import           Servant.API
 import           Servant.Client              (client)
@@ -182,7 +181,7 @@ data BankAccount = BankAccount
   , bankAccountLast4             :: String
   , bankAccountStatus            :: BankAccountStatus
   } deriving (Show, Generic)
-$(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 11 } ''BankAccount)
+$(deriveFromJSON' ''BankAccount)
 
 data Card = Card
   { cardId       :: CardId
@@ -190,21 +189,21 @@ data Card = Card
   , cardExpMonth :: Int -- TODO
   , cardExpYear  :: Int -- TODO
   } deriving (Show, Generic)
-$(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 4 } ''Card)
+$(deriveFromJSON' ''Card)
 
 data Charge = Charge
   { chargeId       :: ChargeId
   , chargeAmount   :: Int
   , chargeCurrency :: String
   } deriving (Show, Generic)
-$(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 6 } ''Charge)
+$(deriveFromJSON' ''Charge)
 
 data Customer = Customer
   { customerId          :: CustomerId
   , customerDescription :: Maybe String
   , customerEmail       :: Maybe String
   } deriving (Show, Generic)
-$(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 8 } ''Customer)
+$(deriveFromJSON' ''Customer)
 
 data Plan = Plan
   { planId                  :: PlanId
@@ -219,7 +218,7 @@ data Plan = Plan
   , planStatementDescriptor :: Maybe String
   , planTrialPeriodDays     :: Maybe Int
   } deriving (Show, Generic)
-$(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 4 } ''Plan)
+$(deriveFromJSON' ''Plan)
 
 -- Requests
 
@@ -394,7 +393,7 @@ createPlan :<|> readPlan :<|> updatePlan :<|> destroyPlan :<|> listPlans =
 data BankAccountToken = BankAccountToken
   { bankAccountTokenId :: Token
   } deriving (Show, Generic)
-$(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 16 } ''BankAccountToken)
+$(deriveFromJSON' ''BankAccountToken)
 
 data BankAccountTokenCreateReq = BankAccountTokenCreateReq
   { bankAccountTokenCreateCountry           :: String

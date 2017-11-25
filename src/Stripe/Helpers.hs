@@ -8,17 +8,27 @@ module Stripe.Helpers
   ( stripeScalar'
   , stripeList'
   , stripeDelete'
+  , deriveFromJSON'
   ) where
 
-import           Data.Either             (either)
+import           Data.Either                 (either)
+import           Language.Haskell.TH.Syntax  as TH
 
+import           Data.Aeson.Casing           (snakeCase)
+import           Data.Aeson.TH               (Options (..), defaultOptions, deriveFromJSON)
 import           Servant.API
-import           Servant.Client          (ClientEnv (ClientEnv), Scheme (Https),
-                                          BaseUrl (BaseUrl), runClientM)
-import           Network.HTTP.Client.TLS (newTlsManagerWith, tlsManagerSettings)
+import           Servant.Client              (ClientEnv (ClientEnv), Scheme (Https),
+                                              BaseUrl (BaseUrl), runClientM)
+import           Network.HTTP.Client.TLS     (newTlsManagerWith, tlsManagerSettings)
 
 import           Stripe.Types
-import           Stripe.Error            (stripeError)
+import           Stripe.Error                (stripeError)
+
+
+deriveFromJSON' :: TH.Name -> TH.Q [TH.Dec]
+deriveFromJSON' name =
+  let len = length . reverse . takeWhile (/= '.') . reverse . show $ name
+   in deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop len } name
 
 
 stripeScalar' :: StripeSecretKey -> StripeConnect -> StripeClient (StripeScalarResp a) -> IO (StripeS a)
