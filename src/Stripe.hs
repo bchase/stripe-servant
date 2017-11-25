@@ -1,6 +1,7 @@
 {-# LANGUAGE DataKinds             #-}
 {-# LANGUAGE DeriveGeneric         #-}
 {-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE NamedFieldPuns        #-}
 {-# LANGUAGE OverloadedLists       #-}
 {-# LANGUAGE OverloadedStrings     #-}
 {-# LANGUAGE TemplateHaskell       #-}
@@ -13,6 +14,8 @@ module Stripe
   ) where
 
 import           Prelude                     hiding (ReadS)
+import qualified Data.HashMap.Strict         as HM
+import           Data.Char                   (toLower)
 import qualified Data.Text                   as T
 import           Data.Proxy                  (Proxy (Proxy))
 import           Data.Scientific             (coefficient)
@@ -38,8 +41,8 @@ import           Stripe.Util                 (fromJsonString)
 --   X * pagination
 --   X * request IDs
 --   X * nested CRUD (e.g. cards, ACH)
---     * cast `created` time ints
---     * metadata
+--   X * cast `created` time ints
+--   \ * metadata
 --     * expanding
 --     * events (webhooks)
 --     * Connect fees
@@ -66,6 +69,9 @@ instance J.FromJSON CurrencyCodeISO4217 where
   parseJSON (J.String "jpy") = return JPY
   parseJSON (J.String str)   = return . UnrecognizedCurrencyCode $ str
   parseJSON _ = mempty
+instance ToHttpApiData CurrencyCodeISO4217 where
+  toQueryParam = T.pack . map toLower . show
+  -- toQueryParam (UnrecognizedCurrencyCode _) -- TODO ...
 
 data Interval
   = Day
@@ -79,6 +85,8 @@ instance J.FromJSON Interval where
   parseJSON (J.String "month") = return Month
   parseJSON (J.String "year")  = return Year
   parseJSON _ = mempty
+instance ToHttpApiData Interval where
+  toQueryParam = T.pack . map toLower . show
 
 data StripeTime = StripeTime
   { getPOSIXTime :: Int
@@ -88,6 +96,27 @@ instance J.FromJSON StripeTime where
   parseJSON (J.Number num) =
     return $ StripeTime (fromInteger . coefficient $ num) (Time.posixSecondsToUTCTime . fromInteger . coefficient $ num)
   parseJSON _ = mempty
+
+newtype Metadata = Metadata { unMetadata :: HM.HashMap T.Text T.Text } deriving (Show, Generic)
+metadata :: [(T.Text, T.Text)] -> Metadata
+metadata = Metadata . HM.fromList
+instance J.FromJSON Metadata where
+  parseJSON (J.Object obj) = return . Metadata . HM.map valToText $ obj
+    where
+      valToText v =
+        case v of
+          J.String txt -> txt
+          _ -> "" -- TODO shouldnt ever be anything but Text
+  parseJSON _ = mempty
+addMetadataToForm :: Maybe Metadata -> F.Form -> F.Form
+addMetadataToForm mMetadata form =
+  let hm = HM.delete "metadata" . unForm $ form
+   in case mMetadata of
+        Just md -> F.Form . HM.union (keysToMetadataScopedKeys . unMetadata $ md) $ hm
+        Nothing -> F.Form hm
+  where
+    keysToMetadataScopedKeys =
+      HM.fromList . map (\(k, v) -> (T.concat ["metadata[", k, "]"], [v])) . HM.toList
 
 
 
@@ -164,13 +193,12 @@ $(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 8 } ''Cu
 data Plan = Plan
   { planId                  :: PlanId
   , planAmount              :: Int
-  -- , planCreated             :: Time.UTCTime -- Data.Time.Clock.POSIX.posixSecondsToUTCTime
   , planCreated             :: StripeTime
   , planCurrency            :: CurrencyCodeISO4217
   , planInterval            :: Interval
   , planIntervalCount       :: Int
   , planLivemode            :: Bool
-  -- , planMetadata         :: Metadata    -- TODO metadata
+  , planMetadata            :: Metadata
   , planName                :: String
   , planStatementDescriptor :: Maybe String
   , planTrialPeriodDays     :: Maybe Int
@@ -242,6 +270,24 @@ instance F.ToForm CustomerUpdateReq where
 emptyCustomerUpdateReq :: CustomerUpdateReq
 emptyCustomerUpdateReq = CustomerUpdateReq Nothing Nothing
 
+data PlanCreateReq = PlanCreateReq
+  { planCreateId                  :: PlanId
+  , planCreateName                :: String
+  , planCreateAmount              :: Int
+  , planCreateCurrency            :: CurrencyCodeISO4217
+  , planCreateInterval            :: Interval
+  , planCreateIntervalCount       :: Maybe Int
+  , planCreateStatementDescriptor :: Maybe String
+  , planCreateTrialPeriodDays     :: Maybe Int
+  , planCreateMetadata            :: Maybe Metadata
+  } deriving (Show, Generic)
+instance ToHttpApiData Metadata where
+  toQueryParam _ = "" -- TODO
+instance F.ToForm PlanCreateReq where
+  toForm req@PlanCreateReq{planCreateMetadata} =
+    let toForm' = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 10 }
+     in addMetadataToForm planCreateMetadata . toForm' $ req
+
 
 ---- STRIPE API TYPE ----
 
@@ -249,12 +295,11 @@ type CustomerAPI = CustomerCreate :<|> CustomerRead :<|> CustomerUpdate :<|> Cus
 type CustomerCardAPI = CustomerCardCreate :<|> CustomerCardRead :<|> CustomerCardUpdate :<|> CustomerCardDestroy :<|> CustomerCardList
 type CustomerBankAccountAPI = CustomerBankAccountCreate :<|> CustomerBankAccountRead :<|> CustomerBankAccountUpdate :<|> CustomerBankAccountDestroy :<|> CustomerBankAccountList :<|> CustomerBankAccountVerify
 type PlanAPI =
-  --      PlanCreate
+       PlanCreate
   -- :<|> PlanRead
   -- :<|> PlanUpdate
   -- :<|> PlanDestroy
-  -- :<|> PlanList
-       PlanList
+  :<|> PlanList
 
 
 type CustomerCreate  = "v1" :> "customers" :> RBody CustomerCreateReq :> StripeHeaders (PostS Customer)
@@ -276,7 +321,7 @@ type CustomerBankAccountDestroy = "v1" :> "customers" :> CapId CustomerId :> "ba
 type CustomerBankAccountList    = "v1" :> "customers" :> CapId CustomerId :> "bank_accounts" :> StripePaginationQueryParams (StripeHeaders (GetListS [BankAccount]))
 type CustomerBankAccountVerify  = "v1" :> "customers" :> CapId CustomerId :> "bank_accounts" :> CapId BankAccountId :> "verify" :> RBody BankAccountVerifyReq :> StripeHeaders (PostS BankAccount)
 
--- type PlanCreate  = "v1" :> "plans" :> RBody PlanCreateReq :> StripeHeaders (PostS Plan)
+type PlanCreate  = "v1" :> "plans" :> RBody PlanCreateReq :> StripeHeaders (PostS Plan)
 -- type PlanRead    = "v1" :> "plans" :> CapId PlanId :> StripeHeaders (GetShowS Plan)
 -- type PlanUpdate  = "v1" :> "plans" :> CapId PlanId :> RBody PlanUpdateReq :> StripeHeaders (PostS Plan)
 -- type PlanDestroy = "v1" :> "plans" :> CapId PlanId :> StripeHeaders (DeleteS PlanId)
@@ -311,13 +356,12 @@ verifyCustomerBankAccount :: CustomerId -> UpdateS BankAccountId BankAccountVeri
 createCustomerBankAccount :<|> readCustomerBankAccount :<|> updateCustomerBankAccount :<|> destroyCustomerBankAccount :<|> listCustomerBankAccounts :<|> verifyCustomerBankAccount =
   client (Proxy :: Proxy CustomerBankAccountAPI)
 
--- createPlan :: CreateS PlanCreateReq Plan
+createPlan :: CreateS PlanCreateReq Plan
 -- readPlan :: ReadS PlanId Plan
 -- updatePlan :: UpdateS PlanId PlanUpdateReq Plan
 -- destroyPlan :: DestroyS PlanId
 listPlans :: ListS [Plan]
--- createPlan :<|> readPlan :<|> updatePlan :<|> destroyPlan :<|> listPlans =
-listPlans =
+createPlan :<|> listPlans =
   client (Proxy :: Proxy PlanAPI)
 
 

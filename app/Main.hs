@@ -3,34 +3,51 @@
 
 module Main where
 
+import qualified Data.Text             as T
+import           Data.Time.Clock       as Time
+import           Data.Time.Clock.POSIX as Time
+
 import           Stripe
 
 
 main :: IO ()
 main = do
-  -- -- [PLAN] CREATE
-  -- let token = Token "tok_mastercard"
-  --     createReq = minPlanCreateReq token
-  -- (Right createResp) <- stripeScalar WithoutConnect $ createPlan createReq
-  -- putStrLn . ((++) "[CREATE PLAN] PLAN DESCRIPTION: ") . show . planDescription . stripeScalarData $ createResp
-  -- let planId' = planId . stripeScalarData $ createResp
+  s <- Time.getCurrentTime >>= return . T.pack . show . Time.utcTimeToPOSIXSeconds
+
+  -- [PLAN] CREATE
+  let createPlanReq =
+        PlanCreateReq
+          { planCreateId                  = PlanId . mconcat $ ["test-plan-", s]
+          , planCreateName                = "Test Plan Name"
+          , planCreateAmount              = 1000
+          , planCreateCurrency            = USD
+          , planCreateInterval            = Month
+          , planCreateIntervalCount       = Just 1
+          , planCreateStatementDescriptor = Just "Company -- Test Plan" -- TODO length txt <= 22
+          , planCreateTrialPeriodDays     = Nothing
+          , planCreateMetadata            = Just . metadata $ [("test-key", "test-val")]
+          }
+  stripeScalar WithoutConnect (createPlan createPlanReq) >>= print
+  -- (Right createPlanResp) <- stripeScalar WithoutConnect $ createPlan createPlanReq
+  -- putStrLn . ((++) "[CREATE PLAN] PLAN DESCRIPTION: ") . show . planDescription . stripeScalarData $ createPlanResp
+  -- let planId' = planId . stripeScalarData $ createPlanResp
   -- -- [PLAN] UPDATE
-  -- let updateReq = emptyPlanUpdateReq { planUpdateDescription = Just "test" }
-  -- (Right updateResp) <- stripeScalar WithoutConnect $ updatePlan planId' updateReq
-  -- putStrLn . ((++) "[UPDATE PLAN] PLAN DESCRIPTION: ") . show . planDescription . stripeScalarData $ updateResp
+  -- let updatePlanReq = emptyPlanUpdateReq { planUpdateDescription = Just "test" }
+  -- (Right updatePlanResp) <- stripeScalar WithoutConnect $ updatePlan planId' updatePlanReq
+  -- putStrLn . ((++) "[UPDATE PLAN] PLAN DESCRIPTION: ") . show . planDescription . stripeScalarData $ updatePlanResp
   -- -- [PLAN] READ
-  -- (Right readResp) <- stripeScalar WithoutConnect $ readPlan planId'
-  -- putStrLn . ((++) "[READ PLAN] PLAN DESCRIPTION: ") . show . planDescription . stripeScalarData $ readResp
+  -- (Right readPlanResp) <- stripeScalar WithoutConnect $ readPlan planId'
+  -- putStrLn . ((++) "[READ PLAN] PLAN DESCRIPTION: ") . show . planDescription . stripeScalarData $ readPlanResp
   -- -- [PLAN] LIST
-  -- (Right listResp) <- stripeList WithoutConnect [] listPlans
-  -- putStrLn . ((++) "[LIST PLAN] CONTAINS PLAN ID: ") . show . containsPlanId planId . stripeListData $ listResp
+  -- (Right listPlanResp) <- stripeList WithoutConnect [] listPlans
+  -- putStrLn . ((++) "[LIST PLAN] CONTAINS PLAN ID: ") . show . containsPlanId planId . stripeListData $ listPlanResp
   -- -- [PLAN] DESTROY
-  -- (Right deleteResp) <- stripeDelete WithoutConnect $ destroyPlan planId'
-  -- putStrLn . ((++) "[DESTROY PLAN] CONTAINS PLAN ID: ") . show $ planId' == stripeDestroyId deleteResp
+  -- (Right deletePlanResp) <- stripeDelete WithoutConnect $ destroyPlan planId'
+  -- putStrLn . ((++) "[DESTROY PLAN] CONTAINS PLAN ID: ") . show $ planId' == stripeDestroyId deletePlanResp
 
   -- [PLAN] LIST
-  -- (Right listResp') <- stripeList WithoutConnect [] listPlans
-  -- putStrLn . ((++) "[LIST PLAN] CONTAINS PLAN ID: ") . show . containsPlanId planId' . stripeListData $ listResp'
+  -- (Right listPlanResp') <- stripeList WithoutConnect [] listPlans
+  -- putStrLn . ((++) "[LIST PLAN] CONTAINS PLAN ID: ") . show . containsPlanId planId' . stripeListData $ listPlanResp'
   stripeList WithoutConnect [] listPlans >>= print
 
 
@@ -123,7 +140,7 @@ main = do
     -- containsCustomerId id' = any ((==) id' . customerId)
 
     key = StripeSecretKey "sk_test_BQokikJOvBiI2HlWgH4olfQ2"
-    -- stripeScalar = stripeScalar' key
+    stripeScalar = stripeScalar' key
     stripeList = stripeList' key
     -- stripeDelete = stripeDelete' key
 
