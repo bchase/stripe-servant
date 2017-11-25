@@ -9,6 +9,7 @@ module Stripe.Helpers
   , stripeList'
   , stripeDelete'
   , deriveFromJSON'
+  -- , deriveToForm
   ) where
 
 import           Data.Either                 (either)
@@ -16,6 +17,7 @@ import           Language.Haskell.TH.Syntax  as TH
 
 import           Data.Aeson.Casing           (snakeCase)
 import           Data.Aeson.TH               (Options (..), defaultOptions, deriveFromJSON)
+-- import qualified Web.Internal.FormUrlEncoded as F
 import           Servant.API
 import           Servant.Client              (ClientEnv (ClientEnv), Scheme (Https),
                                               BaseUrl (BaseUrl), runClientM)
@@ -27,8 +29,13 @@ import           Stripe.Error                (stripeError)
 
 deriveFromJSON' :: TH.Name -> TH.Q [TH.Dec]
 deriveFromJSON' name =
-  let len = length . reverse . takeWhile (/= '.') . reverse . show $ name
-   in deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop len } name
+  deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop (moduleNameLength name) } name
+moduleNameLength :: TH.Name -> Int
+moduleNameLength = length . takeWhile (/= '.') . reverse . show
+-- deriveToForm :: TH.Name -> (a -> F.Form)
+-- deriveToForm name =
+--   let len = length . takeWhile (/= '.') . reverse . show $ name
+--    in F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop len }
 
 
 stripeScalar' :: StripeSecretKey -> StripeConnect -> StripeClient (StripeScalarResp a) -> IO (StripeS a)

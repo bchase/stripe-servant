@@ -36,24 +36,20 @@ import           Stripe.Util                 (fromJsonString)
 
 -- TODO
 --   GENERAL STRIPE
---   \ * errors -- TODO better Either (esp decode fail)
---   X * pagination
---   X * request IDs
---   X * nested CRUD (e.g. cards, ACH)
---   X * cast `created` time ints
+--   \ * errors -- better Either (status codes; decode fail is currently a `Failure`)
 --   \ * metadata
---     * events (webhooks)
---     * Connect fees
 --   . * ADTs for e.g. `status`
+--     * events (webhooks)
+--     * test Connect
+--     * Connect fees
 --     * expanding
 --     ? `Unrecognized* jsonStr` constructor for ADTs (FromJSON)?
 --     ? idempotency
---     ! flesh out data types
---     ! (define needed and) add endpoints
+--     ! flesh out data types (Charge/Customer/Card/BankAccount)
 --   CLEANUP
---   X - mv things to Stripe.Client/Stripe.Data/etc.
+--     - TH `deriveToForm` (grep below)
 --     - mv things to e.g. Resource/Customer.hs, Request/Customer.hs
---     - mv Interval/CurrencyCodeISO4217
+--     - mv StripeTime/Interval/CurrencyCodeISO4217
 --     - test/live key checks
 --     - mv most of this to `Stripe.API` and just reexport public API via this module
 --     ? change `String` to `Text`
@@ -222,13 +218,13 @@ $(deriveFromJSON' ''Plan)
 
 -- Requests
 
-data BankAccountCreateReq = BankAccountCreateReq
+data BankAccountCreate = BankAccountCreate
   { bankAccountCreateSource :: Token
   } deriving (Generic)
-instance F.ToForm BankAccountCreateReq where
-  toForm = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 17 }
-minBankAccountCreateReq :: Token -> BankAccountCreateReq
-minBankAccountCreateReq token = BankAccountCreateReq token
+instance F.ToForm BankAccountCreate where
+  toForm = (\n -> F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop (length . reverse . takeWhile (/= '.') . reverse . show $ n) }) ''BankAccountCreate -- TODO TH deriveToForm
+minBankAccountCreateReq :: Token -> BankAccountCreate
+minBankAccountCreateReq token = BankAccountCreate token
 
 data BankAccountUpdateReq = BankAccountUpdateReq
   { bankAccountUpdateAccountHolderName :: Maybe String
@@ -334,7 +330,7 @@ type CustomerCardUpdate  = "v1" :> "customers" :> CapId CustomerId :> "cards" :>
 type CustomerCardDestroy = "v1" :> "customers" :> CapId CustomerId :> "cards" :> CapId CardId :> StripeHeaders (DeleteS CardId)
 type CustomerCardList    = "v1" :> "customers" :> CapId CustomerId :> "cards" :> StripePaginationQueryParams (StripeHeaders (GetListS [Card]))
 
-type CustomerBankAccountCreate  = "v1" :> "customers" :> CapId CustomerId :> "bank_accounts" :> RBody BankAccountCreateReq :> StripeHeaders (PostS BankAccount)
+type CustomerBankAccountCreate  = "v1" :> "customers" :> CapId CustomerId :> "bank_accounts" :> RBody BankAccountCreate :> StripeHeaders (PostS BankAccount)
 type CustomerBankAccountRead    = "v1" :> "customers" :> CapId CustomerId :> "bank_accounts" :> CapId BankAccountId :> StripeHeaders (GetShowS BankAccount)
 type CustomerBankAccountUpdate  = "v1" :> "customers" :> CapId CustomerId :> "bank_accounts" :> CapId BankAccountId :> RBody BankAccountUpdateReq :> StripeHeaders (PostS BankAccount)
 type CustomerBankAccountDestroy = "v1" :> "customers" :> CapId CustomerId :> "bank_accounts" :> CapId BankAccountId :> StripeHeaders (DeleteS BankAccountId)
@@ -367,7 +363,7 @@ listCustomerCards :: CustomerId -> ListS [Card]
 createCustomerCard :<|> readCustomerCard :<|> updateCustomerCard :<|> destroyCustomerCard :<|> listCustomerCards =
   client (Proxy :: Proxy CustomerCardAPI)
 
-createCustomerBankAccount :: CustomerId -> CreateS BankAccountCreateReq BankAccount
+createCustomerBankAccount :: CustomerId -> CreateS BankAccountCreate BankAccount
 readCustomerBankAccount :: CustomerId -> ReadS BankAccountId BankAccount
 updateCustomerBankAccount :: CustomerId -> UpdateS BankAccountId BankAccountUpdateReq BankAccount
 destroyCustomerBankAccount :: CustomerId -> DestroyS BankAccountId
