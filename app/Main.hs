@@ -27,28 +27,27 @@ main = do
           , planCreateTrialPeriodDays     = Nothing
           , planCreateMetadata            = Just . metadata $ [("test-key", "test-val")]
           }
-  stripeScalar WithoutConnect (createPlan createPlanReq) >>= print
-  -- (Right createPlanResp) <- stripeScalar WithoutConnect $ createPlan createPlanReq
-  -- putStrLn . ((++) "[CREATE PLAN] PLAN DESCRIPTION: ") . show . planDescription . stripeScalarData $ createPlanResp
-  -- let planId' = planId . stripeScalarData $ createPlanResp
-  -- -- [PLAN] UPDATE
-  -- let updatePlanReq = emptyPlanUpdateReq { planUpdateDescription = Just "test" }
-  -- (Right updatePlanResp) <- stripeScalar WithoutConnect $ updatePlan planId' updatePlanReq
-  -- putStrLn . ((++) "[UPDATE PLAN] PLAN DESCRIPTION: ") . show . planDescription . stripeScalarData $ updatePlanResp
-  -- -- [PLAN] READ
-  -- (Right readPlanResp) <- stripeScalar WithoutConnect $ readPlan planId'
-  -- putStrLn . ((++) "[READ PLAN] PLAN DESCRIPTION: ") . show . planDescription . stripeScalarData $ readPlanResp
-  -- -- [PLAN] LIST
-  -- (Right listPlanResp) <- stripeList WithoutConnect [] listPlans
-  -- putStrLn . ((++) "[LIST PLAN] CONTAINS PLAN ID: ") . show . containsPlanId planId . stripeListData $ listPlanResp
-  -- -- [PLAN] DESTROY
-  -- (Right deletePlanResp) <- stripeDelete WithoutConnect $ destroyPlan planId'
-  -- putStrLn . ((++) "[DESTROY PLAN] CONTAINS PLAN ID: ") . show $ planId' == stripeDestroyId deletePlanResp
-
+  -- stripeScalar WithoutConnect (createPlan createPlanReq) >>= print
+  (Right createPlanResp) <- stripeScalar WithoutConnect $ createPlan createPlanReq
+  putStrLn . ((++) "[CREATE PLAN] PLAN ID: ") . show . unPlanId . planId . stripeScalarData $ createPlanResp
+  let planId' = planId . stripeScalarData $ createPlanResp
+  -- [PLAN] UPDATE
+  let updatePlanReq = emptyPlanUpdateReq { planUpdateName = Just "Updated Test Plan Name" }
+  (Right updatePlanResp) <- stripeScalar WithoutConnect $ updatePlan planId' updatePlanReq
+  putStrLn . ((++) "[UPDATE PLAN] PLAN Name: ") . show . planName . stripeScalarData $ updatePlanResp
+  -- [PLAN] READ
+  (Right readPlanResp) <- stripeScalar WithoutConnect $ readPlan planId'
+  putStrLn . ((++) "[READ PLAN] PLAN NAME: ") . show . planName . stripeScalarData $ readPlanResp
   -- [PLAN] LIST
-  -- (Right listPlanResp') <- stripeList WithoutConnect [] listPlans
-  -- putStrLn . ((++) "[LIST PLAN] CONTAINS PLAN ID: ") . show . containsPlanId planId' . stripeListData $ listPlanResp'
-  stripeList WithoutConnect [] listPlans >>= print
+  (Right listPlanResp) <- stripeList WithoutConnect [] listPlans
+  putStrLn . ((++) "[LIST PLAN] PLAN IDS: ") . show . map (unPlanId . planId) . stripeListData $ listPlanResp
+  -- [PLAN] DESTROY
+  (Right deletePlanResp) <- stripeDelete WithoutConnect $ destroyPlan planId'
+  putStrLn . ((++) "[DESTROY PLAN] DELETED: ") . show .stripeDestroyDeleted $ deletePlanResp
+  -- [PLAN] LIST
+  (Right listPlanResp') <- stripeList WithoutConnect [] listPlans
+  putStrLn . ((++) "[LIST PLAN] PLAN IDS: ") . show . map (unPlanId . planId) . stripeListData $ listPlanResp'
+  -- stripeList WithoutConnect [] listPlans >>= print
 
 
   -- -- [CUSTOMER] CREATE
@@ -142,7 +141,7 @@ main = do
     key = StripeSecretKey "sk_test_BQokikJOvBiI2HlWgH4olfQ2"
     stripeScalar = stripeScalar' key
     stripeList = stripeList' key
-    -- stripeDelete = stripeDelete' key
+    stripeDelete = stripeDelete' key
 
     -- getTestBankAccountToken :: IO Token
     -- getTestBankAccountToken = do

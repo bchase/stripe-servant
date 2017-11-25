@@ -108,6 +108,8 @@ instance J.FromJSON Metadata where
           J.String txt -> txt
           _ -> "" -- TODO shouldnt ever be anything but Text
   parseJSON _ = mempty
+instance ToHttpApiData Metadata where
+  toQueryParam _ = "" -- TODO ... handling via `addMetadataToForm`
 addMetadataToForm :: Maybe Metadata -> F.Form -> F.Form
 addMetadataToForm mMetadata form =
   let hm = HM.delete "metadata" . unForm $ form
@@ -281,12 +283,22 @@ data PlanCreateReq = PlanCreateReq
   , planCreateTrialPeriodDays     :: Maybe Int
   , planCreateMetadata            :: Maybe Metadata
   } deriving (Show, Generic)
-instance ToHttpApiData Metadata where
-  toQueryParam _ = "" -- TODO
 instance F.ToForm PlanCreateReq where
   toForm req@PlanCreateReq{planCreateMetadata} =
     let toForm' = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 10 }
      in addMetadataToForm planCreateMetadata . toForm' $ req
+
+data PlanUpdateReq = PlanUpdateReq
+  { planUpdateName                :: Maybe String
+  , planUpdateStatementDescriptor :: Maybe String
+  , planUpdateMetadata            :: Maybe Metadata
+  } deriving (Show, Generic)
+instance F.ToForm PlanUpdateReq where
+  toForm req@PlanUpdateReq{planUpdateMetadata} =
+    let toForm' = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 10 }
+     in addMetadataToForm planUpdateMetadata . toForm' $ req
+emptyPlanUpdateReq :: PlanUpdateReq
+emptyPlanUpdateReq = PlanUpdateReq Nothing Nothing Nothing
 
 
 ---- STRIPE API TYPE ----
@@ -294,12 +306,7 @@ instance F.ToForm PlanCreateReq where
 type CustomerAPI = CustomerCreate :<|> CustomerRead :<|> CustomerUpdate :<|> CustomerDestroy :<|> CustomerList
 type CustomerCardAPI = CustomerCardCreate :<|> CustomerCardRead :<|> CustomerCardUpdate :<|> CustomerCardDestroy :<|> CustomerCardList
 type CustomerBankAccountAPI = CustomerBankAccountCreate :<|> CustomerBankAccountRead :<|> CustomerBankAccountUpdate :<|> CustomerBankAccountDestroy :<|> CustomerBankAccountList :<|> CustomerBankAccountVerify
-type PlanAPI =
-       PlanCreate
-  -- :<|> PlanRead
-  -- :<|> PlanUpdate
-  -- :<|> PlanDestroy
-  :<|> PlanList
+type PlanAPI = PlanCreate :<|> PlanRead :<|> PlanUpdate :<|> PlanDestroy :<|> PlanList
 
 
 type CustomerCreate  = "v1" :> "customers" :> RBody CustomerCreateReq :> StripeHeaders (PostS Customer)
@@ -322,9 +329,9 @@ type CustomerBankAccountList    = "v1" :> "customers" :> CapId CustomerId :> "ba
 type CustomerBankAccountVerify  = "v1" :> "customers" :> CapId CustomerId :> "bank_accounts" :> CapId BankAccountId :> "verify" :> RBody BankAccountVerifyReq :> StripeHeaders (PostS BankAccount)
 
 type PlanCreate  = "v1" :> "plans" :> RBody PlanCreateReq :> StripeHeaders (PostS Plan)
--- type PlanRead    = "v1" :> "plans" :> CapId PlanId :> StripeHeaders (GetShowS Plan)
--- type PlanUpdate  = "v1" :> "plans" :> CapId PlanId :> RBody PlanUpdateReq :> StripeHeaders (PostS Plan)
--- type PlanDestroy = "v1" :> "plans" :> CapId PlanId :> StripeHeaders (DeleteS PlanId)
+type PlanRead    = "v1" :> "plans" :> CapId PlanId :> StripeHeaders (GetShowS Plan)
+type PlanUpdate  = "v1" :> "plans" :> CapId PlanId :> RBody PlanUpdateReq :> StripeHeaders (PostS Plan)
+type PlanDestroy = "v1" :> "plans" :> CapId PlanId :> StripeHeaders (DeleteS PlanId)
 type PlanList    = "v1" :> "plans" :> StripePaginationQueryParams (StripeHeaders (GetListS [Plan]))
 
 
@@ -357,11 +364,11 @@ createCustomerBankAccount :<|> readCustomerBankAccount :<|> updateCustomerBankAc
   client (Proxy :: Proxy CustomerBankAccountAPI)
 
 createPlan :: CreateS PlanCreateReq Plan
--- readPlan :: ReadS PlanId Plan
--- updatePlan :: UpdateS PlanId PlanUpdateReq Plan
--- destroyPlan :: DestroyS PlanId
+readPlan :: ReadS PlanId Plan
+updatePlan :: UpdateS PlanId PlanUpdateReq Plan
+destroyPlan :: DestroyS PlanId
 listPlans :: ListS [Plan]
-createPlan :<|> listPlans =
+createPlan :<|> readPlan :<|> updatePlan :<|> destroyPlan :<|> listPlans =
   client (Proxy :: Proxy PlanAPI)
 
 
