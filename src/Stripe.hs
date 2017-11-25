@@ -18,7 +18,7 @@ import qualified Data.HashMap.Strict         as HM
 import           Data.Char                   (toLower)
 import qualified Data.Text                   as T
 import           Data.Proxy                  (Proxy (Proxy))
-import           Data.Scientific             (coefficient)
+import           Data.Scientific             (Scientific, coefficient)
 import qualified Data.Time.Clock             as Time
 import qualified Data.Time.Clock.POSIX       as Time
 import           GHC.Generics                (Generic)
@@ -46,27 +46,41 @@ import           Stripe.Util                 (fromJsonString)
 --     ? `Unrecognized* jsonStr` constructor for ADTs (FromJSON)?
 --     ? idempotency
 --     ! flesh out data types (Charge/Customer/Card/BankAccount)
+--     - sharing Customers (Connect, via Tokens)
 --   CLEANUP
+--     - mv resource types & their instances to own files
 --     - TH `deriveToForm` (grep below)
+--     - TH `*Id` types & instances
 --     - mv things to e.g. Resource/Customer.hs, Request/Customer.hs
---     - mv StripeTime/Interval/CurrencyCodeISO4217
+--     - mv StripeTime/Interval/CurrencyCode
 --     - test/live key checks
 --     - mv most of this to `Stripe.API` and just reexport public API via this module
 --     ? change `String` to `Text`
 
-data CurrencyCodeISO4217
+data CountryCode -- TODO add more
+  = US
+  | UnrecognizedCountryCode T.Text
+  deriving (Show, Generic)
+instance J.FromJSON CountryCode where
+  parseJSON (J.String "US") = return US
+  parseJSON (J.String str)  = return . UnrecognizedCountryCode $ str
+  parseJSON _ = mempty
+instance ToHttpApiData CountryCode where
+  toQueryParam = T.pack . show
+  -- toQueryParam (UnrecognizedCountryCode code) = code -- TODO
+
+-- ISO4217
+data CurrencyCode -- TODO add more
   = USD
-  | JPY
   | UnrecognizedCurrencyCode T.Text
   deriving (Show, Generic)
-instance J.FromJSON CurrencyCodeISO4217 where
+instance J.FromJSON CurrencyCode where
   parseJSON (J.String "usd") = return USD
-  parseJSON (J.String "jpy") = return JPY
   parseJSON (J.String str)   = return . UnrecognizedCurrencyCode $ str
   parseJSON _ = mempty
-instance ToHttpApiData CurrencyCodeISO4217 where
+instance ToHttpApiData CurrencyCode where
   toQueryParam = T.pack . map toLower . show
-  -- toQueryParam (UnrecognizedCurrencyCode _) -- TODO ...
+  -- toQueryParam (UnrecognizedCurrencyCode code) = code -- TODO
 
 data Interval
   = Day
@@ -88,8 +102,11 @@ data StripeTime = StripeTime
   , getUTCTime :: Time.UTCTime
   } deriving (Eq, Show, Generic)
 instance J.FromJSON StripeTime where
-  parseJSON (J.Number num) =
-    return $ StripeTime (fromInteger . coefficient $ num) (Time.posixSecondsToUTCTime . fromInteger . coefficient $ num)
+  parseJSON (J.Number sci) =
+    return $ StripeTime (int sci) (Time.posixSecondsToUTCTime . int $ sci)
+    where
+      int :: (Num a) => Scientific -> a
+      int = fromInteger . coefficient
   parseJSON _ = mempty
 
 newtype Metadata = Metadata { unMetadata :: HM.HashMap T.Text T.Text } deriving (Show, Generic)
@@ -121,6 +138,7 @@ addMetadataToForm mMetadata form =
 
 -- Resources
 
+newtype AccountId     = AccountId     { unAccountId     :: T.Text } deriving (Eq, Show, Generic)
 newtype BankAccountId = BankAccountId { unBankAccountId :: T.Text } deriving (Eq, Show, Generic)
 newtype CardId        = CardId        { unCardId        :: T.Text } deriving (Eq, Show, Generic)
 newtype ChargeId      = ChargeId      { unChargeId      :: T.Text } deriving (Eq, Show, Generic)
@@ -129,6 +147,8 @@ newtype PlanId        = PlanId        { unPlanId        :: T.Text } deriving (Eq
 
 newtype Token = Token { unToken :: T.Text } deriving (Show, Generic)
 
+instance J.FromJSON AccountId where
+  parseJSON = fromJsonString AccountId
 instance J.FromJSON BankAccountId where
   parseJSON = fromJsonString BankAccountId
 instance J.FromJSON CardId where
@@ -142,6 +162,8 @@ instance J.FromJSON PlanId where
 instance J.FromJSON Token where
   parseJSON = fromJsonString Token
 
+instance ToHttpApiData AccountId where
+  toQueryParam = unAccountId
 instance ToHttpApiData BankAccountId where
   toQueryParam = unBankAccountId
 instance ToHttpApiData CardId where
@@ -155,7 +177,7 @@ instance ToHttpApiData PlanId where
 instance ToHttpApiData Token where
   toUrlPiece = unToken
 
-data BankAccountStatus
+data BankAccountStatus -- TODO mv
   = New
   | Validated
   | Verified
@@ -169,21 +191,36 @@ instance J.FromJSON BankAccountStatus where
   parseJSON (J.String "verification_failed") = return VerificationFailed
   parseJSON (J.String "errored")             = return Errored
   parseJSON _ = mempty
-
+data BankAccountHolderType -- TODO mv
+  = Individual
+  | Company
+  deriving (Show, Generic)
+instance J.FromJSON BankAccountHolderType where
+  parseJSON (J.String "individual") = return Individual
+  parseJSON (J.String "company")    = return Company
+  parseJSON _ = mempty
 data BankAccount = BankAccount
-  { bankAccountId                :: BankAccountId
-  , bankAccountAccountHolderName :: String
-  , bankAccountAccountHolderType :: String
-  , bankAccountLast4             :: String
-  , bankAccountStatus            :: BankAccountStatus
+  { bankAccountId                 :: BankAccountId
+  , bankAccountAccount            :: Maybe AccountId
+  , bankAccountAccountHolderName  :: String
+  , bankAccountAccountHolderType  :: BankAccountHolderType
+  , bankAccountBankName           :: String
+  , bankAccountCountry            :: CountryCode
+  , bankAccountCurrency           :: CurrencyCode
+  , bankAccountDefaultForCurrency :: Maybe Bool
+  , bankAccountFingerprint        :: String
+  , bankAccountLast4              :: String
+  , bankAccountMetadata           :: Metadata
+  , bankAccountRoutingNumber      :: String
+  , bankAccountStatus             :: BankAccountStatus
   } deriving (Show, Generic)
 $(deriveFromJSON' ''BankAccount)
 
 data Card = Card
   { cardId       :: CardId
   , cardLast4    :: String
-  , cardExpMonth :: Int -- TODO
-  , cardExpYear  :: Int -- TODO
+  , cardExpMonth :: Int -- TODO `Month`?
+  , cardExpYear  :: Int
   } deriving (Show, Generic)
 $(deriveFromJSON' ''Card)
 
@@ -205,7 +242,7 @@ data Plan = Plan
   { planId                  :: PlanId
   , planAmount              :: Int
   , planCreated             :: StripeTime
-  , planCurrency            :: CurrencyCodeISO4217
+  , planCurrency            :: CurrencyCode
   , planInterval            :: Interval
   , planIntervalCount       :: Int
   , planLivemode            :: Bool
@@ -285,7 +322,7 @@ data PlanCreateReq = PlanCreateReq
   { planCreateId                  :: PlanId
   , planCreateName                :: String
   , planCreateAmount              :: Int
-  , planCreateCurrency            :: CurrencyCodeISO4217
+  , planCreateCurrency            :: CurrencyCode
   , planCreateInterval            :: Interval
   , planCreateIntervalCount       :: Maybe Int
   , planCreateStatementDescriptor :: Maybe String
