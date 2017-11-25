@@ -43,7 +43,7 @@ import           Stripe.Util                 (fromJsonString)
 --     * test Connect
 --     * Connect fees
 --     * expanding
---     ? `Unrecognized* jsonStr` constructor for ADTs (FromJSON)?
+--     ? `Unrecognized* jsonStr` constructor for all ADTs (FromJSON)?
 --     ? idempotency
 --     ! flesh out data types (Charge/Customer/Card/BankAccount)
 --     - sharing Customers (Connect, via Tokens)
@@ -216,11 +216,79 @@ data BankAccount = BankAccount
   } deriving (Show, Generic)
 $(deriveFromJSON' ''BankAccount)
 
+data CardBrand
+  = AmericanExpress
+  | DinersClub
+  | Discover
+  | JCB
+  | MasterCard
+  | Visa
+  | UnknownCardBrand
+  deriving (Show, Generic)
+instance J.FromJSON CardBrand where
+  parseJSON (J.String "Visa")             = return Visa
+  parseJSON (J.String "American Express") = return AmericanExpress
+  parseJSON (J.String "MasterCard")       = return MasterCard
+  parseJSON (J.String "Discover")         = return Discover
+  parseJSON (J.String "JCB")              = return JCB
+  parseJSON (J.String "Diners Club")      = return DinersClub
+  parseJSON (J.String "Unknown")          = return UnknownCardBrand
+  parseJSON _ = mempty
+data CardFundingType
+  = Credit
+  | Debit
+  | Prepaid
+  | UnknownCardFundingType
+  deriving (Show, Generic)
+instance J.FromJSON CardFundingType where
+  parseJSON (J.String "credit")  = return Credit
+  parseJSON (J.String "debit")   = return Debit
+  parseJSON (J.String "prepaid") = return Prepaid
+  parseJSON (J.String "unknown") = return UnknownCardFundingType
+  parseJSON _ = mempty
+data TokenizationMethod
+  = ApplePay
+  | AndroidPay
+  deriving (Show, Generic)
+instance J.FromJSON TokenizationMethod where
+  parseJSON (J.String "apply_pay")   = return ApplePay
+  parseJSON (J.String "android_pay") = return AndroidPay
+  parseJSON _ = mempty
+data Check
+  = Pass
+  | Fail
+  | Unavailable
+  | Unchecked
+  deriving (Show, Generic)
+instance J.FromJSON Check where
+  parseJSON (J.String "pass")        = return Pass
+  parseJSON (J.String "fail")        = return Fail
+  parseJSON (J.String "unavailable") = return Unavailable
+  parseJSON (J.String "unchecked")   = return Unchecked
+  parseJSON _ = mempty
 data Card = Card
-  { cardId       :: CardId
-  , cardLast4    :: String
-  , cardExpMonth :: Int -- TODO `Month`?
-  , cardExpYear  :: Int
+  { cardId                 :: CardId
+  , cardAddressCity        :: Maybe String
+  , cardAddressCountry     :: Maybe String
+  , cardAddressLine1       :: Maybe String
+  , cardAddressLine1Check  :: Maybe Check
+  , cardAddressLine2       :: Maybe String
+  , cardAddressState       :: Maybe String
+  , cardAddressZip         :: Maybe String
+  , cardAddressZipCheck    :: Maybe Check
+  , cardBrand              :: CardBrand
+  , cardCountry            :: CountryCode
+  , cardCustomer           :: CustomerId
+  , cardCvcCheck           :: Maybe Check
+  , cardDynamicLast4       :: Maybe String
+  , cardExpMonth           :: Int -- TODO `Month`?
+  , cardExpYear            :: Int
+  , cardFingerprint        :: String
+  , cardFunding            :: CardFundingType
+  , cardLast4              :: String
+  , cardMetadata           :: Metadata
+  , cardName               :: Maybe String
+  , cardTokenizationMethod :: Maybe TokenizationMethod
   } deriving (Show, Generic)
 $(deriveFromJSON' ''Card)
 
