@@ -43,10 +43,10 @@ import           Stripe.Util                 (fromJsonString)
 --   X * nested CRUD (e.g. cards, ACH)
 --   X * cast `created` time ints
 --   \ * metadata
---     * expanding
 --     * events (webhooks)
 --     * Connect fees
---     * ADTs for e.g. `status`
+--   . * ADTs for e.g. `status`
+--     * expanding
 --     ? `Unrecognized* jsonStr` constructor for ADTs (FromJSON)?
 --     ? idempotency
 --     ! flesh out data types
@@ -160,13 +160,27 @@ instance ToHttpApiData PlanId where
 instance ToHttpApiData Token where
   toUrlPiece = unToken
 
+data BankAccountStatus
+  = New
+  | Validated
+  | Verified
+  | VerificationFailed
+  | Errored
+  deriving (Show)
+instance J.FromJSON BankAccountStatus where
+  parseJSON (J.String "new")                 = return New
+  parseJSON (J.String "validated")           = return Validated
+  parseJSON (J.String "verified")            = return Verified
+  parseJSON (J.String "verification_failed") = return VerificationFailed
+  parseJSON (J.String "errored")             = return Errored
+  parseJSON _ = mempty
 
 data BankAccount = BankAccount
   { bankAccountId                :: BankAccountId
   , bankAccountAccountHolderName :: String
   , bankAccountAccountHolderType :: String
   , bankAccountLast4             :: String
-  , bankAccountStatus            :: String
+  , bankAccountStatus            :: BankAccountStatus
   } deriving (Show, Generic)
 $(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 11 } ''BankAccount)
 
