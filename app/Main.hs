@@ -72,6 +72,29 @@ main = do
   -- putStrLn . ((++) "[LIST CUSTOMER] CONTAINS CUSTOMER ID: ") . show . containsCustomerId custId . stripeListData $ listResp
 
 
+  -- -- [CHARGE] CREATE
+  -- let createChargeReq = minChargeCreateReq . Token $ "tok_visa"
+  -- (Right createChargeResp) <- stripeScalar WithoutConnect $ createCharge custId createChargeReq
+  -- putStrLn . ((++) "[CREATE CHARGE] `expYear`: ") . show . chargeExpYear . stripeScalarData $ createChargeResp
+  -- let chargeId' = chargeId . stripeScalarData $ createChargeResp
+  -- -- [CHARGE] UPDATE
+  -- let updateChargeReq = emptyChargeUpdateReq { chargeUpdateExpYear = Just 2025 }
+  -- (Right updateChargeResp) <- stripeScalar WithoutConnect $ updateCharge custId chargeId' updateChargeReq
+  -- putStrLn . ((++) "[UPDATE CHARGE] `expYear`: ") . show . chargeExpYear . stripeScalarData $ updateChargeResp
+  -- -- [CHARGE] READ
+  -- (Right readChargeResp) <- stripeScalar WithoutConnect $ readCharge custId chargeId'
+  -- putStrLn . ((++) "[READ CHARGE] `expYear`: ") . show . chargeExpYear . stripeScalarData $ readChargeResp
+  -- -- [CHARGE] LIST
+  -- (Right listChargesResp) <- stripeList WithoutConnect [] $ listCharges custId
+  -- putStrLn . ((++) "[LIST CHARGES] `last4`s: ") . show . map chargeLast4 . stripeListData $ listChargesResp
+  -- -- [CHARGE] DESTROY
+  -- (Right deleteChargeResp) <- stripeDelete WithoutConnect $ destroyCharge custId chargeId'
+  -- putStrLn . ((++) "[DESTROY CHARGE] `deleted`: ") . show . stripeDestroyDeleted $ deleteChargeResp
+  -- [CHARGE] LIST
+  (Right listChargesResp') <- stripeList WithoutConnect [] $ listCharges
+  putStrLn . ((++) "[LIST CHARGES] amounts: ") . show . map (\c ->  (show $ chargeCurrency c) ++ (show $ chargeAmount c)) . stripeListData $ listChargesResp'
+
+
   -- [CARD] CREATE
   let createCardReq = minCardCreateReq . Token $ "tok_visa"
   (Right createCardResp) <- stripeScalar WithoutConnect $ createCustomerCard custId createCardReq

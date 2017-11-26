@@ -47,6 +47,21 @@ import           Stripe.Util                 (fromJsonString)
 --     ? idempotency
 --     ! flesh out data types (Charge/Customer/Card/BankAccount)
 --     - sharing Customers (Connect, via Tokens)
+--     - resources
+--       * Refunds
+--       * Events
+--       * Subscriptions
+--         - Subscriptions
+--         - Invoices
+--         - Invoice Items
+--         - Coupons
+--         - Discounts (needed?)
+--         - Subscription Items (needed?)
+--         - Tokens (needed?)
+--       * Connect
+--         - Account
+--         - Application Fees
+--         - Application Fee Refund
 --   CLEANUP
 --     - mv resource types & their instances to own files
 --     - TH `deriveToForm` (grep below)
@@ -55,6 +70,7 @@ import           Stripe.Util                 (fromJsonString)
 --     - mv StripeTime/Interval/CurrencyCode
 --     - test/live key checks
 --     - mv most of this to `Stripe.API` and just reexport public API via this module
+--     ? rename `StripeErrorCode` to `CardErrorCode`
 --     ? change `String` to `Text`
 
 data CountryCode -- TODO add more
@@ -143,6 +159,7 @@ newtype BankAccountId = BankAccountId { unBankAccountId :: T.Text } deriving (Eq
 newtype CardId        = CardId        { unCardId        :: T.Text } deriving (Eq, Show, Generic)
 newtype ChargeId      = ChargeId      { unChargeId      :: T.Text } deriving (Eq, Show, Generic)
 newtype CustomerId    = CustomerId    { unCustomerId    :: T.Text } deriving (Eq, Show, Generic)
+newtype InvoiceId     = InvoiceId     { unInvoiceId     :: T.Text } deriving (Eq, Show, Generic)
 newtype PlanId        = PlanId        { unPlanId        :: T.Text } deriving (Eq, Show, Generic)
 
 newtype Token = Token { unToken :: T.Text } deriving (Show, Generic)
@@ -157,6 +174,8 @@ instance J.FromJSON ChargeId where
   parseJSON = fromJsonString ChargeId
 instance J.FromJSON CustomerId where
   parseJSON = fromJsonString CustomerId
+instance J.FromJSON InvoiceId where
+  parseJSON = fromJsonString InvoiceId
 instance J.FromJSON PlanId where
   parseJSON = fromJsonString PlanId
 instance J.FromJSON Token where
@@ -172,6 +191,8 @@ instance ToHttpApiData ChargeId where
   toQueryParam = unChargeId
 instance ToHttpApiData CustomerId where
   toQueryParam = unCustomerId
+instance ToHttpApiData InvoiceId where
+  toQueryParam = unInvoiceId
 instance ToHttpApiData PlanId where
   toQueryParam = unPlanId
 instance ToHttpApiData Token where
@@ -292,12 +313,122 @@ data Card = Card
   } deriving (Show, Generic)
 $(deriveFromJSON' ''Card)
 
+
+data ChargeStatus
+  = Succeeded
+  | Pending
+  | Failed
+  deriving (Show, Generic)
+instance J.FromJSON ChargeStatus where
+  parseJSON (J.String "succeeded") = return Succeeded
+  parseJSON (J.String "pending")   = return Pending
+  parseJSON (J.String "failed")    = return Failed
+  parseJSON _ = mempty
+data ChargeOutcomeNetworkStatus
+  = ApprovedByNetwork
+  | DeclinedByNetwork
+  | NotSentToNetwork
+  | ReversedAfterApproval
+  deriving (Show, Generic)
+instance J.FromJSON ChargeOutcomeNetworkStatus where
+  parseJSON (J.String "approved_by_network")     = return ApprovedByNetwork
+  parseJSON (J.String "declined_by_network")     = return DeclinedByNetwork
+  parseJSON (J.String "not_sent_to_network")     = return NotSentToNetwork
+  parseJSON (J.String "reversed_after_approval") = return ReversedAfterApproval
+  parseJSON _ = mempty
+data ChargeOutcomeRiskLevel
+  = Normal
+  | Elevated
+  | Highest
+  | NotAssessed
+  | UnknownRiskLevel
+  deriving (Show, Generic)
+instance J.FromJSON ChargeOutcomeRiskLevel where
+  parseJSON (J.String "normal")       = return Normal
+  parseJSON (J.String "elevated")     = return Elevated
+  parseJSON (J.String "highest")      = return Highest
+  parseJSON (J.String "not_assessed") = return NotAssessed
+  parseJSON (J.String "unknown")      = return UnknownRiskLevel
+  parseJSON _ = mempty
+data ChargeOutcomeType
+  = Authorized
+  | ManualReview
+  | IssuerDeclined
+  | Blocked
+  | Invalid
+  deriving (Show, Generic)
+instance J.FromJSON ChargeOutcomeType where
+  parseJSON (J.String "authorized")      = return Authorized
+  parseJSON (J.String "manual_review")   = return ManualReview
+  parseJSON (J.String "issuer_declined") = return IssuerDeclined
+  parseJSON (J.String "blocked")         = return Blocked
+  parseJSON (J.String "invalid")         = return Invalid
+  parseJSON _ = mempty
+data ChargeOutcomeReason
+  = HighestRiskLevel
+  | ElevatedRiskLevel
+  | Rule
+  | OtherReason T.Text
+  deriving (Show, Generic)
+instance J.FromJSON ChargeOutcomeReason where
+  parseJSON (J.String "highest_risk_level")  = return HighestRiskLevel
+  parseJSON (J.String "elevated_risk_level") = return ElevatedRiskLevel
+  parseJSON (J.String "rule")                = return Rule
+  parseJSON _ = mempty
+data ChargeOutcome = ChargeOutcome
+  { chargeOutcomeNetworkStatus :: ChargeOutcomeNetworkStatus
+  , chargeOutcomeReason        :: Maybe ChargeOutcomeReason
+  , chargeOutcomeRiskLevel     :: ChargeOutcomeRiskLevel
+  , chargeOutcomeSellerMessage :: String
+  , chargeOutcomeType          :: ChargeOutcomeType
+  } deriving (Show, Generic)
+$(deriveFromJSON' ''ChargeOutcome)
 data Charge = Charge
-  { chargeId       :: ChargeId
-  , chargeAmount   :: Int
-  , chargeCurrency :: String
+  { chargeId                  :: ChargeId
+  , chargeAmount              :: Int
+  , chargeAmountRefunded      :: Int
+  , chargeCaptured            :: Bool
+  , chargeCreated             :: StripeTime
+  , chargeCurrency            :: CurrencyCode
+  , chargeCustomer            :: Maybe CustomerId
+  , chargeDescription         :: Maybe String
+  , chargeDestination         :: Maybe AccountId
+  , chargeFailureCode         :: Maybe StripeErrorCode
+  , chargeFailureMessage      :: Maybe String
+  , chargeInvoice             :: Maybe InvoiceId
+  , chargeLivemode            :: Bool
+  , chargeMetadata            :: Metadata
+  , chargeOnBehalfOf          :: Maybe AccountId
+  , chargeOutcome             :: ChargeOutcome
+  , chargePaid                :: Bool
+  , chargeReceiptEmail        :: Maybe String
+  , chargeReceiptNumber       :: Maybe String
+  , chargeRefunded            :: Bool
+  , chargeStatementDescriptor :: Maybe String
+  , chargeStatus              :: ChargeStatus
   } deriving (Show, Generic)
 $(deriveFromJSON' ''Charge)
+  -- -- TODO
+  -- , chargeRefunds :: {
+  --     Object :: List,
+  --     Data :: [...],
+  --     HasMore :: False,
+  --     TotalCount :: 0,
+  --     Url :: /v1/Charges/Ch1BS9Tl2EZvKYlo2CRwnFr7F6/Refunds
+  --   },
+  -- , chargeSource :: {...} -- Source = Card | BA
+  -- , chargeApplication :: Maybe -- TODO expandable "ID of the Connect application that created to charge"
+  -- , chargeApplicationFee :: Maybe -- TODO Connect
+  -- , chargeBalanceTransaction :: -- TODO expandable "ID of the balance transaction that describes the impact of this charge on your account balance (not including refunds or disputes)."
+  -- , chargeDispute :: Null,
+  -- , chargeFraudDetails :: { },
+
+  -- -- Relay, Radar, etc.
+  -- , chargeOrder :: Null,
+  -- , chargeReview :: Null,
+  -- , chargeShipping :: Null, -- expandable
+  -- , chargeSourceTransfer :: Null,
+  -- , chargeTransferGroup :: Null
 
 data Customer = Customer
   { customerId          :: CustomerId
@@ -422,6 +553,20 @@ type CustomerCardAPI = CustomerCardCreate :<|> CustomerCardRead :<|> CustomerCar
 type CustomerBankAccountAPI = CustomerBankAccountCreate :<|> CustomerBankAccountRead :<|> CustomerBankAccountUpdate :<|> CustomerBankAccountDestroy :<|> CustomerBankAccountList :<|> CustomerBankAccountVerify
 type PlanAPI = PlanCreate :<|> PlanRead :<|> PlanUpdate :<|> PlanDestroy :<|> PlanList
 
+type ChargeAPI =
+  --      ChargeCreate
+  -- :<|> ChargeRead
+  -- :<|> ChargeUpdate
+  -- :<|> ChargeDestroy
+  -- :<|> ChargeList
+       ChargeList
+
+
+-- type ChargeCreate  = "v1" :> "charges" :> RBody ChargeCreateReq :> StripeHeaders (PostS Charge)
+-- type ChargeRead    = "v1" :> "charges" :> CapId ChargeId :> StripeHeaders (GetShowS Charge)
+-- type ChargeUpdate  = "v1" :> "charges" :> CapId ChargeId :> RBody ChargeUpdateReq :> StripeHeaders (PostS Charge)
+-- type ChargeDestroy = "v1" :> "charges" :> CapId ChargeId :> StripeHeaders (DeleteS ChargeId)
+type ChargeList    = "v1" :> "charges" :> StripePaginationQueryParams (StripeHeaders (GetListS [Charge]))
 
 type CustomerCreate  = "v1" :> "customers" :> RBody CustomerCreateReq :> StripeHeaders (PostS Customer)
 type CustomerRead    = "v1" :> "customers" :> CapId CustomerId :> StripeHeaders (GetShowS Customer)
@@ -484,6 +629,14 @@ destroyPlan :: DestroyS PlanId
 listPlans :: ListS [Plan]
 createPlan :<|> readPlan :<|> updatePlan :<|> destroyPlan :<|> listPlans =
   client (Proxy :: Proxy PlanAPI)
+
+-- createCharge :: CreateS ChargeCreateReq Charge
+-- readCharge :: ReadS ChargeId Charge
+-- updateCharge :: UpdateS ChargeId ChargeUpdateReq Charge
+-- destroyCharge :: DestroyS ChargeId
+listCharges :: ListS [Charge]
+listCharges =
+  client (Proxy :: Proxy ChargeAPI)
 
 
 
