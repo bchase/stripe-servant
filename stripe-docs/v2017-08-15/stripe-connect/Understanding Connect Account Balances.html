@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<!-- saved from url=(0048)https://stripe.com/docs/connect/account-balances -->
+<html lang="en" data-ember-extension="1"><script type="text/javascript" async="" src="./Understanding Connect Account Balances_files/mixpanel-2.2.min.js"></script><script async="" src="./Understanding Connect Account Balances_files/analytics.js"></script><script async="" src="./Understanding Connect Account Balances_files/gtm.js"></script><script src="./Understanding Connect Account Balances_files/742650679237989" async=""></script><script async="" src="./Understanding Connect Account Balances_files/fbevents.js"></script><script type="text/javascript">window["_gaUserPrefs"] = { ioo : function() { return true; } }</script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    <meta name="google-site-verification" content="f0LCrdI6z4Fo8zld4sHCgo5SiUE4EYYRUa6KVeX3Mw8">
+    <meta name="csrf-token" content="ACmByp9VS-5dgI-ZXH4IDjQKupcbFRMLHUfMREA8ebLWGyvN9zdYqelEZg-tdQCE2ww411MvMRPNy_WDfbOyUg==">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Understanding Connect Account Balances</title>
+
+    <meta name="description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+
+
+    <link rel="shortcut icon" href="https://stripe.com/favicon.ico">
+
+    <link rel="apple-touch-icon-precomposed" href="https://stripe.com/img/apple-touch-icon/180x180.png">
+    <link rel="icon" href="https://stripe.com/img/apple-touch-icon/180x180.png">
+
+
+    <link rel="image_src" type="image/png" href="https://stripe.com/img/v3/home/social.png">
+
+
+        <link rel="canonical" href="https://stripe.com/docs/connect/authentication">
+
+    <meta property="og:title" content="Authentication with Connect">
+    <meta property="og:url" content="https://stripe.com/docs/connect/authentication">
+    <meta property="og:description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+    <meta property="og:image" content="https://stripe.com/img/v3/home/social.png">
+
+      <meta name="twitter:card" content="summary">
+      <meta name="twitter:image" content="https://stripe.com/img/v3/home/twitter.png">
+    <meta name="twitter:site" content="@stripe">
+    <meta name="twitter:title" content="Authentication with Connect">
+    <meta name="twitter:description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+
+
+    <script type="application/json" id="strut_files">{&quot;v3/shared/navigation_ie10.css&quot;:&quot;/assets/v3/shared/navigation_ie10-fad8432db8a0ef02ccfc88df4a0b8535.css&quot;}</script>
+
+    
+
+    
+
+    <link rel="stylesheet" href="./Understanding Connect Account Balances_files/default-6388c486f7388db1252f0d7c85db5e15.css">
+    <link rel="stylesheet" href="./Understanding Connect Account Balances_files/common-966a7c7414d89c40541b15f2adfa6a26.css">
+    <link rel="stylesheet" href="./Understanding Connect Account Balances_files/base-3cdaeb306a5f322afd95a5e0122a3388.css">
+    <link rel="stylesheet" href="./Understanding Connect Account Balances_files/prism_light-6e629a34ce1570d4f33f7e2ee8bebbc2.css">
+    
+    
+    <meta name="viewport" content="width=1060">
+    <meta name="robots" content="noarchive">
+    <link rel="stylesheet" href="./Understanding Connect Account Balances_files/connect_button-9fd48f5cd30c2680d9e4a099d67cd9b1.css">
+</head>
+  <body class="">
+    
+    <div id="docs">
+      <div id="sidebar" class="bordered">
+        <div class="logo">
+          <a class="site" href="https://stripe.com/" title="Stripe"></a>
+          <a class="extension" href="https://stripe.com/docs">docs</a>
+        </div>
+        <div class="nav-border"></div>
+        <nav>
+          <h1 class="home"><a href="https://stripe.com/docs">Home</a></h1>
+          <h1 class="payments"><a class="toggle-content" data-trigger-id="0">Payments</a></h1>
+<ul class="hidden" data-hidden="true" data-height="889" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/quickstart">Quickstart</a>
+    </li>
+    <li class="category">Collecting payment details
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/checkout/tutorial" data-trigger-id="9">Checkout</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/checkout">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js" data-trigger-id="10">Stripe.js &amp; Elements</a>
+      <ul class="hidden" data-hidden="true" data-height="112" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/quickstart">Quickstart</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/payment-request-button">Payment Request Button</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/migrating">Migration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/reference">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios" data-trigger-id="11">iOS</a>
+      <ul class="hidden" data-hidden="true" data-height="112" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/standard">Standard Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/custom">Custom Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/apple-pay/apps">Apple Pay in Apps</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/sources">Using Sources</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android" data-trigger-id="12">Android</a>
+      <ul class="hidden" data-hidden="true" data-height="168" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/standard">Standard Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/pay-with-google">Pay with Google</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/alipay-android">Working with Alipay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/android-pay">Android Pay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/customer-information">Customer Information</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/sources">Using Sources</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/saving-cards">Saving Cards</a>
+    </li>
+    <li class="category">Charges
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/charges">Creating Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/declines" data-trigger-id="13">Declines &amp; Failed Payments</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/declines/codes">Decline Codes</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/disputes" data-trigger-id="14">Disputes &amp; Fraud</a>
+      <ul class="hidden" data-hidden="true" data-height="56" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/disputes/categories">Dispute Categories</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/disputes/prevention">Prevention</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/refunds">Refunds</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/payouts">Receiving Payouts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/currencies" data-trigger-id="15">Supported Currencies</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/currencies/conversions">Currency Conversions</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="category">Sources
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources" data-trigger-id="16">Payment Methods</a>
+      <ul class="hidden" data-hidden="true" data-height="308" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/sources/cards">Cards</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/three-d-secure">3D Secure</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/alipay">Alipay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/ach-credit-transfer">ACH Credit Transfer</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/bancontact">Bancontact</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/bitcoin">Bitcoin</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/giropay">Giropay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/ideal">iDEAL</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/p24">P24</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/sepa-debit">SEPA Direct Debit</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/sofort">SOFORT</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/best-practices">Best Practices</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/customers">Sources &amp; Customers</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/connect">Connect Platforms</a>
+    </li>
+    <li class="category">Other Payment Methods
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/ach">ACH</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/amex-express-checkout">Amex Express Checkout</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/apple-pay">Apple Pay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/pay-with-google">Pay with Google</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/payment-request-api">Payment Request API</a>
+    </li>
+    <li class="category">Products &amp; Orders
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders" data-trigger-id="17">Orders</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/orders/guide">Guide</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders/tax-integration">Tax Integrations</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders/shipping-integration">Shipping Integrations</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="subscriptions"><a class="toggle-content" data-trigger-id="1">Subscriptions</a></h1>
+<ul class="hidden" data-hidden="true" data-height="528" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/quickstart">Quickstart</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/creating" data-trigger-id="18">Creating Subscriptions</a>
+      <ul data-collapsable="false" data-height="168">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/multiplan">Using Multiple Plans</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/discounts">Applying Discounts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/trials">Using Trial Periods</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/quantities">Setting Quantities</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/taxes">Adding Taxes</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/multiple">Multiple Subscriptions</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/lifecycle">Lifecycle &amp; Events</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/webhooks">Using Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/changing" data-trigger-id="19">Changing Subscriptions</a>
+      <ul data-collapsable="false" data-height="84">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/upgrading-downgrading">Upgrading &amp; Downgrading</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/billing-cycle">Billing Cycle</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/canceling-pausing">Canceling &amp; Pausing</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/invoices" data-trigger-id="20">Working with Invoices</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/ach-credit">ACH Credit Transfers</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/plans">Managing Plans</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/subscriptions/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="connect"><a class="toggle-content" data-trigger-id="2">Connect</a></h1>
+<ul class="" data-height="566" style="opacity: 1; height: 566px;">
+    <li>
+      <a href="https://stripe.com/docs/connect" class="">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/quickstart" class="">Quickstart</a>
+    </li>
+    <li class="category">Account Types
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/accounts">Accounts Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/standard-accounts">Standard</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/express-accounts">Express</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/custom-accounts" data-trigger-id="21">Custom</a>
+      <ul class="hidden" data-hidden="true" data-height="84" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/connect/updating-accounts">Updating Accounts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/identity-verification">Identity Verification</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/required-verification-information">Required Info</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="category">Processing Payments
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/charges" data-trigger-id="22" class="">Creating Charges</a>
+      <ul class="hidden" data-height="104" style="opacity: 0; height: 0px;" data-hidden="true">
+    <li>
+      <a href="https://stripe.com/docs/connect/direct-charges" class="">Direct Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/destination-charges" class="">Destination Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/charges-transfers" class="">Separate Charges and Transfers</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/account-debits" class="">Account Debits</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/subscriptions" class="">Using Subscriptions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/currencies">Multiple Currencies</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/account-balances" class="selected">Account Balances</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/payouts">Bank Payouts</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/connect/best-practices" class="">Best Practices</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/migrating" class="">Migrating</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/reference" class="">OAuth Reference</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/webhooks" class="">Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="sigma"><a class="toggle-content" data-trigger-id="3">Sigma</a></h1>
+<ul class="hidden" data-hidden="true" data-height="150" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/sigma">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/transactions">Transactions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/subscriptions">Subscriptions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/connect">Connect</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/scheduled-queries">Scheduled Queries</a>
+    </li>
+</ul>
+
+          <h1 class="radar"><a class="toggle-content" data-trigger-id="4">Radar</a></h1>
+<ul class="hidden" data-hidden="true" data-height="248" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/radar">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/risk-evaluation">Risk Evaluation</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/blocklist">Blocklist</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/review" data-trigger-id="23">Review</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/radar/review/auth-and-capture">Uncaptured Payments</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/rules" data-trigger-id="24">Rules</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/radar/rules/reference">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/radar/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="relay"><a class="toggle-content" data-trigger-id="5">Relay</a></h1>
+<ul class="hidden" data-hidden="true" data-height="94" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/relay">Selling in Other Apps</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/relay/apps-guide" data-trigger-id="25">Accepting Orders in Your App</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/relay/apps-error-guide">Error Handling</a>
+    </li>
+</ul>
+
+    </li>
+</ul>
+
+          <h1 class="account"><a class="toggle-content" data-trigger-id="6">Account</a></h1>
+<ul class="hidden" data-hidden="true" data-height="150" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/dashboard">Your Account</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/dashboard/receipts">Email Receipts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/checklist">Going Live Checklist</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/reporting">Reporting</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/dashboard/search">Search</a>
+    </li>
+</ul>
+
+          <h1 class="api"><a class="toggle-content" data-trigger-id="7">Development</a></h1>
+<ul class="hidden" data-hidden="true" data-height="206" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/libraries">API Libraries</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/upgrades">API Upgrades</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/webhooks">Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/building-integrations">Building Integrations</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/building-plugins">Building Plugins &amp; Libraries</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/recipes">Recipes</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/security">Security</a>
+    </li>
+</ul>
+
+          <h1 class="atlas"><a class="toggle-content" data-trigger-id="8">Atlas</a></h1>
+<ul class="hidden" data-hidden="true" data-height="122" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/atlas">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/application">Application</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/account-progress">Account Progress</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/next">What's Next</a>
+    </li>
+</ul>
+
+          <h1 class="references"><a href="https://stripe.com/docs/api" class="external" target="_blank">API Reference</a></h1>
+        </nav>
+      </div>
+      <div id="content-wrapper" tabindex="0">
+        <div class="overlay"></div>
+          <div class="search-results">
+            <ul class="results"></ul>
+          </div>
+          <form class="search">
+            <input type="search" placeholder="Search documentation...">
+            <div class="search-after">
+              <span class="search-text"></span>
+              <span class="search-after-text--no-results">— No Results</span>
+            </div>
+          </form>
+        <header id="main-header">
+          <nav>
+            <ul class="external">
+              <li><a href="https://support.stripe.com/">Support</a></li>
+
+              <li class="button">
+                <a data-adroll-segment="submit_two" href="https://dashboard.stripe.com/login">Sign in</a>
+              </li>
+            </ul>
+          </nav>
+        </header>
+        <article id="content"><header>
+  <h1>Understanding Connect Account Balances</h1>
+  <p>Learn how Stripe account balances work when using <a href="https://stripe.com/connect">Connect</a>.</p>
+</header>
+
+<section>
+  <aside class="note">
+    <h3 id="balances-by-source">Balances by source<a class="anchor" href="https://stripe.com/docs/connect/account-balances#balances-by-source"></a></h3>
+    <p>Stripe accounts additionally have separate balances by <a href="https://stripe.com/docs/connect/payouts#standard-transfers">payment source</a>. But for simplicity's sake, this page focuses on the broader concept of account balances regardless of the source.</p>
+  </aside>
+
+<p>Both your platform account and a connected account are still just Stripe accounts, each with their own, separate account balance.</p>
+
+<p>All Stripe accounts can have balances in two states:</p>
+
+<ul>
+  <li><code>pending</code>, meaning the funds are not yet available to pay out</li>
+  <li><code>available</code>, meaning the funds can be paid out now</li>
+</ul>
+
+<p>With non-Connect accounts, processing charges increases the Stripe account balance. The charged amount, less any Stripe fees, is initially reflected on the pending balance, and becomes available on a 2-day rolling basis. (This timing can vary by country and account.) Available funds can be paid out to a bank account or debit card. Payouts reduce the Stripe account balance accordingly.</p>
+
+<p>With Connect, your platform account and each connected account has their own <code>pending</code> and <code>available</code> balances. How funds from payments are allocated between the two types of accounts depends upon which <a href="https://stripe.com/docs/connect/charges">charging approach</a> is used.</p>
+
+<p>Further, a platform account can also have a <code>connected_reserved</code> balance, used to offset negative balances on connected accounts.</p>
+</section>
+
+<section>
+
+  <h2 id="accounting-for-negative-balances">Accounting for negative balances<a class="anchor" href="https://stripe.com/docs/connect/account-balances#accounting-for-negative-balances"></a></h2>
+  <aside class="note">
+    <h3 id="validating-connected-banks">Validating connected banks<a class="anchor" href="https://stripe.com/docs/connect/account-balances#validating-connected-banks"></a></h3>
+    <p>To reduce the risk of financial loss, we recommended you ensure each connected account has a valid <a href="https://stripe.com/docs/connect/payouts">bank account</a>.</p>
+  </aside>
+
+<p>Some actions, such as refunds and chargebacks, create negative transactions in a Stripe account. If at all possible, Stripe automatically offsets negative transactions against future payments to ensure a positive Stripe balance.</p>
+
+<p>Stripe first assigns negative transactions to the account on which the associated charge was made. For example, when charging on a connected account, a refund or chargeback comes from the connected account. When charging on your platform, a refund or chargeback comes from your platform account.</p>
+
+<p>However, ultimate responsibility for negative balances depends upon the relationship between your platform and the connected account. A connected Standard account is always ultimately responsible to cover negative balances. For Express and Custom accounts, the platform is ultimately responsible to cover negative balances.</p>
+
+<p>To check the balance of a connected account, perform a <a href="https://stripe.com/docs/api/ruby#retrieve_balance">retrieve balance</a> API call authenticated as the connected account. The returned <a href="https://stripe.com/docs/api#balance_object">Balance object</a> reflects the <code>pending</code> and <code>available</code> balances.</p>
+  <div class="tabs tabs-code animated" data-platform="server">
+    <nav class="nav-languages">
+        <a data-language="curl" class="selected">curl</a>
+        <a data-language="ruby">Ruby</a>
+        <a data-language="python">Python</a>
+        <a data-language="php">PHP</a>
+        <a data-language="java">Java</a>
+        <a data-language="node">Node</a>
+    </nav>
+    <div class="tabs-content">
+      <div class="code selected" data-language="curl">
+  <pre class=" numbered selected language-curl"><code class=" language-curl"><span class="token curl">curl</span> <span class="token url">https://api.stripe.com/v1/balance</span> \
+<span class="token option">   -u</span> <span class="token value secret-key" style="pointer-events: none;">sk_test_BQokikJOvBiI2HlWgH4olfQ2</span>: \
+<span class="token option">   -H</span> <span class="token value">"Stripe-Account: CONNECTED_STRIPE_ACCOUNT_ID"</span>
+</code><span class="line-numbers"><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="ruby">
+  <pre class=" numbered language-ruby"><code class=" language-ruby"><span class="token constant">Stripe</span><span class="token punctuation">.</span><span class="token function">api_key</span> <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token constant">PLATFORM_SECRET_KEY</span><span class="token punctuation">}</span>
+
+balance <span class="token operator">=</span> <span class="token constant">Stripe</span><span class="token punctuation">:</span><span class="token symbol">:Balance</span><span class="token punctuation">.</span><span class="token function">retrieve</span><span class="token punctuation">(</span>
+  <span class="token punctuation">{</span><span class="token symbol">:stripe_account</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token constant">CONNECTED_STRIPE_ACCOUNT_ID</span><span class="token punctuation">}</span>
+<span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="python">
+  <pre class=" numbered language-python"><code class=" language-python"><span class="token constant">stripe.api_key</span> <span class="token operator">=</span> <span class="token punctuation">{</span>PLATFORM_SECRET_KEY<span class="token punctuation">}</span>
+
+balance <span class="token operator">=</span> <span class="token constant">stripe.Balance.</span><span class="token function">retrieve</span><span class="token punctuation">(</span>
+  <span class="token constant">stripe_account</span><span class="token operator">=</span>CONNECTED_STRIPE_ACCOUNT_ID
+<span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="php">
+  <pre class=" numbered language-php"><code class=" language-php">StripeStripe<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">setApiKey</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token constant">PLATFORM_SECRET_KEY</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token variable">$balance</span> <span class="token operator">=</span> <span class="token namespace">\Stripe</span><span class="token namespace">\Balance</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">retrieve</span><span class="token punctuation">(</span>
+  <span class="token keyword">array</span><span class="token punctuation">(</span><span class="token string">"stripe_account"</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token constant">CONNECTED_STRIPE_ACCOUNT_ID</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="java">
+  <pre class=" numbered language-java"><code class=" language-java"><span class="token constant">Stripe</span><span class="token punctuation">.</span>apiKey <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token constant">PLATFORM_SECRET_KEY</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token constant">RequestOptions</span> requestOptions <span class="token operator">=</span> <span class="token constant">RequestOptions</span><span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setStripeAccount</span><span class="token punctuation">(</span><span class="token constant">CONNECTED_STRIPE_ACCOUNT_ID</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token constant">Balance</span> balance <span class="token operator">=</span> <span class="token constant">Balance</span><span class="token punctuation">.</span><span class="token function">retrieve</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="node">
+  <pre class=" numbered language-javascript"><code class=" language-javascript"><span class="token keyword">var</span> stripe <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'stripe'</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">{</span>PLATFORM_SECRET_KEY<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+stripe<span class="token punctuation">.</span><span class="token property">balance</span><span class="token punctuation">.</span><span class="token property"></span><span class="token function">retrieve</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  <span class="token symbol">stripe_account<span class="token punctuation">:</span></span> CONNECTED_STRIPE_ACCOUNT_ID
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> balance<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// asynchronously called</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+    </div>
+  </div>
+
+  <p>While an account's balance is negative, you cannot send payouts to the account's bank or debit card on their behalf. Stripe will resume sending payouts to the connected account once the account's Stripe balance is again positive.</p>
+
+  <p>If you haven't already attempted to debit a connected account with a negative balance, you can enable the <a href="https://stripe.com/docs/api#account_object-debit_negative_balances">debit_negative_balances</a> flag to have Stripe automatically resolve the issue. This functionality only works for banks located in Australia, Canada, and the U.S. Also note that enabling <code>debit_negative_balances</code> triggers debits (as needed) even when the connected account is on manual payouts.</p>
+
+</section>
+
+<section>
+<h2 id="understanding-connected-reserved-balances">Understanding connected reserved balances<a class="anchor" href="https://stripe.com/docs/connect/account-balances#understanding-connected-reserved-balances"></a></h2>
+
+<p>To ensure funds can be covered, Stripe holds a reserve on your platform account’s <code>available</code> balance to cover any negative <code>available</code> balances across your Custom accounts. You’ll see this reserve reflected in the <a href="https://dashboard.stripe.com/balance">Dashboard</a> and exported reports (as a <strong>reserve transaction</strong>).</p>
+
+<p>To see the current reserves held on your account, perform a retrieve balance API call but for your own account (i.e., not authorized as another user as in the above).</p>
+
+<p>To clear a connected account’s negative balance, and thereby remove the reserve on your account, send a <a href="https://stripe.com/docs/connect/charges-transfers">transfer</a> to the applicable account. If a connected account has a negative balance for more than 180 days, Stripe will automatically transfer your reserves to the connected account to zero out the balance.</p>
+</section>
+
+<section>
+<h2 id="holding-funds">Holding funds<a class="anchor" href="https://stripe.com/docs/connect/account-balances#holding-funds"></a></h2>
+
+<p>Some platforms may need more granular control over their payout schedule. This can be accomplished by:</p>
+
+<ul>
+  <li>Holding funds in the platform balance before <a href="https://stripe.com/docs/connect/charges-transfers">sending them to Express or Custom accounts</a></li>
+  <li>Keeping funds in an Express or Custom account’s balance before proceeding to <a href="https://stripe.com/docs/connect/payouts#using-manual-transfers">payout those funds</a> to a bank account or debit card</li>
+</ul>
+
+<p>We recommend platforms only hold funds when there is both a clear purpose for holding and a commitment to complete the payment upon the occurrence of an event or satisfaction of a precondition. The typical use case for holding funds is on-demand services platforms, where the marketplace usually waits for the service to be completed and confirmed before paying out to the service provider (e.g., rentals, delivery services, and ride-sharing).</p>
+
+<p>Platforms should refrain from holding funds arbitrarily, and instead pay out their connected accounts as soon as they are identified: usually when the charge is made. In case of doubt, speak with your legal advisor.</p>
+
+<p>For compliance reasons, it is only possible to hold funds in a reserve for up to 90 days from charge creation to payout in either case.</p></section>
+
+<section>
+  <h2 id="further-reading">Further reading<a class="anchor" href="https://stripe.com/docs/connect/account-balances#further-reading"></a></h2>
+  <p>Discover what other Connect functionality is available!</p>
+<ul class="next-steps">
+    <li><a href="https://stripe.com/docs/connect/direct-charges"><span>Creating Direct Charges</span></a></li>
+    <li><a href="https://stripe.com/docs/connect/destination-charges"><span>Creating Destination Charges on Your Platform</span></a></li>
+    <li><a href="https://stripe.com/docs/connect/charges-transfers"><span>Creating Separate Charges and Transfers</span></a></li>
+</ul>
+</section>
+<footer>
+  <h2 data-no-anchor="">Questions?</h2>
+  <p>We're always happy to help with code or other questions you might have! <a href="https://stripe.com/docs/connect/account-balances#" class="search-link">Search</a> our documentation, <a href="https://support.stripe.com/email">contact support</a>, or <a href="https://stripe.com/contact/sales">connect with our sales team</a>. You can also chat live with other developers in <a href="irc://irc.freenode.net/stripe">#stripe</a> on freenode.</p>
+</footer>
+</article>
+      </div>
+    </div>
+
+    <div id="loading-bar" class="hidden" style="width: 0%;"></div>
+
+    <script src="./Understanding Connect Account Balances_files/jquery.min-356cfe6f83a29dcc6fd2cd9ac777637e.js"></script>
+    <script src="./Understanding Connect Account Balances_files/prism-d97c2fbc02243c145440b270c43ec26b.js"></script>
+    <script src="./Understanding Connect Account Balances_files/dynamics.min-f8b2e1648525e57b196b53792a19cda3.js"></script>
+    <script src="./Understanding Connect Account Balances_files/jquery.cookie-368e8ec1948575a79f6830f8d13db348.js"></script>
+    <script src="./Understanding Connect Account Balances_files/documentation-9d21cec0f3371635162f9c978350719d.js"></script>
+      <script src="./Understanding Connect Account Balances_files/algoliasearch-ccb98f296c1e54994357b8d396b3ce13.js"></script>
+      <script src="./Understanding Connect Account Balances_files/documentation-search-76a887ea03340dcf4d184728b1daad3d.js"></script>
+    <script>
+      parseKey("sk_test_BQokikJOvBiI2HlWgH4olfQ2", "secret-key", null);
+      parseKey("pk_test_6pRNASCoBOKtIshFeQd4XMUh", "publishable-key", null);
+    </script>
+      <script type="text/javascript" src="./Understanding Connect Account Balances_files/saved_resource"></script>
+  <script type="text/javascript" src="./Understanding Connect Account Balances_files/saved_resource(1)"></script>
+
+    
+    
+
+<script type="application/json" id="site-analytics-config">{"generalAnalyticsConfig":{"mixpanel":{"identifier":"eb71b6171a4f7ed97de9b7a0395b7ca5"},"ga":{},"trackpage":true,"flags":{"site.experiments.home_page_cta":true,"site.experiments.nav_login_cta":false,"site.experiments.get_started_copy":false,"site.experiments.request_demo_copy":false,"site.experiments.contact_sales_content":false},"locale":"en"},"siteSpecificAnalyticsConfig":{"trackPageViewed":false}}</script>
+
+
+<!-- Google Tag Manager (noscript) -->
+<noscript>&lt;iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K8JKCBR"
+height="0" width="0" style="display:none;visibility:hidden"&gt;&lt;/iframe&gt;</noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+<script defer="" src="./Understanding Connect Account Balances_files/analytics.min.js"></script>
+<script defer="" src="./Understanding Connect Account Balances_files/stripe-m-preview.js"></script>
+ 
+    <script src="./Understanding Connect Account Balances_files/documentation-analytics-7e4ac19718751588692cdd0955dba883.js"></script>
+  
+
+<div id="MultiLookup" style="opacity: 0.8" class="black"></div><div id="dict" class="card-panel grey lighten-4"><div id="dict-inner"></div><img id="toktogi-lock" class="toktogi-icon" src="chrome-extension://domfinmkohodhgghgedfdcmonefafolm/images/unlock.png"></div><div id="toktogi-notification" class="card-panel grey lighten-4">Toktogi is on</div><iframe frameborder="0" allowtransparency="true" scrolling="no" name="__privateStripeMetricsController0" allowpaymentrequest="true" src="./Understanding Connect Account Balances_files/outer.html" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important;"></iframe><script>
+$(function() {
+  if (location.search.match(/[?&]code=/)) {
+    var el = $("h3#express-account-creation > a");
+    if (el.length > 0) el[0].click();
+  }
+});
+</script>
+</body><div></div></html>

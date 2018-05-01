@@ -1,0 +1,2265 @@
+<!DOCTYPE html>
+<!-- saved from url=(0039)https://stripe.com/docs/connect/payouts -->
+<html lang="en" data-ember-extension="1"><script type="text/javascript" async="" src="./Setting Bank and Debit Card Payouts_files/mixpanel-2.2.min.js"></script><script async="" src="./Setting Bank and Debit Card Payouts_files/analytics.js"></script><script async="" src="./Setting Bank and Debit Card Payouts_files/gtm.js"></script><script src="./Setting Bank and Debit Card Payouts_files/742650679237989" async=""></script><script async="" src="./Setting Bank and Debit Card Payouts_files/fbevents.js"></script><script type="text/javascript">window["_gaUserPrefs"] = { ioo : function() { return true; } }</script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    <meta name="google-site-verification" content="f0LCrdI6z4Fo8zld4sHCgo5SiUE4EYYRUa6KVeX3Mw8">
+    <meta name="csrf-token" content="ACmByp9VS-5dgI-ZXH4IDjQKupcbFRMLHUfMREA8ebLWGyvN9zdYqelEZg-tdQCE2ww411MvMRPNy_WDfbOyUg==">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Setting Bank and Debit Card Payouts</title>
+
+    <meta name="description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+
+
+    <link rel="shortcut icon" href="https://stripe.com/favicon.ico">
+
+    <link rel="apple-touch-icon-precomposed" href="https://stripe.com/img/apple-touch-icon/180x180.png">
+    <link rel="icon" href="https://stripe.com/img/apple-touch-icon/180x180.png">
+
+
+    <link rel="image_src" type="image/png" href="https://stripe.com/img/v3/home/social.png">
+
+
+        <link rel="canonical" href="https://stripe.com/docs/connect/authentication">
+
+    <meta property="og:title" content="Authentication with Connect">
+    <meta property="og:url" content="https://stripe.com/docs/connect/authentication">
+    <meta property="og:description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+    <meta property="og:image" content="https://stripe.com/img/v3/home/social.png">
+
+      <meta name="twitter:card" content="summary">
+      <meta name="twitter:image" content="https://stripe.com/img/v3/home/twitter.png">
+    <meta name="twitter:site" content="@stripe">
+    <meta name="twitter:title" content="Authentication with Connect">
+    <meta name="twitter:description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+
+
+    <script type="application/json" id="strut_files">{&quot;v3/shared/navigation_ie10.css&quot;:&quot;/assets/v3/shared/navigation_ie10-fad8432db8a0ef02ccfc88df4a0b8535.css&quot;}</script>
+
+    
+
+    
+
+    <link rel="stylesheet" href="./Setting Bank and Debit Card Payouts_files/default-6388c486f7388db1252f0d7c85db5e15.css">
+    <link rel="stylesheet" href="./Setting Bank and Debit Card Payouts_files/common-966a7c7414d89c40541b15f2adfa6a26.css">
+    <link rel="stylesheet" href="./Setting Bank and Debit Card Payouts_files/base-3cdaeb306a5f322afd95a5e0122a3388.css">
+    <link rel="stylesheet" href="./Setting Bank and Debit Card Payouts_files/prism_light-6e629a34ce1570d4f33f7e2ee8bebbc2.css">
+    
+    
+    <meta name="viewport" content="width=1060">
+    <meta name="robots" content="noarchive">
+    <link rel="stylesheet" href="./Setting Bank and Debit Card Payouts_files/connect_button-9fd48f5cd30c2680d9e4a099d67cd9b1.css">
+</head>
+  <body class="">
+    
+    <div id="docs">
+      <div id="sidebar" class="bordered">
+        <div class="logo">
+          <a class="site" href="https://stripe.com/" title="Stripe"></a>
+          <a class="extension" href="https://stripe.com/docs">docs</a>
+        </div>
+        <div class="nav-border"></div>
+        <nav>
+          <h1 class="home"><a href="https://stripe.com/docs">Home</a></h1>
+          <h1 class="payments"><a class="toggle-content" data-trigger-id="0">Payments</a></h1>
+<ul class="hidden" data-hidden="true" data-height="889" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/quickstart">Quickstart</a>
+    </li>
+    <li class="category">Collecting payment details
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/checkout/tutorial" data-trigger-id="9">Checkout</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/checkout">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js" data-trigger-id="10">Stripe.js &amp; Elements</a>
+      <ul class="hidden" data-hidden="true" data-height="112" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/quickstart">Quickstart</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/payment-request-button">Payment Request Button</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/migrating">Migration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/reference">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios" data-trigger-id="11">iOS</a>
+      <ul class="hidden" data-hidden="true" data-height="112" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/standard">Standard Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/custom">Custom Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/apple-pay/apps">Apple Pay in Apps</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/sources">Using Sources</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android" data-trigger-id="12">Android</a>
+      <ul class="hidden" data-hidden="true" data-height="168" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/standard">Standard Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/pay-with-google">Pay with Google</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/alipay-android">Working with Alipay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/android-pay">Android Pay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/customer-information">Customer Information</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/sources">Using Sources</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/saving-cards">Saving Cards</a>
+    </li>
+    <li class="category">Charges
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/charges">Creating Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/declines" data-trigger-id="13">Declines &amp; Failed Payments</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/declines/codes">Decline Codes</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/disputes" data-trigger-id="14">Disputes &amp; Fraud</a>
+      <ul class="hidden" data-hidden="true" data-height="56" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/disputes/categories">Dispute Categories</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/disputes/prevention">Prevention</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/refunds">Refunds</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/payouts">Receiving Payouts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/currencies" data-trigger-id="15">Supported Currencies</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/currencies/conversions">Currency Conversions</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="category">Sources
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources" data-trigger-id="16">Payment Methods</a>
+      <ul class="hidden" data-hidden="true" data-height="308" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/sources/cards">Cards</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/three-d-secure">3D Secure</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/alipay">Alipay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/ach-credit-transfer">ACH Credit Transfer</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/bancontact">Bancontact</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/bitcoin">Bitcoin</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/giropay">Giropay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/ideal">iDEAL</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/p24">P24</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/sepa-debit">SEPA Direct Debit</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/sofort">SOFORT</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/best-practices">Best Practices</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/customers">Sources &amp; Customers</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/connect">Connect Platforms</a>
+    </li>
+    <li class="category">Other Payment Methods
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/ach">ACH</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/amex-express-checkout">Amex Express Checkout</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/apple-pay">Apple Pay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/pay-with-google">Pay with Google</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/payment-request-api">Payment Request API</a>
+    </li>
+    <li class="category">Products &amp; Orders
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders" data-trigger-id="17">Orders</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/orders/guide">Guide</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders/tax-integration">Tax Integrations</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders/shipping-integration">Shipping Integrations</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="subscriptions"><a class="toggle-content" data-trigger-id="1">Subscriptions</a></h1>
+<ul class="hidden" data-hidden="true" data-height="528" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/quickstart">Quickstart</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/creating" data-trigger-id="18">Creating Subscriptions</a>
+      <ul data-collapsable="false" data-height="168">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/multiplan">Using Multiple Plans</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/discounts">Applying Discounts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/trials">Using Trial Periods</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/quantities">Setting Quantities</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/taxes">Adding Taxes</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/multiple">Multiple Subscriptions</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/lifecycle">Lifecycle &amp; Events</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/webhooks">Using Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/changing" data-trigger-id="19">Changing Subscriptions</a>
+      <ul data-collapsable="false" data-height="84">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/upgrading-downgrading">Upgrading &amp; Downgrading</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/billing-cycle">Billing Cycle</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/canceling-pausing">Canceling &amp; Pausing</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/invoices" data-trigger-id="20">Working with Invoices</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/ach-credit">ACH Credit Transfers</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/plans">Managing Plans</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/subscriptions/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="connect"><a class="toggle-content" data-trigger-id="2">Connect</a></h1>
+<ul class="" data-height="566" style="opacity: 1; height: 566px;">
+    <li>
+      <a href="https://stripe.com/docs/connect" class="">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/quickstart" class="">Quickstart</a>
+    </li>
+    <li class="category">Account Types
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/accounts">Accounts Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/standard-accounts">Standard</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/express-accounts">Express</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/custom-accounts" data-trigger-id="21">Custom</a>
+      <ul class="hidden" data-hidden="true" data-height="84" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/connect/updating-accounts">Updating Accounts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/identity-verification">Identity Verification</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/required-verification-information">Required Info</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="category">Processing Payments
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/charges" data-trigger-id="22" class="">Creating Charges</a>
+      <ul class="hidden" data-height="104" style="opacity: 0; height: 0px;" data-hidden="true">
+    <li>
+      <a href="https://stripe.com/docs/connect/direct-charges" class="">Direct Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/destination-charges" class="">Destination Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/charges-transfers" class="">Separate Charges and Transfers</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/account-debits" class="">Account Debits</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/subscriptions" class="">Using Subscriptions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/currencies">Multiple Currencies</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/account-balances" class="">Account Balances</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/payouts" class="selected">Bank Payouts</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/connect/best-practices" class="">Best Practices</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/migrating" class="">Migrating</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/reference" class="">OAuth Reference</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/webhooks" class="">Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="sigma"><a class="toggle-content" data-trigger-id="3">Sigma</a></h1>
+<ul class="hidden" data-hidden="true" data-height="150" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/sigma">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/transactions">Transactions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/subscriptions">Subscriptions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/connect">Connect</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/scheduled-queries">Scheduled Queries</a>
+    </li>
+</ul>
+
+          <h1 class="radar"><a class="toggle-content" data-trigger-id="4">Radar</a></h1>
+<ul class="hidden" data-hidden="true" data-height="248" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/radar">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/risk-evaluation">Risk Evaluation</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/blocklist">Blocklist</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/review" data-trigger-id="23">Review</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/radar/review/auth-and-capture">Uncaptured Payments</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/rules" data-trigger-id="24">Rules</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/radar/rules/reference">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/radar/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="relay"><a class="toggle-content" data-trigger-id="5">Relay</a></h1>
+<ul class="hidden" data-hidden="true" data-height="94" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/relay">Selling in Other Apps</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/relay/apps-guide" data-trigger-id="25">Accepting Orders in Your App</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/relay/apps-error-guide">Error Handling</a>
+    </li>
+</ul>
+
+    </li>
+</ul>
+
+          <h1 class="account"><a class="toggle-content" data-trigger-id="6">Account</a></h1>
+<ul class="hidden" data-hidden="true" data-height="150" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/dashboard">Your Account</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/dashboard/receipts">Email Receipts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/checklist">Going Live Checklist</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/reporting">Reporting</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/dashboard/search">Search</a>
+    </li>
+</ul>
+
+          <h1 class="api"><a class="toggle-content" data-trigger-id="7">Development</a></h1>
+<ul class="hidden" data-hidden="true" data-height="206" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/libraries">API Libraries</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/upgrades">API Upgrades</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/webhooks">Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/building-integrations">Building Integrations</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/building-plugins">Building Plugins &amp; Libraries</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/recipes">Recipes</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/security">Security</a>
+    </li>
+</ul>
+
+          <h1 class="atlas"><a class="toggle-content" data-trigger-id="8">Atlas</a></h1>
+<ul class="hidden" data-hidden="true" data-height="122" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/atlas">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/application">Application</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/account-progress">Account Progress</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/next">What's Next</a>
+    </li>
+</ul>
+
+          <h1 class="references"><a href="https://stripe.com/docs/api" class="external" target="_blank">API Reference</a></h1>
+        </nav>
+      </div>
+      <div id="content-wrapper" tabindex="0">
+        <div class="overlay"></div>
+          <div class="search-results">
+            <ul class="results"></ul>
+          </div>
+          <form class="search">
+            <input type="search" placeholder="Search documentation...">
+            <div class="search-after">
+              <span class="search-text"></span>
+              <span class="search-after-text--no-results">— No Results</span>
+            </div>
+          </form>
+        <header id="main-header">
+          <nav>
+            <ul class="external">
+              <li><a href="https://support.stripe.com/">Support</a></li>
+
+              <li class="button">
+                <a data-adroll-segment="submit_two" href="https://dashboard.stripe.com/login">Sign in</a>
+              </li>
+            </ul>
+          </nav>
+        </header>
+        <article id="content"><header>
+  <h1>Setting Bank and Debit Card Payouts</h1>
+  <p>Stripe allows platforms to specify payouts for its Express and Custom <a href="https://stripe.com/connect">Connect</a> accounts.</p>
+</header>
+
+<section>
+<aside class="important alternate amber">
+  <p><strong>In previous versions of Connect, payouts were known as bank transfers. Refer to the <a href="https://stripe.com/docs/connect/legacy-transfers">legacy transfers</a> documentation for information about the deprecated <code>transfers</code> API.</strong></p>
+</aside>
+
+<aside class="note">
+  <h3 id="payouts-and-account-types">Payouts and account types<a class="anchor" href="https://stripe.com/docs/connect/payouts#payouts-and-account-types"></a></h3>
+  <p>For <em>Express</em> accounts, the account holder manages their payout accounts (i.e., bank accounts and debit cards) but the platform can schedule payouts.</p>
+  <p>For <em>Custom</em> accounts, the platform manages the payout accounts and can also schedule payouts.</p>
+  <p>This page does not apply to <em>Standard</em> accounts, where the account holder manages  their payout accounts and payout schedule.</p>
+</aside>
+
+<p>By default, any charge you make on behalf of a connected account accumulates in the connected account’s <a href="https://stripe.com/docs/connect/account-balances">Stripe balance</a> and is paid out on a daily rolling basis. However, Stripe offers platforms fine-grained tools to change the payout schedule for <a href="https://stripe.com/docs/connect/express-accounts">Express</a> and <a href="https://stripe.com/docs/connect/custom-accounts">Custom</a> accounts.</p>
+
+<p>You can:</p>
+
+<ul>
+  <li>Schedule <a href="https://stripe.com/docs/connect/payouts#payout-information">how frequently</a> funds are automatically paid out</li>
+  <li>Perform <a href="https://stripe.com/docs/connect/payouts#using-manual-payouts">manual payouts</a></li>
+  <li>Settle funds <a href="https://stripe.com/docs/connect/payouts#instant-payouts">instantly</a></li>
+</ul>
+
+<p>For Custom accounts, the platform can also set the destination <a href="https://stripe.com/docs/connect/payouts#bank-accounts">bank accounts and debit cards</a>. For Express accounts, the account holder handles that.</p></section>
+
+<section>
+  <h2 id="supported-presentment">Supported settlement currencies<a class="anchor" href="https://stripe.com/docs/connect/payouts#supported-presentment"></a></h2>
+
+  <p>See what currencies you can settle in by selecting the applicable country. Supported <em>presentment</em> currencies can be found in our <a href="https://stripe.com/docs/connect/currencies#supported-presentment">currencies</a> documentation.</p>
+
+<div class="tabs tabs-regular animated">
+  <nav class="nav-tabs">
+    Viewing supported settlement currencies for:
+      <select>
+          <option>Austria (AT)</option>
+          <option>Australia (AU)</option>
+          <option>Belgium (BE)</option>
+          <option>Canada (CA)</option>
+          <option>Switzerland (CH)</option>
+          <option>Germany (DE)</option>
+          <option>Denmark (DK)</option>
+          <option>Spain (ES)</option>
+          <option>Finland (FI)</option>
+          <option>France (FR)</option>
+          <option>United Kingdom (GB)</option>
+          <option>Hong Kong (HK)</option>
+          <option>Ireland (IE)</option>
+          <option>Italy (IT)</option>
+          <option>Japan (JP)</option>
+          <option>Luxembourg (LU)</option>
+          <option>Netherlands (NL)</option>
+          <option>Norway (NO)</option>
+          <option>New Zealand (NZ)</option>
+          <option>Portugal (PT)</option>
+          <option>Sweden (SE)</option>
+          <option>Singapore (SG)</option>
+          <option selected="">United States (US)</option>
+      </select>
+  </nav>
+  <div class="tabs-content">
+    <div class="tabs-tab" id="AT">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>EUR</td>
+              <td>Austria, Belgium, Denmark, Finland, France, Germany, Ireland, Italy, Luxembourg, Netherlands, Norway, Portugal, Spain, Sweden, Switzerland, United Kingdom</td>
+            </tr>
+            <tr>
+              <td>DKK</td>
+              <td>Denmark</td>
+            </tr>
+            <tr>
+              <td>GBP</td>
+              <td>United Kingdom</td>
+            </tr>
+            <tr>
+              <td>NOK</td>
+              <td>Norway</td>
+            </tr>
+            <tr>
+              <td>SEK</td>
+              <td>Sweden</td>
+            </tr>
+            <tr>
+              <td>USD</td>
+              <td>United States</td>
+            </tr>
+            <tr>
+              <td>CHF</td>
+              <td>Switzerland</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab" id="AU">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>AUD</td>
+              <td>Australia</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab" id="BE">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>EUR</td>
+              <td>Austria, Belgium, Denmark, Finland, France, Germany, Ireland, Italy, Luxembourg, Netherlands, Norway, Portugal, Spain, Sweden, Switzerland, United Kingdom</td>
+            </tr>
+            <tr>
+              <td>DKK</td>
+              <td>Denmark</td>
+            </tr>
+            <tr>
+              <td>GBP</td>
+              <td>United Kingdom</td>
+            </tr>
+            <tr>
+              <td>NOK</td>
+              <td>Norway</td>
+            </tr>
+            <tr>
+              <td>SEK</td>
+              <td>Sweden</td>
+            </tr>
+            <tr>
+              <td>USD</td>
+              <td>United States</td>
+            </tr>
+            <tr>
+              <td>CHF</td>
+              <td>Switzerland</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab" id="CA">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>CAD</td>
+              <td>Canada</td>
+            </tr>
+            <tr>
+              <td>USD</td>
+              <td>Canada, United States</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab" id="CH">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>CHF</td>
+              <td>Switzerland</td>
+            </tr>
+            <tr>
+              <td>EUR</td>
+              <td>Austria, Belgium, Denmark, Finland, France, Germany, Ireland, Italy, Luxembourg, Netherlands, Norway, Portugal, Spain, Sweden, Switzerland, United Kingdom</td>
+            </tr>
+            <tr>
+              <td>DKK</td>
+              <td>Denmark</td>
+            </tr>
+            <tr>
+              <td>GBP</td>
+              <td>United Kingdom</td>
+            </tr>
+            <tr>
+              <td>NOK</td>
+              <td>Norway</td>
+            </tr>
+            <tr>
+              <td>SEK</td>
+              <td>Sweden</td>
+            </tr>
+            <tr>
+              <td>USD</td>
+              <td>United States</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab" id="DE">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>EUR</td>
+              <td>Austria, Belgium, Denmark, Finland, France, Germany, Ireland, Italy, Luxembourg, Netherlands, Norway, Portugal, Spain, Sweden, Switzerland, United Kingdom</td>
+            </tr>
+            <tr>
+              <td>DKK</td>
+              <td>Denmark</td>
+            </tr>
+            <tr>
+              <td>GBP</td>
+              <td>United Kingdom</td>
+            </tr>
+            <tr>
+              <td>NOK</td>
+              <td>Norway</td>
+            </tr>
+            <tr>
+              <td>SEK</td>
+              <td>Sweden</td>
+            </tr>
+            <tr>
+              <td>USD</td>
+              <td>United States</td>
+            </tr>
+            <tr>
+              <td>CHF</td>
+              <td>Switzerland</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab" id="DK">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>EUR</td>
+              <td>Austria, Belgium, Denmark, Finland, France, Germany, Ireland, Italy, Luxembourg, Netherlands, Norway, Portugal, Spain, Sweden, Switzerland, United Kingdom</td>
+            </tr>
+            <tr>
+              <td>DKK</td>
+              <td>Denmark</td>
+            </tr>
+            <tr>
+              <td>GBP</td>
+              <td>United Kingdom</td>
+            </tr>
+            <tr>
+              <td>NOK</td>
+              <td>Norway</td>
+            </tr>
+            <tr>
+              <td>SEK</td>
+              <td>Sweden</td>
+            </tr>
+            <tr>
+              <td>USD</td>
+              <td>United States</td>
+            </tr>
+            <tr>
+              <td>CHF</td>
+              <td>Switzerland</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab" id="ES">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>EUR</td>
+              <td>Austria, Belgium, Denmark, Finland, France, Germany, Ireland, Italy, Luxembourg, Netherlands, Norway, Portugal, Spain, Sweden, Switzerland, United Kingdom</td>
+            </tr>
+            <tr>
+              <td>DKK</td>
+              <td>Denmark</td>
+            </tr>
+            <tr>
+              <td>GBP</td>
+              <td>United Kingdom</td>
+            </tr>
+            <tr>
+              <td>NOK</td>
+              <td>Norway</td>
+            </tr>
+            <tr>
+              <td>SEK</td>
+              <td>Sweden</td>
+            </tr>
+            <tr>
+              <td>USD</td>
+              <td>United States</td>
+            </tr>
+            <tr>
+              <td>CHF</td>
+              <td>Switzerland</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab" id="FI">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>EUR</td>
+              <td>Austria, Belgium, Denmark, Finland, France, Germany, Ireland, Italy, Luxembourg, Netherlands, Norway, Portugal, Spain, Sweden, Switzerland, United Kingdom</td>
+            </tr>
+            <tr>
+              <td>DKK</td>
+              <td>Denmark</td>
+            </tr>
+            <tr>
+              <td>GBP</td>
+              <td>United Kingdom</td>
+            </tr>
+            <tr>
+              <td>NOK</td>
+              <td>Norway</td>
+            </tr>
+            <tr>
+              <td>SEK</td>
+              <td>Sweden</td>
+            </tr>
+            <tr>
+              <td>USD</td>
+              <td>United States</td>
+            </tr>
+            <tr>
+              <td>CHF</td>
+              <td>Switzerland</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab" id="FR">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>EUR</td>
+              <td>Austria, Belgium, Denmark, Finland, France, Germany, Ireland, Italy, Luxembourg, Netherlands, Norway, Portugal, Spain, Sweden, Switzerland, United Kingdom</td>
+            </tr>
+            <tr>
+              <td>DKK</td>
+              <td>Denmark</td>
+            </tr>
+            <tr>
+              <td>GBP</td>
+              <td>United Kingdom</td>
+            </tr>
+            <tr>
+              <td>NOK</td>
+              <td>Norway</td>
+            </tr>
+            <tr>
+              <td>SEK</td>
+              <td>Sweden</td>
+            </tr>
+            <tr>
+              <td>USD</td>
+              <td>United States</td>
+            </tr>
+            <tr>
+              <td>CHF</td>
+              <td>Switzerland</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab" id="GB">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>EUR</td>
+              <td>Austria, Belgium, Denmark, Finland, France, Germany, Ireland, Italy, Luxembourg, Netherlands, Norway, Portugal, Spain, Sweden, Switzerland, United Kingdom</td>
+            </tr>
+            <tr>
+              <td>DKK</td>
+              <td>Denmark</td>
+            </tr>
+            <tr>
+              <td>GBP</td>
+              <td>United Kingdom</td>
+            </tr>
+            <tr>
+              <td>NOK</td>
+              <td>Norway</td>
+            </tr>
+            <tr>
+              <td>SEK</td>
+              <td>Sweden</td>
+            </tr>
+            <tr>
+              <td>USD</td>
+              <td>United States</td>
+            </tr>
+            <tr>
+              <td>CHF</td>
+              <td>Switzerland</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab" id="HK">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>HKD</td>
+              <td>Hong Kong</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab" id="IE">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>EUR</td>
+              <td>Austria, Belgium, Denmark, Finland, France, Germany, Ireland, Italy, Luxembourg, Netherlands, Norway, Portugal, Spain, Sweden, Switzerland, United Kingdom</td>
+            </tr>
+            <tr>
+              <td>DKK</td>
+              <td>Denmark</td>
+            </tr>
+            <tr>
+              <td>GBP</td>
+              <td>United Kingdom</td>
+            </tr>
+            <tr>
+              <td>NOK</td>
+              <td>Norway</td>
+            </tr>
+            <tr>
+              <td>SEK</td>
+              <td>Sweden</td>
+            </tr>
+            <tr>
+              <td>USD</td>
+              <td>United States</td>
+            </tr>
+            <tr>
+              <td>CHF</td>
+              <td>Switzerland</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab" id="IT">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>EUR</td>
+              <td>Austria, Belgium, Denmark, Finland, France, Germany, Ireland, Italy, Luxembourg, Netherlands, Norway, Portugal, Spain, Sweden, Switzerland, United Kingdom</td>
+            </tr>
+            <tr>
+              <td>DKK</td>
+              <td>Denmark</td>
+            </tr>
+            <tr>
+              <td>GBP</td>
+              <td>United Kingdom</td>
+            </tr>
+            <tr>
+              <td>NOK</td>
+              <td>Norway</td>
+            </tr>
+            <tr>
+              <td>SEK</td>
+              <td>Sweden</td>
+            </tr>
+            <tr>
+              <td>USD</td>
+              <td>United States</td>
+            </tr>
+            <tr>
+              <td>CHF</td>
+              <td>Switzerland</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab" id="JP">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>JPY</td>
+              <td>Japan</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab" id="LU">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>EUR</td>
+              <td>Austria, Belgium, Denmark, Finland, France, Germany, Ireland, Italy, Luxembourg, Netherlands, Norway, Portugal, Spain, Sweden, Switzerland, United Kingdom</td>
+            </tr>
+            <tr>
+              <td>DKK</td>
+              <td>Denmark</td>
+            </tr>
+            <tr>
+              <td>GBP</td>
+              <td>United Kingdom</td>
+            </tr>
+            <tr>
+              <td>NOK</td>
+              <td>Norway</td>
+            </tr>
+            <tr>
+              <td>SEK</td>
+              <td>Sweden</td>
+            </tr>
+            <tr>
+              <td>USD</td>
+              <td>United States</td>
+            </tr>
+            <tr>
+              <td>CHF</td>
+              <td>Switzerland</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab" id="NL">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>EUR</td>
+              <td>Austria, Belgium, Denmark, Finland, France, Germany, Ireland, Italy, Luxembourg, Netherlands, Norway, Portugal, Spain, Sweden, Switzerland, United Kingdom</td>
+            </tr>
+            <tr>
+              <td>DKK</td>
+              <td>Denmark</td>
+            </tr>
+            <tr>
+              <td>GBP</td>
+              <td>United Kingdom</td>
+            </tr>
+            <tr>
+              <td>NOK</td>
+              <td>Norway</td>
+            </tr>
+            <tr>
+              <td>SEK</td>
+              <td>Sweden</td>
+            </tr>
+            <tr>
+              <td>USD</td>
+              <td>United States</td>
+            </tr>
+            <tr>
+              <td>CHF</td>
+              <td>Switzerland</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab" id="NO">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>EUR</td>
+              <td>Austria, Belgium, Denmark, Finland, France, Germany, Ireland, Italy, Luxembourg, Netherlands, Norway, Portugal, Spain, Sweden, Switzerland, United Kingdom</td>
+            </tr>
+            <tr>
+              <td>DKK</td>
+              <td>Denmark</td>
+            </tr>
+            <tr>
+              <td>GBP</td>
+              <td>United Kingdom</td>
+            </tr>
+            <tr>
+              <td>NOK</td>
+              <td>Norway</td>
+            </tr>
+            <tr>
+              <td>SEK</td>
+              <td>Sweden</td>
+            </tr>
+            <tr>
+              <td>USD</td>
+              <td>United States</td>
+            </tr>
+            <tr>
+              <td>CHF</td>
+              <td>Switzerland</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab" id="NZ">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>NZD</td>
+              <td>New Zealand</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab" id="PT">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>EUR</td>
+              <td>Austria, Belgium, Denmark, Finland, France, Germany, Ireland, Italy, Luxembourg, Netherlands, Norway, Portugal, Spain, Sweden, Switzerland, United Kingdom</td>
+            </tr>
+            <tr>
+              <td>DKK</td>
+              <td>Denmark</td>
+            </tr>
+            <tr>
+              <td>GBP</td>
+              <td>United Kingdom</td>
+            </tr>
+            <tr>
+              <td>NOK</td>
+              <td>Norway</td>
+            </tr>
+            <tr>
+              <td>SEK</td>
+              <td>Sweden</td>
+            </tr>
+            <tr>
+              <td>USD</td>
+              <td>United States</td>
+            </tr>
+            <tr>
+              <td>CHF</td>
+              <td>Switzerland</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab" id="SE">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>EUR</td>
+              <td>Austria, Belgium, Denmark, Finland, France, Germany, Ireland, Italy, Luxembourg, Netherlands, Norway, Portugal, Spain, Sweden, Switzerland, United Kingdom</td>
+            </tr>
+            <tr>
+              <td>DKK</td>
+              <td>Denmark</td>
+            </tr>
+            <tr>
+              <td>GBP</td>
+              <td>United Kingdom</td>
+            </tr>
+            <tr>
+              <td>NOK</td>
+              <td>Norway</td>
+            </tr>
+            <tr>
+              <td>SEK</td>
+              <td>Sweden</td>
+            </tr>
+            <tr>
+              <td>USD</td>
+              <td>United States</td>
+            </tr>
+            <tr>
+              <td>CHF</td>
+              <td>Switzerland</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab" id="SG">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>SGD</td>
+              <td>Singapore</td>
+            </tr>
+
+        </tbody></table>
+</div><div class="tabs-tab selected" id="US">        <p>
+          Accounts created in this country can receive payouts in the following currencies.
+        </p>
+        <table>
+          <thead><tr><th>Currency</th><th>can be paid out to banks in these countries</th></tr></thead>
+            <tbody><tr>
+              <td>USD</td>
+              <td>United States</td>
+            </tr>
+
+        </tbody></table>
+</div>
+  </div>
+</div>
+</section>
+
+<section>
+<h2 id="formats">Bank account formats by country<a class="anchor" href="https://stripe.com/docs/connect/payouts#formats"></a></h2>
+
+<p>When attaching banks to Custom accounts, platforms need to provide an <code>account_number</code> and, in some countries, a <code>routing_number</code>. Every country has a slightly different format for these numbers, and entering them incorrectly causes subsequent payouts to fail.</p>
+
+<p>We recommend creating validations in your bank account entry forms that enforce the required formats based on the country of the Custom account’s bank. In some countries, separate pieces of information—for example, the bank code and branch codes—must be combined to create a routing number.</p>  <div class="tabs tabs-regular animated">
+  <nav class="nav-tabs">
+    
+      <select>
+          <option>Australia (AU)</option>
+          <option>Austria (AT)</option>
+          <option>Belgium (BE)</option>
+          <option>Brazil (BR)</option>
+          <option>Canada (CA)</option>
+          <option>Denmark (DK)</option>
+          <option>Finland (FI)</option>
+          <option>France (FR)</option>
+          <option>Germany (DE)</option>
+          <option>Gibraltar (GI)</option>
+          <option>Hong Kong (HK)</option>
+          <option>Ireland (IE)</option>
+          <option>Italy (IT)</option>
+          <option>Japan (JP)</option>
+          <option>Luxembourg (LU)</option>
+          <option>Mexico (MX)</option>
+          <option>Netherlands (NL)</option>
+          <option>New Zealand (NZ)</option>
+          <option>Norway (NO)</option>
+          <option>Portugal (PT)</option>
+          <option>Singapore (SG)</option>
+          <option>Spain (ES)</option>
+          <option>Sweden (SE)</option>
+          <option>Switzerland (CH)</option>
+          <option>United Kingdom (GB)</option>
+          <option selected="">United States (US)</option>
+      </select>
+  </nav>
+  <div class="tabs-content">
+    <div class="tabs-tab" id="AU">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>BSB</td>
+         <td>123456 (6 characters)</td>
+      </tr>
+      <tr>
+         <td>Account Number</td>
+         <td>12345678 (8 characters)</td>
+      </tr>
+    </tbody></table>
+</div><div class="tabs-tab" id="AT">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>IBAN</td>
+         <td>AT611904300235473201</td>
+      </tr>
+    </tbody></table>
+</div><div class="tabs-tab" id="BE">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>IBAN</td>
+         <td>BE12345678912345</td>
+      </tr>
+    </tbody></table>
+</div><div class="tabs-tab" id="BR">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>Bank Code</td>
+         <td>123 (3 characters)</td>
+      </tr>
+      <tr>
+         <td>Branch Code</td>
+         <td>4567 (4 characters, with 1 optional check digit)</td>
+      </tr>
+      <tr>
+         <td>Account Number</td>
+         <td>Format varies by bank</td>
+      </tr>
+    </tbody></table>
+    <p>When creating a bank via the API, combine the bank code and branch code to create a full routing number (e.g., <strong>1234567</strong>).</p>
+</div><div class="tabs-tab" id="CA">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>Transit Number</td>
+         <td>12345</td>
+      </tr>
+      <tr>
+         <td>Institution Number</td>
+         <td>678</td>
+      </tr>
+      <tr>
+         <td>Account Number</td>
+         <td>Format varies by bank</td>
+      </tr>
+    </tbody></table>
+    <p>When creating a bank via the API, combine the transit and institution numbers to create a full routing number (e.g., <strong>12345678</strong>).</p>
+</div><div class="tabs-tab" id="DK">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>IBAN</td>
+         <td>DK5000400440116243</td>
+      </tr>
+    </tbody></table>
+</div><div class="tabs-tab" id="FI">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>IBAN</td>
+         <td>FI2112345600000785</td>
+      </tr>
+    </tbody></table>
+</div><div class="tabs-tab" id="FR">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>IBAN</td>
+         <td>FR1420041010050500013M02606 (27 characters)</td>
+      </tr>
+    </tbody></table>
+</div><div class="tabs-tab" id="DE">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>IBAN</td>
+         <td>DE89370400440532013000 (22 characters)</td>
+      </tr>
+    </tbody></table>
+</div><div class="tabs-tab" id="GI">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>IBAN</td>
+         <td>GI75NWBK000000007099453 (23 characters)</td>
+      </tr>
+    </tbody></table>
+    <p>While we don't currently support businesses that have operations solely in Gibraltar, it is possible to attach bank accounts that are based in Gibraltar.</p>
+</div><div class="tabs-tab" id="HK">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>Clearing Code</td>
+         <td>123 (3 characters)</td>
+      </tr>
+      <tr>
+         <td>Branch Code</td>
+         <td>456 (3 characters)</td>
+      </tr>
+      <tr>
+         <td>Account Number</td>
+         <td>123456-789 (5-6 characters, a dash, 1-3 characters)</td>
+      </tr>
+    </tbody></table>
+    <p>When creating a bank via the API, combine the bank code and branch code to create a full routing number (e.g., <strong>123456</strong>).</p>
+</div><div class="tabs-tab" id="IE">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>IBAN</td>
+         <td>IE29AIBK93115212345678 (22 characters)</td>
+      </tr>
+    </tbody></table>
+</div><div class="tabs-tab" id="IT">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>IBAN</td>
+         <td>IT60X0542811101000000123456 (27 characters)</td>
+      </tr>
+    </tbody></table>
+</div><div class="tabs-tab" id="JP">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>Bank Name</td>
+         <td>いろは銀行</td>
+      </tr>
+      <tr>
+         <td>Branch Name</td>
+         <td>東京支店</td>
+      </tr>
+      <tr>
+         <td>Bank Code</td>
+         <td>0123 (4 characters)</td>
+      </tr>
+      <tr>
+         <td>Branch Code</td>
+         <td>456 (3 characters)</td>
+      </tr>
+      <tr>
+         <td>Account Number</td>
+         <td>1234567 (6-8 characters)</td>
+      </tr>
+      <tr>
+         <td>Account Owner Name</td>
+         <td>ヤマダハナコ</td>
+      </tr>
+    </tbody></table>
+    <p>Stripe currently only supports checking accounts for bank accounts in Japan.</p>
+    <p>When creating a bank via the API, combine the bank code and branch code to create a full routing number (e.g., <strong>0123456</strong>). We also explicitly require the name of the person or business that owns the bank account, via the <a href="https://stripe.com/docs/api#account_bank_account_object-account_holder_name">account_holder_name</a> attribute.</p>
+</div><div class="tabs-tab" id="LU">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>IBAN</td>
+         <td>LU280019400644750000 (20 characters)</td>
+      </tr>
+    </tbody></table>
+</div><div class="tabs-tab" id="MX">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>CLABE</td>
+         <td>123456789012345678 (18 characters)</td>
+      </tr>
+    </tbody></table>
+</div><div class="tabs-tab" id="NL">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>IBAN</td>
+         <td>NL39RABO0300065264 (18 characters)</td>
+      </tr>
+    </tbody></table>
+</div><div class="tabs-tab" id="NZ">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>Routing Number</td>
+         <td>110000 (6 digits)</td>
+      </tr>
+      <tr>
+         <td>Account Number</td>
+         <td>0000000010 (9-10 digits)</td>
+      </tr>
+    </tbody></table>
+
+
+    <p>When creating a bank via the API, split the full number into a routing number (which consists of the first six digits) and an account number (which consists of the following 9-10 digits), without any separators or other characters.</p>
+</div><div class="tabs-tab" id="NO">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>IBAN</td>
+         <td>NO9386011117947 (15 characters)</td>
+      </tr>
+    </tbody></table>
+</div><div class="tabs-tab" id="PT">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>IBAN</td>
+         <td>PT50123443211234567890172 (25 characters)</td>
+      </tr>
+    </tbody></table>
+</div><div class="tabs-tab" id="SG">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>Bank Code</td>
+         <td>1234</td>
+      </tr>
+      <tr>
+         <td>Branch Code</td>
+         <td>567</td>
+      </tr>
+      <tr>
+         <td>Account Number</td>
+         <td>123456789012 (6-12 characters)</td>
+      </tr>
+    </tbody></table>
+    <p>When creating a bank via the API, combine the bank code and branch code with a hyphen to create a full routing number (e.g., <strong>1234-567</strong>).</p>
+</div><div class="tabs-tab" id="ES">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>IBAN</td>
+         <td>ES9121000418450200051332 (24 characters)</td>
+      </tr>
+    </tbody></table>
+</div><div class="tabs-tab" id="SE">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>IBAN</td>
+         <td>SE3550000000054910000003 (24 characters)</td>
+      </tr>
+    </tbody></table>
+</div><div class="tabs-tab" id="CH">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>IBAN</td>
+         <td>CH9300762011623852957 (21 characters)</td>
+      </tr>
+    </tbody></table>
+</div><div class="tabs-tab" id="GB">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>Sort Code</td>
+         <td>12-34-56</td>
+      </tr>
+      <tr>
+         <td>Account Number</td>
+         <td>01234567</td>
+      </tr>
+    </tbody></table>
+    <p>The information required for UK-based bank accounts depends on the currency being used and the country of your Stripe account. EUR-denominated UK bank accounts and some countries that support UK-based GBP accounts may need to provide IBAN information instead of an account number and sort code.
+    </p><table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>IBAN</td>
+         <td>GB82WEST12345698765432 (22 characters)</td>
+      </tr>
+    </tbody></table>
+</div><div class="tabs-tab selected" id="US">    <table class="alternate">
+    <thead>
+      <tr>
+         <th style="width: 40%">Bank Account Information</th>
+         <th>Example Data</th>
+      </tr>
+    </thead>
+      <tbody><tr>
+         <td>Routing Number</td>
+         <td>111000000 (9 characters)</td>
+      </tr>
+      <tr>
+         <td>Account Number</td>
+         <td>Format varies by bank</td>
+      </tr>
+    </tbody></table>
+</div>
+  </div>
+</div>
+
+</section>
+
+
+<section>
+<h2 id="bank-accounts">Managing bank accounts and debit cards<a class="anchor" href="https://stripe.com/docs/connect/payouts#bank-accounts"></a></h2>
+
+<p>Express and Custom accounts have an <code>external_accounts</code> property: a list of all bank accounts and debit cards associated with the Stripe account. Any external account is a possible destination for funds.</p>
+
+<p>Platforms can <em>see</em> the external accounts for its connected Express accounts. Platforms can <em>update</em> the external accounts for its Custom accounts.</p>
+<div class="code" data-language="json">
+  <pre class=" numbered language-javascript"><code class=" language-javascript"><span class="token punctuation">{</span>
+  <span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">.</span><span class="token property"></span>
+  <span class="token string">"external_accounts"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token string">"object"</span><span class="token punctuation">:</span> <span class="token string">"list"</span><span class="token punctuation">,</span>
+    <span class="token string">"has_more"</span><span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    <span class="token string">"url"</span><span class="token punctuation">:</span> <span class="token string">"/v1/accounts/acct_14qyt6Alijdnw0EA/external_accounts"</span><span class="token punctuation">,</span>
+    <span class="token string">"data"</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">{</span>
+        <span class="token string">"id"</span><span class="token punctuation">:</span> <span class="token string">"ba_18u1IUJ6m0aiknMBHFQaTWOj"</span><span class="token punctuation">,</span>
+        <span class="token string">"object"</span><span class="token punctuation">:</span> <span class="token string">"bank_account"</span><span class="token punctuation">,</span>
+        <span class="token string">"account"</span><span class="token punctuation">:</span> <span class="token string">"acct_18rsqhJ6m0aiknMB"</span><span class="token punctuation">,</span>
+        <span class="token string">"account_holder_name"</span><span class="token punctuation">:</span> <span class="token string">"Jane Austen"</span><span class="token punctuation">,</span>
+        <span class="token string">"account_holder_type"</span><span class="token punctuation">:</span> <span class="token string">"individual"</span><span class="token punctuation">,</span>
+        <span class="token string">"bank_name"</span><span class="token punctuation">:</span> <span class="token string">"STRIPE TEST BANK"</span><span class="token punctuation">,</span>
+        <span class="token string">"country"</span><span class="token punctuation">:</span> <span class="token string">"US"</span><span class="token punctuation">,</span>
+        <span class="token string">"currency"</span><span class="token punctuation">:</span> <span class="token string">"usd"</span><span class="token punctuation">,</span>
+        <span class="token string">"default_for_currency"</span><span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+        <span class="token string">"fingerprint"</span><span class="token punctuation">:</span> <span class="token string">"sSZ2yLp0EZTH17cF"</span><span class="token punctuation">,</span>
+        <span class="token string">"last4"</span><span class="token punctuation">:</span> <span class="token string">"6789"</span><span class="token punctuation">,</span>
+        <span class="token string">"metadata"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token string">"routing_number"</span><span class="token punctuation">:</span> <span class="token string">"110000000"</span><span class="token punctuation">,</span>
+        <span class="token string">"status"</span><span class="token punctuation">:</span> <span class="token string">"new"</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token punctuation">{</span><span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">.</span><span class="token property"></span>
+<span class="token punctuation">}</span></code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+<p>Destination accounts are added via the <code>external_accounts</code> parameter when <a href="https://stripe.com/docs/connect/custom-accounts#creating-a-custom-account">creating</a> or <a href="https://stripe.com/docs/connect/updating-accounts">updating</a> Custom accounts. The value should be a bank account or debit card token returned from <a href="https://stripe.com/docs/stripe-js/reference#collecting-bank-account-details">Stripe.js</a>. Alternatively, you can provide a hash of the bank account details, but using Stripe.js is preferred as it prevents sensitive data from hitting your server.</p>
+
+<p>When using debit cards as a payout destination, the following restrictions apply:</p>
+
+<ul>
+  <li>Must be a non-prepaid U.S. Visa or Mastercard</li>
+  <li>Limited to $9,999 (USD) per payout on <a href="https://stripe.com/docs/connect/payouts#instant-payouts">Instant Payouts</a></li>
+  <li>Generally limited to $3,000 (USD) per payout otherwise</li>
+</ul>
+
+<p>Also, Stripe cannot perform a negative payout against a debit card to correct a negative Stripe account balance.</p>
+</section>
+
+<section>
+<h2 id="multiple-accounts">Managing multiple bank and debit accounts<a class="anchor" href="https://stripe.com/docs/connect/payouts#multiple-accounts"></a></h2>
+
+<p>By default, providing a new value for <code>external_accounts</code> while updating a Custom account <em>replaces</em> the existing account with the new one. To <em>add</em> additional bank accounts or debit cards to a connected account, use the <a href="https://stripe.com/docs/api#account_create_bank_account">Bank Account</a> and <a href="https://stripe.com/docs/api#account_create_card">Card</a> creation API endpoints.</p>
+  <div class="tabs tabs-code animated" data-platform="server">
+    <nav class="nav-languages">
+        <a data-language="curl" class="selected">curl</a>
+        <a data-language="ruby">Ruby</a>
+        <a data-language="python">Python</a>
+        <a data-language="php">PHP</a>
+        <a data-language="java">Java</a>
+        <a data-language="node">Node</a>
+    </nav>
+    <div class="tabs-content">
+      <div class="code selected" data-language="curl">
+  <pre class=" numbered selected language-curl"><code class=" language-curl"><span class="token curl">curl</span> <span class="token url">https://api.stripe.com/v1/accounts/CONNECTED_STRIPE_ACCOUNT_ID/external_accounts</span> \
+<span class="token option">   -u</span> <span class="token value">{PLATFORM_SECRET_KEY}</span>: \
+<span class="token option">   -d</span> <span class="token parameter">external_account</span>=<span class="token value">btok_9CUINZPUJnubtQ</span>
+</code><span class="line-numbers"><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="ruby">
+  <pre class=" numbered language-ruby"><code class=" language-ruby"><span class="token constant">Stripe</span><span class="token punctuation">.</span><span class="token function">api_key</span> <span class="token operator">=</span> <span class="token constant">PLATFORM_SECRET_KEY</span>
+account <span class="token operator">=</span> <span class="token constant">Stripe</span><span class="token punctuation">:</span><span class="token symbol">:Account</span><span class="token punctuation">.</span><span class="token function">retrieve</span><span class="token punctuation">(</span><span class="token constant">CONNECTED_STRIPE_ACCOUNT_ID</span><span class="token punctuation">)</span>
+account<span class="token punctuation">.</span>external_accounts<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token symbol">:external_account</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token string">"btok_9CUUxVXui4TQyJ"</span><span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="python">
+  <pre class=" numbered language-python"><code class=" language-python"><span class="token constant">stripe.api_key</span> <span class="token operator">=</span> PLATFORM_SECRET_KEY
+account <span class="token operator">=</span> <span class="token constant">stripe.Account.</span><span class="token function">retrieve</span><span class="token punctuation">(</span>CONNECTED_STRIPE_ACCOUNT_ID<span class="token punctuation">)</span>
+account<span class="token punctuation">.</span><span class="token variable">external_accounts</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>external_account<span class="token operator">=</span><span class="token string">"btok_9CUY3ZiKZEHSlb"</span><span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="php">
+  <pre class=" numbered language-php"><code class=" language-php"><span class="token namespace">\Stripe</span><span class="token namespace">\Stripe</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">setApiKey</span><span class="token punctuation">(</span><span class="token constant">PLATFORM_SECRET_KEY</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$account</span> <span class="token operator">=</span> <span class="token namespace">\Stripe</span><span class="token namespace">\Account</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">retrieve</span><span class="token punctuation">(</span><span class="token constant">CONNECTED_STRIPE_ACCOUNT_ID</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$account</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token property">external_accounts</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token keyword">array</span><span class="token punctuation">(</span>
+    <span class="token string">"external_account"</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token string">"btok_9CUINZPUJnubtQ"</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="java">
+  <pre class=" numbered language-java"><code class=" language-java"><span class="token constant">Stripe</span><span class="token punctuation">.</span>apiKey <span class="token operator">=</span> <span class="token constant">PLATFORM_SECRET_KEY</span><span class="token punctuation">;</span>
+<span class="token constant">Account</span> account <span class="token operator">=</span> <span class="token constant">Account</span><span class="token punctuation">.</span><span class="token function">retrieve</span><span class="token punctuation">(</span><span class="token constant">CONNECTED_STRIPE_ACCOUNT_ID</span><span class="token punctuation">,</span> null<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token constant">Map&lt;String, Object&gt;</span> params <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constant">HashMap&lt;String, Object&gt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+params<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"external_account"</span><span class="token punctuation">,</span> <span class="token string">"btok_9CUaZTAdbT4G5z"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+account<span class="token punctuation">.</span><span class="token function">getExternalAccounts</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>params<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="node">
+  <pre class=" numbered language-javascript"><code class=" language-javascript"><span class="token keyword">var</span> stripe <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'stripe'</span><span class="token punctuation">)</span><span class="token punctuation">(</span>PLATFORM_SECRET_KEY<span class="token punctuation">)</span><span class="token punctuation">;</span>
+stripe<span class="token punctuation">.</span><span class="token property">accounts</span><span class="token punctuation">.</span><span class="token property"></span><span class="token function">createExternalAccount</span><span class="token punctuation">(</span>
+  CONNECTED_STRIPE_ACCOUNT_ID<span class="token punctuation">,</span>
+  <span class="token punctuation">{</span><span class="token symbol">external_account<span class="token punctuation">:</span></span> <span class="token string">"btok_9CUYdoUSROb2yg"</span><span class="token punctuation">}</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+    </div>
+  </div>
+
+<p>When working with <a href="https://stripe.com/docs/connect/currencies">multiple currencies</a>, Stripe automatically sends payouts to an associated bank account or debit card for its currency, thereby avoiding exchange fees. When there are multiple accounts available for a given currency, Stripe uses the one set as <code>default_for_currency</code>.</p></section>
+
+<section id="payout-information">
+<h2 id="payout-schedule">Payout schedule<a class="anchor" href="https://stripe.com/docs/connect/payouts#payout-schedule"></a></h2>
+
+<p>When using automatic payouts, the <code>payout_schedule</code> property on an account indicates how often the Stripe account’s balance is automatically paid out:</p>
+<div class="code" data-language="json">
+  <pre class=" numbered language-javascript"><code class=" language-javascript"><span class="token punctuation">{</span>
+  <span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">.</span><span class="token property"></span>
+  <span class="token string">"payout_schedule"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token string">"delay_days"</span><span class="token punctuation">:</span> <span class="token number">7</span><span class="token punctuation">,</span>
+    <span class="token string">"interval"</span><span class="token punctuation">:</span> <span class="token string">"daily"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">.</span><span class="token property"></span>
+<span class="token punctuation">}</span></code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+<p>The <code>delay_days</code> property reflects how long it takes charges (or linked transfers) to become available for payout. This field is useful for dictating automatic payouts. For example, if you want your Express or Custom accounts to receive their funds 2 weeks after the charge is made, set <code>interval</code> to <code>daily</code> and <code>delay_days</code> to <strong>14</strong>. The default is the lowest permitted value for the account, determined by the connected account’s country. When setting or updating this field, you may pass the string <strong>minimum</strong> to choose the lowest permitted value.</p>
+
+<p>There are four possible settings for the <code>interval</code> property:</p>
+
+<ul>
+  <li><strong>manual</strong> prevents automatic payouts. You will have to manually pay out the account’s balance using the <a href="https://stripe.com/docs/api#create_payout">Payouts API</a> (acting as the connected account). You also set an account to <code>manual</code> to use <a href="https://stripe.com/docs/connect/payouts#instant-payouts">Instant Payouts</a>.</li>
+  <li><strong>daily</strong> automatically pays out charges <code>delay_days</code> days after they’re created. The <code>delay_days</code> value cannot be less than your own payout schedule or less than the default payout schedule for the account.</li>
+  <li><strong>weekly</strong> automatically pays out the balance once a week, with the day specified by the <code>weekly_anchor</code> parameter (a lower-case weekday such as <strong>monday</strong>).</li>
+  <li><strong>monthly</strong> automatically pays out the balance once a month, specified by the <code>monthly_anchor</code> parameter (a number from 1 to 31). Payouts scheduled between 29-31st of the month are sent on the last day of shorter months.</li>
+</ul></section>
+
+<section>
+<h2 id="using-manual-payouts">Using manual payouts<a class="anchor" href="https://stripe.com/docs/connect/payouts#using-manual-payouts"></a></h2>
+
+<p>If you set <code>payout_schedule[interval]</code> to <code>manual</code> using the <a href="https://stripe.com/docs/api#account_object-payout_schedule">Accounts API</a>, Stripe will hold funds in the account holder’s balance until told to pay them out (or until a maximum of 90 days have passed). To trigger a payout of these funds, use the <a href="https://stripe.com/docs/api#create_payout">Payouts API</a>.</p>
+
+<p>The Payouts API is only for moving funds from a connected Stripe account’s balance into their external account. To move funds between the platform and a connected account, see creating <a href="https://stripe.com/docs/connect/charges-transfers">separate charges and transfers</a> or <a href="https://stripe.com/docs/connect/destination-charges">creating destination charges through the platform</a>.</p>
+
+<h3 id="regular-payouts">Regular payouts<a class="anchor" href="https://stripe.com/docs/connect/payouts#regular-payouts"></a></h3>
+
+<p>As a basic payout example, to have $10 sent from a connected account’s Stripe balance to their external account:</p>
+  <div class="tabs tabs-code animated" data-platform="server">
+    <nav class="nav-languages">
+        <a data-language="curl" class="selected">curl</a>
+        <a data-language="ruby">Ruby</a>
+        <a data-language="python">Python</a>
+        <a data-language="php">PHP</a>
+        <a data-language="java">Java</a>
+        <a data-language="node">Node</a>
+        <a data-language="go">Go</a>
+    </nav>
+    <div class="tabs-content">
+      <div class="code selected" data-language="curl">
+  <pre class=" numbered selected language-curl"><code class=" language-curl"><span class="token curl">curl</span> <span class="token url">https://api.stripe.com/v1/payouts</span> \
+<span class="token option">   -u</span> <span class="token value">{PLATFORM_SECRET_KEY}</span>: \
+<span class="token option">   -H</span> <span class="token value">"Stripe-Account: {CONNECTED_STRIPE_ACCOUNT_ID}"</span> \
+<span class="token option">   -d</span> <span class="token parameter">amount</span>=<span class="token value">1000</span> \
+<span class="token option">   -d</span> <span class="token parameter">currency</span>=<span class="token value">usd</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="ruby">
+  <pre class=" numbered language-ruby"><code class=" language-ruby"><span class="token comment" spellcheck="true"># Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true"># See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">Stripe</span><span class="token punctuation">.</span><span class="token function">api_key</span> <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span>
+
+<span class="token constant">Stripe</span><span class="token punctuation">:</span><span class="token symbol">:Payout</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  <span class="token symbol">:amount</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token number">1000</span><span class="token punctuation">,</span>
+  <span class="token symbol">:currency</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token string">"usd"</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token symbol">:stripe_account</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token constant">CONNECTED_STRIPE_ACCOUNT_ID</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="python">
+  <pre class=" numbered language-python"><code class=" language-python"><span class="token comment" spellcheck="true"># Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true"># See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">stripe.api_key</span> <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span>
+
+<span class="token constant">stripe.Payout.</span><span class="token function">create</span><span class="token punctuation">(</span>
+  <span class="token parameter">amount</span><span class="token operator">=</span><span class="token number">1000</span><span class="token punctuation">,</span>
+  <span class="token parameter">currency</span><span class="token operator">=</span><span class="token string">"usd"</span><span class="token punctuation">,</span>
+  <span class="token constant">stripe_account</span><span class="token operator">=</span>CONNECTED_STRIPE_ACCOUNT_ID<span class="token punctuation">,</span>
+<span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="php">
+  <pre class=" numbered language-php"><code class=" language-php"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token namespace">\Stripe</span><span class="token namespace">\Stripe</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">setApiKey</span><span class="token punctuation">(</span><span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token namespace">\Stripe</span><span class="token namespace">\Payout</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token keyword">array</span><span class="token punctuation">(</span>
+    <span class="token string">"amount"</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token number">1000</span><span class="token punctuation">,</span>
+    <span class="token string">"currency"</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token string">"usd"</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token keyword">array</span><span class="token punctuation">(</span><span class="token string">"stripe_account"</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token constant">CONNECTED_STRIPE_ACCOUNT_ID</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="java">
+  <pre class=" numbered language-java"><code class=" language-java"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">Stripe</span><span class="token punctuation">.</span>apiKey <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">;</span>
+
+<span class="token constant">RequestOptions</span> requestOptions <span class="token operator">=</span> <span class="token constant">RequestOptions</span><span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setStripeAccount</span><span class="token punctuation">(</span><span class="token constant">CONNECTED_STRIPE_ACCOUNT_ID</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token constant">Map&lt;String, Object&gt;</span> params <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constant">HashMap&lt;String, Object&gt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+params<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"amount"</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+params<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"currency"</span><span class="token punctuation">,</span> <span class="token string">"usd"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token constant">Payout</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>params<span class="token punctuation">,</span> requestOptions<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="node">
+  <pre class=" numbered language-javascript"><code class=" language-javascript"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token keyword">var</span> stripe <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"stripe"</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+stripe<span class="token punctuation">.</span><span class="token property">payouts</span><span class="token punctuation">.</span><span class="token property"></span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  <span class="token symbol">amount<span class="token punctuation">:</span></span> <span class="token number">1000</span><span class="token punctuation">,</span>
+  <span class="token symbol">currency<span class="token punctuation">:</span></span> <span class="token string">"usd"</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  <span class="token symbol">stripe_account<span class="token punctuation">:</span></span> <span class="token string">"{CONNECTED_STRIPE_ACCOUNT_ID}"</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token property"></span><span class="token function">then</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>payout<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// asynchronously called</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="go">
+  <pre class=" numbered language-go"><code class=" language-go"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+stripe<span class="token punctuation">.</span>Key <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span>
+
+params <span class="token operator">:=</span> <span class="token constant">&amp;stripe.PayoutParams</span><span class="token punctuation">{</span>
+  <span class="token symbol">Amount:</span> <span class="token number">1000</span><span class="token punctuation">,</span>
+  <span class="token symbol">Currency:</span> <span class="token string">"usd"</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+params<span class="token punctuation">.</span><span class="token function">SetStripeAccount</span><span class="token punctuation">(</span><span class="token string">"{CONNECTED_STRIPE_ACCOUNT_ID}"</span><span class="token punctuation">)</span>
+
+pay<span class="token punctuation">,</span> err <span class="token operator">:=</span> payout<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span>params<span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+    </div>
+  </div>
+
+  <aside class="note">
+    <h3 id="support-for-escrow">Support for escrow<a class="anchor" href="https://stripe.com/docs/connect/payouts#support-for-escrow"></a></h3>
+
+    <p><em>Escrow</em> has a precise legal definition and Stripe does not support escrow accounts. However, we do provide escrow-like behavior through manual payouts. This gives you influence over payout timing, with the ability to delay payouts to Express and Custom accounts for up to 90 days.</p>
+    <p>Manual payouts can be used as an alternative to escrow when there may be a risk of a delayed delivery, or if there's the possibility of a refund being needed.</p>
+  </aside>
+
+<p>With a standard payout, you can move an amount up to the user’s available balance. To find that amount, perform a <a href="https://stripe.com/docs/api#retrieve_balance">retrieve balance</a> call on their behalf.</p>
+
+<p>Stripe tracks balance contributions from different payment sources in separate balances. The retrieve balance response breaks down the components of each balance by source type. For example, to create a payout specifically for a non-credit-card balance, specify the <code>source_type</code> in your request.</p>
+  <div class="tabs tabs-code animated" data-platform="server">
+    <nav class="nav-languages">
+        <a data-language="curl" class="selected">curl</a>
+        <a data-language="ruby">Ruby</a>
+        <a data-language="python">Python</a>
+        <a data-language="php">PHP</a>
+        <a data-language="java">Java</a>
+        <a data-language="node">Node</a>
+    </nav>
+    <div class="tabs-content">
+      <div class="code selected" data-language="curl">
+  <pre class=" numbered selected language-curl"><code class=" language-curl"><span class="token curl">curl</span> <span class="token url">https://api.stripe.com/v1/payouts</span> \
+<span class="token option">   -u</span> <span class="token value">{PLATFORM_SECRET_KEY}</span>: \
+<span class="token option">   -d</span> <span class="token parameter">amount</span>=<span class="token value">24784</span> \
+<span class="token option">   -d</span> <span class="token parameter">currency</span>=<span class="token value">usd</span> \
+<span class="token option">   -d</span> <span class="token parameter">source_type</span>=<span class="token value">bank_account</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="ruby">
+  <pre class=" numbered language-ruby"><code class=" language-ruby"><span class="token constant">Stripe</span><span class="token punctuation">.</span><span class="token function">api_key</span> <span class="token operator">=</span> <span class="token constant">PLATFORM_SECRET_KEY</span>
+<span class="token constant">Stripe</span><span class="token punctuation">:</span><span class="token symbol">:Payout</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>
+  <span class="token symbol">:amount</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token number">24784</span><span class="token punctuation">,</span>
+  <span class="token symbol">:currency</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token string">'usd'</span><span class="token punctuation">,</span>
+  <span class="token symbol">:source_type</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token string">'bank_account'</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="python">
+  <pre class=" numbered language-python"><code class=" language-python"><span class="token constant">stripe.api_key</span> <span class="token operator">=</span> PLATFORM_SECRET_KEY
+<span class="token constant">stripe.Payout.</span><span class="token function">create</span><span class="token punctuation">(</span>
+  <span class="token parameter">amount</span><span class="token operator">=</span><span class="token number">24784</span><span class="token punctuation">,</span>
+  <span class="token parameter">currency</span><span class="token operator">=</span><span class="token string">"usd"</span><span class="token punctuation">,</span>
+  source_type<span class="token operator">=</span><span class="token string">"bank_account"</span><span class="token punctuation">,</span>
+<span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="php">
+  <pre class=" numbered language-php"><code class=" language-php"><span class="token namespace">\Stripe</span><span class="token namespace">\Stripe</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">setApiKey</span><span class="token punctuation">(</span><span class="token constant">PLATFORM_SECRET_KEY</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$tr</span> <span class="token operator">=</span> <span class="token namespace">\Stripe</span><span class="token namespace">\Payout</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token keyword">array</span><span class="token punctuation">(</span>
+  <span class="token string">"amount"</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token number">24784</span><span class="token punctuation">,</span>
+  <span class="token string">"currency"</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token string">"usd"</span><span class="token punctuation">,</span>
+  <span class="token string">"source_type"</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token string">"bank_account"</span>
+<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="java">
+  <pre class=" numbered language-java"><code class=" language-java"><span class="token constant">Stripe</span><span class="token punctuation">.</span>apiKey <span class="token operator">=</span> <span class="token constant">PLATFORM_SECRET_KEY</span><span class="token punctuation">;</span>
+
+<span class="token constant">Map&lt;String, Object&gt;</span> payoutParams <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constant">HashMap&lt;String, Object&gt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+payoutParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"amount"</span><span class="token punctuation">,</span> <span class="token number">24784</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+payoutParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"currency"</span><span class="token punctuation">,</span> <span class="token string">"usd"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+payoutParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"source_type"</span><span class="token punctuation">,</span> <span class="token string">"bank_account"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token constant">Payout</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>payoutParams<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="node">
+  <pre class=" numbered language-javascript"><code class=" language-javascript"><span class="token keyword">var</span> stripe <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'stripe'</span><span class="token punctuation">)</span><span class="token punctuation">(</span>PLATFORM_SECRET_KEY<span class="token punctuation">)</span><span class="token punctuation">;</span>
+stripe<span class="token punctuation">.</span><span class="token property">payouts</span><span class="token punctuation">.</span><span class="token property"></span><span class="token function">create</span><span class="token punctuation">(</span>
+  <span class="token punctuation">{</span>
+    <span class="token symbol">amount<span class="token punctuation">:</span></span> <span class="token number">24784</span><span class="token punctuation">,</span>
+    <span class="token symbol">currency<span class="token punctuation">:</span></span> <span class="token string">'usd'</span><span class="token punctuation">,</span>
+    <span class="token symbol">source_type<span class="token punctuation">:</span></span> <span class="token string">'bank_account'</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+    </div>
+  </div>
+
+<p>Note that it is possible for any source’s balance component to go negative (through refunds or chargebacks), and payouts can’t be created for greater than the aggregate available balance.</p>
+
+<h3 id="instant-payouts">Using Instant Payouts (U.S. only)<a class="anchor" href="https://stripe.com/docs/connect/payouts#instant-payouts"></a></h3>
+
+<p>With Instant Payouts, you can immediately send funds to a connected account’s debit card. Funds typically appear in the associated bank account within 30 minutes, making it possible to go from charge to payout in mere moments.</p>
+
+<p>To use Instant Payouts, specify <strong>instant</strong> for the <code>method</code> property when creating the payout:</p>
+  <div class="tabs tabs-code animated" data-platform="server">
+    <nav class="nav-languages">
+        <a data-language="curl" class="selected">curl</a>
+        <a data-language="ruby">Ruby</a>
+        <a data-language="python">Python</a>
+        <a data-language="php">PHP</a>
+        <a data-language="java">Java</a>
+        <a data-language="node">Node</a>
+    </nav>
+    <div class="tabs-content">
+      <div class="code selected" data-language="curl">
+  <pre class=" numbered selected language-curl"><code class=" language-curl"><span class="token curl">curl</span> <span class="token url">https://api.stripe.com/v1/payouts</span> \
+<span class="token option">   -u</span> <span class="token value">{PLATFORM_SECRET_KEY}</span>: \
+<span class="token option">   -H</span> <span class="token value">"Stripe-Account: {CONNECTED_STRIPE_ACCOUNT_ID}"</span> \
+<span class="token option">   -d</span> <span class="token parameter">amount</span>=<span class="token value">1000</span> \
+<span class="token option">   -d</span> <span class="token parameter">currency</span>=<span class="token value">usd</span> \
+<span class="token option">   -d</span> <span class="token parameter">method</span>=<span class="token value">instant</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="ruby">
+  <pre class=" numbered language-ruby"><code class=" language-ruby"><span class="token constant">Stripe</span><span class="token punctuation">.</span><span class="token function">api_key</span> <span class="token operator">=</span> <span class="token constant">PLATFORM_SECRET_KEY</span>
+<span class="token constant">Stripe</span><span class="token punctuation">:</span><span class="token symbol">:Payout</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>
+  <span class="token punctuation">{</span>
+    <span class="token symbol">:amount</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token number">1000</span><span class="token punctuation">,</span>
+    <span class="token symbol">:currency</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token string">"usd"</span><span class="token punctuation">,</span>
+    <span class="token symbol">:method</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token string">"instant"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span><span class="token symbol">:stripe_account</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token constant">CONNECTED_STRIPE_ACCOUNT_ID</span><span class="token punctuation">}</span>
+<span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="python">
+  <pre class=" numbered language-python"><code class=" language-python"><span class="token constant">stripe.api_key</span> <span class="token operator">=</span> PLATFORM_SECRET_KEY
+<span class="token constant">stripe.Payout.</span><span class="token function">create</span><span class="token punctuation">(</span>
+  <span class="token parameter">amount</span><span class="token operator">=</span><span class="token number">1000</span><span class="token punctuation">,</span>
+  <span class="token parameter">currency</span><span class="token operator">=</span><span class="token string">"usd"</span><span class="token punctuation">,</span>
+  <span class="token parameter">method</span><span class="token operator">=</span><span class="token string">"instant"</span><span class="token punctuation">,</span>
+  <span class="token constant">stripe_account</span><span class="token operator">=</span>CONNECTED_STRIPE_ACCOUNT_ID
+<span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="php">
+  <pre class=" numbered language-php"><code class=" language-php"><span class="token namespace">\Stripe</span><span class="token namespace">\Stripe</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">setApiKey</span><span class="token punctuation">(</span><span class="token constant">PLATFORM_SECRET_KEY</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token namespace">\Stripe</span><span class="token namespace">\Payout</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">create</span><span class="token punctuation">(</span>
+  <span class="token keyword">array</span><span class="token punctuation">(</span>
+    <span class="token string">"amount"</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token number">1000</span><span class="token punctuation">,</span>
+    <span class="token string">"currency"</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token string">"usd"</span><span class="token punctuation">,</span>
+    <span class="token string">"method"</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token string">"instant"</span>
+  <span class="token punctuation">)</span><span class="token punctuation">,</span>
+  <span class="token keyword">array</span><span class="token punctuation">(</span><span class="token string">"stripe_account"</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token constant">CONNECTED_STRIPE_ACCOUNT_ID</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="java">
+  <pre class=" numbered language-java"><code class=" language-java"><span class="token constant">Stripe</span><span class="token punctuation">.</span>apiKey <span class="token operator">=</span> <span class="token constant">PLATFORM_SECRET_KEY</span><span class="token punctuation">;</span>
+<span class="token constant">RequestOptions</span> requestOptions <span class="token operator">=</span> <span class="token constant">RequestOptions</span><span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setStripeAccount</span><span class="token punctuation">(</span><span class="token constant">CONNECTED_STRIPE_ACCOUNT_ID</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token constant">Map&lt;String, Object&gt;</span> payoutParams <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constant">HashMap&lt;String, Object&gt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+payoutParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"amount"</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+payoutParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"currency"</span><span class="token punctuation">,</span> <span class="token string">"usd"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+payoutParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"method"</span><span class="token punctuation">,</span> <span class="token string">"instant"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token constant">Payout</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>transferParams<span class="token punctuation">,</span> requestOptions<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="node">
+  <pre class=" numbered language-javascript"><code class=" language-javascript"><span class="token keyword">var</span> stripe <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'stripe'</span><span class="token punctuation">)</span><span class="token punctuation">(</span>PLATFORM_SECRET_KEY<span class="token punctuation">)</span><span class="token punctuation">;</span>
+stripe<span class="token punctuation">.</span><span class="token property">payouts</span><span class="token punctuation">.</span><span class="token property"></span><span class="token function">create</span><span class="token punctuation">(</span>
+  <span class="token punctuation">{</span>
+    <span class="token symbol">amount<span class="token punctuation">:</span></span> <span class="token number">1000</span><span class="token punctuation">,</span>
+    <span class="token symbol">currency<span class="token punctuation">:</span></span> <span class="token string">"usd"</span><span class="token punctuation">,</span>
+    <span class="token symbol">method<span class="token punctuation">:</span></span> <span class="token string">"instant"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span><span class="token symbol">stripe_account<span class="token punctuation">:</span></span> CONNECTED_STRIPE_ACCOUNT_ID<span class="token punctuation">}</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+    </div>
+  </div>
+
+  <aside class="note">
+    <h3 id="pricing">Pricing<a class="anchor" href="https://stripe.com/docs/connect/payouts#pricing"></a></h3>
+    <p>Instant Payouts cost 1.5% of the payout amount, with a minimum fee of 50¢.</p>
+  </aside>
+
+<p>Instant Payouts differ from manual payouts in a couple of ways:</p>
+
+<ul>
+  <li>You can pay out an account’s available balance plus its <em>pending</em> balance</li>
+  <li>Instant Payouts can be requested on weekends and holidays</li>
+</ul>
+
+<p>Initially, platforms can pay out up to $5,000 (USD) per day—in total, across all connected accounts—through Instant Payouts. <a href="https://support.stripe.com/email">Contact us</a> if you need this threshold increased.</p>
+
+<p>Instant Payouts is available for all of the largest U.S. banks, but a small percentage of banks do not yet support it. For those banks, you will have to fall back to standard payouts.</p>
+
+<p>When you add a card to an account, Stripe returns a property <code>available_payout_methods</code> in the response, which will be a set containing the payout methods Stripe supports for that card.  This property will be either <code>["standard"]</code> or <code>["standard", "instant"]</code>.  Only values in this set should be passed as the <code>method</code> when creating a payout.</p>
+<div class="code" data-language="json">
+  <pre class=" numbered language-javascript"><code class=" language-javascript"><span class="token punctuation">{</span>
+  <span class="token string">"id"</span><span class="token punctuation">:</span> <span class="token string">"card_9CUH5DBY1jTgQ0"</span><span class="token punctuation">,</span>
+  <span class="token string">"object"</span><span class="token punctuation">:</span> <span class="token string">"card"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">.</span><span class="token property"></span>
+  <span class="token string">"account"</span><span class="token punctuation">:</span> <span class="token string">"acct_1032D82eZvKYlo2C"</span><span class="token punctuation">,</span>
+  <span class="token string">"available_payout_methods"</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"standard"</span><span class="token punctuation">,</span> <span class="token string">"instant"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+ <p>If a connected account's card does not support Instant Payouts, you must clearly communicate to the owner of that account that they will not receive their payouts instantly.</p>
+</section>
+
+<section>
+
+<h3 id="webhooks">Using webhooks with payouts<a class="anchor" href="https://stripe.com/docs/connect/payouts#webhooks"></a></h3>
+
+<p>All payout activity on connected accounts can be tracked using <a href="https://stripe.com/docs/webhooks">webhooks</a>. (When using Connect, you should always be using webhooks.) Specific to payouts, you’ll see these events:</p>
+
+<ul>
+  <li><code>payout.created</code></li>
+  <li><code>payout.updated</code></li>
+  <li><code>payout.paid</code></li>
+  <li><code>payout.failed</code></li>
+</ul>
+
+<p>For most payouts, these event notifications occur over a series of days. For Instant Payouts, <code>payout.paid</code> will be sent on the next business day, although the funds should be received well beforehand.</p>
+
+<p>If a payout cannot be completed, a <code>payout.failed</code> event occurs. The event’s  <code>failure_code</code> property indicates why. Additionally, the external account involved in the payout is disabled, triggering an <code>account.external_account.updated</code> notification. No automatic or manual payouts can go through until the platform updates the connected account’s external accounts.</p>
+</section>
+
+<section>
+  <h2 id="further-reading">Further reading<a class="anchor" href="https://stripe.com/docs/connect/payouts#further-reading"></a></h2>
+  <p>Check out the rest of the guide for help with your integration.</p>
+<ul class="next-steps">
+    <li><a href="https://stripe.com/docs/connect/custom-accounts"><span>Custom Accounts</span></a></li>
+    <li><a href="https://stripe.com/docs/connect/updating-accounts"><span>Updating Accounts</span></a></li>
+    <li><a href="https://stripe.com/docs/connect/account-balances"><span>Understanding Connect Account Balances</span></a></li>
+    <li><a href="https://stripe.com/docs/connect/statement-descriptors"><span>Statement Descriptors with Connect</span></a></li>
+</ul>
+
+</section>
+<footer>
+  <h2 data-no-anchor="">Questions?</h2>
+  <p>We're always happy to help with code or other questions you might have! <a href="https://stripe.com/docs/connect/payouts#" class="search-link">Search</a> our documentation, <a href="https://support.stripe.com/email">contact support</a>, or <a href="https://stripe.com/contact/sales">connect with our sales team</a>. You can also chat live with other developers in <a href="irc://irc.freenode.net/stripe">#stripe</a> on freenode.</p>
+</footer>
+</article>
+      </div>
+    </div>
+
+    <div id="loading-bar" class="hidden" style="width: 100%;"></div>
+
+    <script src="./Setting Bank and Debit Card Payouts_files/jquery.min-356cfe6f83a29dcc6fd2cd9ac777637e.js"></script>
+    <script src="./Setting Bank and Debit Card Payouts_files/prism-d97c2fbc02243c145440b270c43ec26b.js"></script>
+    <script src="./Setting Bank and Debit Card Payouts_files/dynamics.min-f8b2e1648525e57b196b53792a19cda3.js"></script>
+    <script src="./Setting Bank and Debit Card Payouts_files/jquery.cookie-368e8ec1948575a79f6830f8d13db348.js"></script>
+    <script src="./Setting Bank and Debit Card Payouts_files/documentation-9d21cec0f3371635162f9c978350719d.js"></script>
+      <script src="./Setting Bank and Debit Card Payouts_files/algoliasearch-ccb98f296c1e54994357b8d396b3ce13.js"></script>
+      <script src="./Setting Bank and Debit Card Payouts_files/documentation-search-76a887ea03340dcf4d184728b1daad3d.js"></script>
+    <script>
+      parseKey("sk_test_BQokikJOvBiI2HlWgH4olfQ2", "secret-key", null);
+      parseKey("pk_test_6pRNASCoBOKtIshFeQd4XMUh", "publishable-key", null);
+    </script>
+      <script type="text/javascript" src="./Setting Bank and Debit Card Payouts_files/saved_resource"></script>
+  <script type="text/javascript" src="./Setting Bank and Debit Card Payouts_files/saved_resource(1)"></script>
+
+    
+    
+
+<script type="application/json" id="site-analytics-config">{"generalAnalyticsConfig":{"mixpanel":{"identifier":"eb71b6171a4f7ed97de9b7a0395b7ca5"},"ga":{},"trackpage":true,"flags":{"site.experiments.home_page_cta":true,"site.experiments.nav_login_cta":false,"site.experiments.get_started_copy":false,"site.experiments.request_demo_copy":false,"site.experiments.contact_sales_content":false},"locale":"en"},"siteSpecificAnalyticsConfig":{"trackPageViewed":false}}</script>
+
+
+<!-- Google Tag Manager (noscript) -->
+<noscript>&lt;iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K8JKCBR"
+height="0" width="0" style="display:none;visibility:hidden"&gt;&lt;/iframe&gt;</noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+<script defer="" src="./Setting Bank and Debit Card Payouts_files/analytics.min.js"></script>
+<script defer="" src="./Setting Bank and Debit Card Payouts_files/stripe-m-preview.js"></script>
+ 
+    <script src="./Setting Bank and Debit Card Payouts_files/documentation-analytics-7e4ac19718751588692cdd0955dba883.js"></script>
+  
+
+<div id="MultiLookup" style="opacity: 0.8" class="black"></div><div id="dict" class="card-panel grey lighten-4"><div id="dict-inner"></div><img id="toktogi-lock" class="toktogi-icon" src="chrome-extension://domfinmkohodhgghgedfdcmonefafolm/images/unlock.png"></div><div id="toktogi-notification" class="card-panel grey lighten-4">Toktogi is on</div><iframe frameborder="0" allowtransparency="true" scrolling="no" name="__privateStripeMetricsController0" allowpaymentrequest="true" src="./Setting Bank and Debit Card Payouts_files/outer.html" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important;"></iframe><script>
+$(function() {
+  if (location.search.match(/[?&]code=/)) {
+    var el = $("h3#express-account-creation > a");
+    if (el.length > 0) el[0].click();
+  }
+});
+</script>
+</body><div></div></html>

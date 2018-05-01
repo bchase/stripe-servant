@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<!-- saved from url=(0032)https://stripe.com/docs/webhooks -->
+<html lang="en" data-ember-extension="1"><script type="text/javascript" async="" src="./Using Webhooks_files/mixpanel-2.2.min.js"></script><script async="" src="./Using Webhooks_files/analytics.js"></script><script async="" src="./Using Webhooks_files/gtm.js"></script><script src="./Using Webhooks_files/742650679237989" async=""></script><script async="" src="./Using Webhooks_files/fbevents.js"></script><script type="text/javascript">window["_gaUserPrefs"] = { ioo : function() { return true; } }</script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    <meta name="google-site-verification" content="f0LCrdI6z4Fo8zld4sHCgo5SiUE4EYYRUa6KVeX3Mw8">
+    <meta name="csrf-token" content="ll1U4DvNQPD4kf8qWZ1wTZR_ngc7kaxMQOAlV6EvrTVAb_7nU69Tt0xVFryolnjHe3kcR3OrjlSQbByQnKBm1Q==">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Using Webhooks</title>
+
+    <meta name="description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+
+
+    <link rel="shortcut icon" href="https://stripe.com/favicon.ico">
+
+    <link rel="apple-touch-icon-precomposed" href="https://stripe.com/img/apple-touch-icon/180x180.png">
+    <link rel="icon" href="https://stripe.com/img/apple-touch-icon/180x180.png">
+
+
+    <link rel="image_src" type="image/png" href="https://stripe.com/img/v3/home/social.png">
+
+
+        <link rel="canonical" href="https://stripe.com/docs/webhooks">
+
+    <meta property="og:title" content="Using Webhooks">
+    <meta property="og:url" content="https://stripe.com/docs/webhooks">
+    <meta property="og:description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+    <meta property="og:image" content="https://stripe.com/img/v3/home/social.png">
+
+      <meta name="twitter:card" content="summary">
+      <meta name="twitter:image" content="https://stripe.com/img/v3/home/twitter.png">
+    <meta name="twitter:site" content="@stripe">
+    <meta name="twitter:title" content="Using Webhooks">
+    <meta name="twitter:description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+
+
+    <script type="application/json" id="strut_files">{&quot;v3/shared/navigation_ie10.css&quot;:&quot;/assets/v3/shared/navigation_ie10-fad8432db8a0ef02ccfc88df4a0b8535.css&quot;}</script>
+
+    
+
+    
+
+    <link rel="stylesheet" href="./Using Webhooks_files/default-6388c486f7388db1252f0d7c85db5e15.css">
+    <link rel="stylesheet" href="./Using Webhooks_files/common-966a7c7414d89c40541b15f2adfa6a26.css">
+    <link rel="stylesheet" href="./Using Webhooks_files/base-3cdaeb306a5f322afd95a5e0122a3388.css">
+    <link rel="stylesheet" href="./Using Webhooks_files/prism_light-6e629a34ce1570d4f33f7e2ee8bebbc2.css">
+    
+    
+    <meta name="viewport" content="width=1060">
+    <meta name="robots" content="noarchive">
+  </head>
+  <body class="">
+    
+    <div id="docs">
+      <div id="sidebar" class="bordered">
+        <div class="logo">
+          <a class="site" href="https://stripe.com/" title="Stripe"></a>
+          <a class="extension" href="https://stripe.com/docs">docs</a>
+        </div>
+        <div class="nav-border"></div>
+        <nav>
+          <h1 class="home"><a href="https://stripe.com/docs">Home</a></h1>
+          <h1 class="payments"><a class="toggle-content" data-trigger-id="0">Payments</a></h1>
+<ul class="hidden" data-hidden="true" data-height="892.3333740234375" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/quickstart">Quickstart</a>
+    </li>
+    <li class="category">Collecting payment details
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/checkout/tutorial" data-trigger-id="9">Checkout</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/checkout">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js" data-trigger-id="10">Stripe.js &amp; Elements</a>
+      <ul class="hidden" data-hidden="true" data-height="112" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/quickstart">Quickstart</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/payment-request-button">Payment Request Button</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/migrating">Migration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/reference">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios" data-trigger-id="11">iOS</a>
+      <ul class="hidden" data-hidden="true" data-height="112" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/standard">Standard Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/custom">Custom Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/apple-pay/apps">Apple Pay in Apps</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/sources">Using Sources</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android" data-trigger-id="12">Android</a>
+      <ul class="hidden" data-hidden="true" data-height="168" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/standard">Standard Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/pay-with-google">Pay with Google</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/alipay-android">Working with Alipay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/android-pay">Android Pay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/customer-information">Customer Information</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/sources">Using Sources</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/saving-cards">Saving Cards</a>
+    </li>
+    <li class="category">Charges
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/charges">Creating Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/declines" data-trigger-id="13">Declines &amp; Failed Payments</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/declines/codes">Decline Codes</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/disputes" data-trigger-id="14">Disputes &amp; Fraud</a>
+      <ul class="hidden" data-hidden="true" data-height="56" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/disputes/categories">Dispute Categories</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/disputes/prevention">Prevention</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/refunds">Refunds</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/payouts">Receiving Payouts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/currencies" data-trigger-id="15">Supported Currencies</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/currencies/conversions">Currency Conversions</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="category">Sources
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources" data-trigger-id="16">Payment Methods</a>
+      <ul class="hidden" data-hidden="true" data-height="308" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/sources/cards">Cards</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/three-d-secure">3D Secure</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/alipay">Alipay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/ach-credit-transfer">ACH Credit Transfer</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/bancontact">Bancontact</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/bitcoin">Bitcoin</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/giropay">Giropay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/ideal">iDEAL</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/p24">P24</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/sepa-debit">SEPA Direct Debit</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/sofort">SOFORT</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/best-practices">Best Practices</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/customers">Sources &amp; Customers</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/connect">Connect Platforms</a>
+    </li>
+    <li class="category">Other Payment Methods
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/ach">ACH</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/amex-express-checkout">Amex Express Checkout</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/apple-pay">Apple Pay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/pay-with-google">Pay with Google</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/payment-request-api">Payment Request API</a>
+    </li>
+    <li class="category">Products &amp; Orders
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders" data-trigger-id="17">Orders</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/orders/guide">Guide</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders/tax-integration">Tax Integrations</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders/shipping-integration">Shipping Integrations</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="subscriptions"><a class="toggle-content" data-trigger-id="1">Subscriptions</a></h1>
+<ul class="hidden" data-hidden="true" data-height="528" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/quickstart">Quickstart</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/creating" data-trigger-id="18">Creating Subscriptions</a>
+      <ul data-collapsable="false" data-height="168">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/multiplan">Using Multiple Plans</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/discounts">Applying Discounts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/trials">Using Trial Periods</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/quantities">Setting Quantities</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/taxes">Adding Taxes</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/multiple">Multiple Subscriptions</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/lifecycle">Lifecycle &amp; Events</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/webhooks">Using Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/changing" data-trigger-id="19">Changing Subscriptions</a>
+      <ul data-collapsable="false" data-height="84">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/upgrading-downgrading">Upgrading &amp; Downgrading</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/billing-cycle">Billing Cycle</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/canceling-pausing">Canceling &amp; Pausing</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/invoices" data-trigger-id="20">Working with Invoices</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/ach-credit">ACH Credit Transfers</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/plans">Managing Plans</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/subscriptions/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="connect"><a class="toggle-content" data-trigger-id="2">Connect</a></h1>
+<ul class="hidden" data-hidden="true" data-height="567.3333740234375" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/connect">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/quickstart">Quickstart</a>
+    </li>
+    <li class="category">Account Types
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/accounts">Accounts Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/standard-accounts">Standard</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/express-accounts">Express</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/custom-accounts" data-trigger-id="21">Custom</a>
+      <ul class="hidden" data-hidden="true" data-height="104" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/connect/updating-accounts">Updating Accounts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/identity-verification">Identity Verification</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/required-verification-information">Required Info</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="category">Processing Payments
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/charges" data-trigger-id="22">Creating Charges</a>
+      <ul class="hidden" data-hidden="true" data-height="124" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/connect/direct-charges">Direct Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/destination-charges">Destination Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/charges-transfers">Separate Charges and Transfers</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/account-debits">Account Debits</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/subscriptions">Using Subscriptions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/currencies">Multiple Currencies</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/account-balances">Account Balances</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/payouts">Bank Payouts</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/connect/best-practices">Best Practices</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/migrating">Migrating</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/reference">OAuth Reference</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/webhooks">Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="sigma"><a class="toggle-content" data-trigger-id="3">Sigma</a></h1>
+<ul class="hidden" data-hidden="true" data-height="150" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/sigma">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/transactions">Transactions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/subscriptions">Subscriptions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/connect">Connect</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/scheduled-queries">Scheduled Queries</a>
+    </li>
+</ul>
+
+          <h1 class="radar"><a class="toggle-content" data-trigger-id="4">Radar</a></h1>
+<ul class="hidden" data-hidden="true" data-height="248" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/radar">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/risk-evaluation">Risk Evaluation</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/blocklist">Blocklist</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/review" data-trigger-id="23">Review</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/radar/review/auth-and-capture">Uncaptured Payments</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/rules" data-trigger-id="24">Rules</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/radar/rules/reference">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/radar/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="relay"><a class="toggle-content" data-trigger-id="5">Relay</a></h1>
+<ul class="hidden" data-hidden="true" data-height="94" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/relay">Selling in Other Apps</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/relay/apps-guide" data-trigger-id="25">Accepting Orders in Your App</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/relay/apps-error-guide">Error Handling</a>
+    </li>
+</ul>
+
+    </li>
+</ul>
+
+          <h1 class="account"><a class="toggle-content" data-trigger-id="6">Account</a></h1>
+<ul class="hidden" data-hidden="true" data-height="150" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/dashboard">Your Account</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/dashboard/receipts">Email Receipts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/checklist">Going Live Checklist</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/reporting">Reporting</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/dashboard/search">Search</a>
+    </li>
+</ul>
+
+          <h1 class="api"><a class="toggle-content" data-trigger-id="7">Development</a></h1>
+<ul data-height="206">
+    <li>
+      <a href="https://stripe.com/docs/libraries">API Libraries</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/upgrades">API Upgrades</a>
+    </li>
+    <li>
+      <a class="selected" href="https://stripe.com/docs/webhooks">Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/building-integrations">Building Integrations</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/building-plugins">Building Plugins &amp; Libraries</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/recipes">Recipes</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/security">Security</a>
+    </li>
+</ul>
+
+          <h1 class="atlas"><a class="toggle-content" data-trigger-id="8">Atlas</a></h1>
+<ul class="hidden" data-hidden="true" data-height="122" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/atlas">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/application">Application</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/account-progress">Account Progress</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/next">What's Next</a>
+    </li>
+</ul>
+
+          <h1 class="references"><a href="https://stripe.com/docs/api" class="external" target="_blank">API Reference</a></h1>
+        </nav>
+      </div>
+      <div id="content-wrapper" tabindex="0">
+        <div class="overlay"></div>
+          <div class="search-results">
+            <ul class="results"></ul>
+          </div>
+          <form class="search">
+            <input type="search" placeholder="Search documentation...">
+            <div class="search-after">
+              <span class="search-text"></span>
+              <span class="search-after-text--no-results">— No Results</span>
+            </div>
+          </form>
+        <header id="main-header">
+          <nav>
+            <ul class="external">
+              <li><a href="https://support.stripe.com/">Support</a></li>
+
+              <li class="button">
+                <a data-adroll-segment="submit_two" href="https://dashboard.stripe.com/login">Sign in</a>
+              </li>
+            </ul>
+          </nav>
+        </header>
+        <article id="content">
+          <header>
+  <h1>Using Webhooks</h1>
+  <p>Use webhooks to be notified about events that happen in a Stripe account.</p>
+</header>
+
+<section>
+  <aside class="note">
+    <h3 id="webhook-terminology">Webhook terminology<a class="anchor" href="https://stripe.com/docs/webhooks#webhook-terminology"></a></h3>
+    <p>An <em>event</em> is an account occurrence, such as a charge being captured, a transfer paid, or an account being updated. Each occurrence has a corresponding <code>Event</code> object.</p>
+    <p><em>Webhook endpoints</em> are URLs defined by users to which Stripe sends events. A single event may be sent to many webhook endpoints.</p>
+    <p><em>Webhooks</em> refers to the overall concept of sending notifications to webhook endpoints.</p>
+  </aside>
+
+  <p>Interacting with a third-party API like Stripe's can introduce two problems:</p>
+
+  <ul>
+    <li>Services not directly responsible for making an API request may still need to know the response of that request</li>
+    <li>Some events, like disputed charges and many recurring billing events, are not the result of a direct API request</li>
+  </ul>
+
+  <p>Webhooks solve these problems by letting you register a URL that we will notify anytime an event happens in your account. When the event occurs—for example, when a successful charge is made on a customer's subscription, Stripe creates an <code>Event</code> object. This object contains all the relevant information about what just happened, including the type of event and the data associated with that event. Stripe then sends the <code>Event</code> object to any URLs in your account's webhooks settings via an HTTP POST request.  You can find a full list of all event types in the <a href="https://stripe.com/docs/api#event_types">API docs</a>.</p>
+
+</section>
+<section>
+<h2 id="when-to-use-webhooks">When to use webhooks<a class="anchor" href="https://stripe.com/docs/webhooks#when-to-use-webhooks"></a></h2>
+
+<p>Webhooks are only necessary for behind-the-scenes transactions. The results of most Stripe requests (e.g., creating <a href="https://stripe.com/docs/charges">charges</a> or <a href="https://stripe.com/docs/refunds">refunds</a>) are reported synchronously to your code and don’t require webhooks for verification.</p>
+
+<p>If you only accept <a href="https://stripe.com/docs/charges#synchronicity">card payments</a> using Stripe, webhooks are optional. Most payment methods using <a href="https://stripe.com/docs/sources">Sources</a> require the use of webhooks so your integration can be notified about asynchronous changes to the status of <a href="https://stripe.com/docs/api#source_object">Source</a> and <a href="https://stripe.com/docs/api#charge_object">Charge</a> objects.</p>
+  <p>You might use webhooks as the basis to:</p>
+
+  <ul>
+    <li>Update a customer's membership record in your database when a subscription payment succeeds</li>
+    <li>Email a customer when a subscription payment fails</li>
+    <li>Check out the Dashboard if you see that a dispute was filed</li>
+    <li>Make adjustments to an invoice when it's created (but before it's been paid)</li>
+    <li>Log an accounting entry when a transfer is paid</li>
+  </ul>
+
+</section>
+<section>
+  <h2 id="configuring-your-webhook-settings">Configuring your webhook settings<a class="anchor" href="https://stripe.com/docs/webhooks#configuring-your-webhook-settings"></a></h2>
+
+  <aside class="note">
+    <h3 id="common-webhook-mistakes">Common webhook mistakes<a class="anchor" href="https://stripe.com/docs/webhooks#common-webhook-mistakes"></a></h3>
+    <p>The two most common mistakes with webhooks are providing the wrong URL in the Dashboard and the webhook endpoint not returning a <code>200</code> status code.</p>
+  </aside>
+
+  <p>Webhooks are configured in the <a href="https://dashboard.stripe.com/account/webhooks" target="_blank">webhooks settings</a> section of the Dashboard. Clicking <strong>Add endpoint</strong> reveals a form to add a new URL for receiving webhooks.</p>
+
+  <p>Stripe supports two webhook types: Account and Connect. You'll likely want to create an account webhook, unless you've created a <a href="https://stripe.com/docs/connect">Connect application</a>.</p>
+
+  <p>You can enter any URL you'd like to have events sent to, but this should be a dedicated page on your server, coded per the instructions below. The mode determines whether test events or live events are sent to this URL; if you want to send both live and test events to the same URL, you need to create two separate settings. You may add as many URLs as you like, and <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">basic access authentication</a> is supported.</p>
+
+  <p>You can also choose to be notified of all event types, or only specific ones.</p>
+</section>
+
+<section>
+  <h2 id="receiving-a-webhook">Receiving a webhook notification<a class="anchor" href="https://stripe.com/docs/webhooks#receiving-a-webhook"></a></h2>
+
+  <p>Creating a webhook endpoint on your server is no different from creating any page on your website. With PHP, you might create a new <strong>.php</strong> file on your server; with a framework like Sinatra, you would add a new route with the desired URL.</p>
+
+  <p>Webhook data is sent as JSON in the POST request body. The full event details are included and can be used directly, after parsing the JSON into an <a href="https://stripe.com/docs/api#event_object">Event object</a>.</p>
+
+  <div class="tabs tabs-code animated" data-platform="server">
+    <nav class="nav-languages">
+        <a data-language="ruby" class="selected">Ruby</a>
+        <a data-language="python">Python</a>
+        <a data-language="php">PHP</a>
+        <a data-language="java">Java</a>
+        <a data-language="node">Node</a>
+        <a data-language="dotnet">.NET</a>
+    </nav>
+    <div class="tabs-content">
+      <div class="code selected" data-language="ruby">
+  <pre class=" numbered  language-ruby"><code class="  language-ruby"><span class="token comment" spellcheck="true"># Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true"># See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">Stripe</span><span class="token punctuation">.</span><span class="token function">api_key</span> <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span>
+
+<span class="token keyword">require</span> <span class="token string">"json"</span>
+
+<span class="token comment" spellcheck="true"># Using Sinatra</span>
+post <span class="token string">"/my/webhook/url"</span> <span class="token keyword">do</span>
+  <span class="token comment" spellcheck="true"># Retrieve the request's body and parse it as JSON</span>
+  event_json <span class="token operator">=</span> <span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>request<span class="token punctuation">.</span>body<span class="token punctuation">.</span>read<span class="token punctuation">)</span>
+
+  <span class="token comment" spellcheck="true"># Do something with event_json</span>
+
+  status <span class="token number">200</span>
+<span class="token keyword">end</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="python">
+  <pre class=" numbered  language-python"><code class="  language-python"><span class="token comment" spellcheck="true"># Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true"># See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">stripe.api_key</span> <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span>
+
+<span class="token keyword">import</span> json
+<span class="token keyword">from</span> django<span class="token punctuation">.</span><span class="token variable">http</span> <span class="token keyword">import</span> HttpResponse
+
+<span class="token comment" spellcheck="true"># Using Django</span>
+<span class="token keyword">def</span> my_webhook_<span class="token function">view</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token comment" spellcheck="true"># Retrieve the request's body and parse it as JSON</span>
+  event_json <span class="token operator">=</span> json<span class="token punctuation">.</span><span class="token function">loads</span><span class="token punctuation">(</span>request<span class="token punctuation">.</span><span class="token variable">body</span><span class="token punctuation">)</span>
+
+  <span class="token comment" spellcheck="true"># Do something with event_json</span>
+
+  <span class="token keyword">return</span> <span class="token function">HttpResponse</span><span class="token punctuation">(</span><span class="token parameter">status</span><span class="token operator">=</span><span class="token number">200</span><span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="php">
+  <pre class=" numbered  language-php"><code class="  language-php"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token namespace">\Stripe</span><span class="token namespace">\Stripe</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">setApiKey</span><span class="token punctuation">(</span><span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// Retrieve the request's body and parse it as JSON</span>
+<span class="token variable">$input</span> <span class="token operator">=</span> @<span class="token function">file_get_contents</span><span class="token punctuation">(</span><span class="token string">"php://input"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$event_json</span> <span class="token operator">=</span> <span class="token function">json_decode</span><span class="token punctuation">(</span><span class="token variable">$input</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// Do something with $event_json</span>
+
+<span class="token function">http_response_code</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// PHP 5.4 or greater</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="java">
+  <pre class=" numbered  language-java"><code class="  language-java"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">Stripe</span><span class="token punctuation">.</span>apiKey <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// Using Spark framework (http://sparkjava.com)</span>
+<span class="token keyword">public</span> <span class="token constant">Object</span> <span class="token function">handle</span><span class="token punctuation">(</span><span class="token constant">Request</span> request<span class="token punctuation">,</span> <span class="token constant">Response</span> response<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// Retrieve the request's body and parse it as JSON</span>
+  <span class="token constant">Event</span> eventJson <span class="token operator">=</span> <span class="token constant">APIResource</span><span class="token punctuation">.</span><span class="token constant">GSON</span><span class="token punctuation">.</span><span class="token function">fromJson</span><span class="token punctuation">(</span>request<span class="token punctuation">.</span><span class="token function">body</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token constant">Event</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment" spellcheck="true">// Do something with eventJson</span>
+
+  response<span class="token punctuation">.</span><span class="token function">status</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="node">
+  <pre class=" numbered  language-javascript"><code class="  language-javascript"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token keyword">var</span> stripe <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"stripe"</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// Using Express</span>
+app<span class="token punctuation">.</span><span class="token property"></span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">"/my/webhook/url"</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> response<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// Retrieve the request's body and parse it as JSON</span>
+  <span class="token keyword">var</span> event_json <span class="token operator">=</span> JSON<span class="token punctuation">.</span><span class="token property"></span><span class="token function">parse</span><span class="token punctuation">(</span>request<span class="token punctuation">.</span><span class="token property">body</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment" spellcheck="true">// Do something with event_json</span>
+
+  response<span class="token punctuation">.</span><span class="token property"></span><span class="token function">send</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="dotnet">
+  <pre class=" numbered  language-dotnet"><code class="  language-dotnet"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+StripeConfiguration<span class="token punctuation">.</span><span class="token function">SetApiKey</span><span class="token punctuation">(</span><span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">using</span> System<span class="token punctuation">;</span>
+<span class="token keyword">using</span> System<span class="token punctuation">.</span>IO<span class="token punctuation">;</span>
+<span class="token keyword">using</span> Microsoft<span class="token punctuation">.</span>AspNetCore<span class="token punctuation">.</span>Mvc<span class="token punctuation">;</span>
+<span class="token keyword">using</span> Stripe<span class="token punctuation">;</span>
+
+<span class="token keyword">namespace</span> workspace<span class="token punctuation">.</span>Controllers
+<span class="token punctuation">{</span>
+    <span class="token punctuation">[</span><span class="token function">Route</span><span class="token punctuation">(</span><span class="token string">"api/[controller]"</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">StripeWebHook</span> <span class="token punctuation">:</span> Controller
+    <span class="token punctuation">{</span>
+        <span class="token punctuation">[</span>HttpPost<span class="token punctuation">]</span>
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">Index</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">var</span> json <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StreamReader</span><span class="token punctuation">(</span>HttpContext<span class="token punctuation">.</span>Request<span class="token punctuation">.</span>Body<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ReadToEnd</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">var</span> stripeEvent <span class="token operator">=</span> StripeEventUtility<span class="token punctuation">.</span><span class="token function">ParseEvent</span><span class="token punctuation">(</span>json<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token comment" spellcheck="true">// Do something with stripeEvent</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+    </div>
+  </div>
+
+  <h3 id="receiving-webhooks-with-csrf-protection">Receiving webhooks with a CSRF-protected server<a class="anchor" href="https://stripe.com/docs/webhooks#receiving-webhooks-with-csrf-protection"></a></h3>
+
+  <p>
+    If you're using Rails, Django, or another web framework, your site may automatically check that every POST request
+    contains a <em>CSRF token</em>. This is an important security feature that helps protect you and your users from
+    <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)">cross-site request forgery</a> attempts. However, this security measure may
+    also prevent your site from processing legitimate webhooks. If so, you may need to exempt the webhooks route from CSRF protection.
+  </p>
+
+  <div class="tabs tabs-code animated">
+    <nav class="nav-languages">
+        <a data-language="ruby" class="selected">Rails</a>
+        <a data-language="python">Django</a>
+    </nav>
+    <div class="tabs-content">
+      <div class="code selected" data-language="ruby">
+  <pre class=" numbered  language-ruby"><code class="  language-ruby"><span class="token comment" spellcheck="true"># Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true"># See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">Stripe</span><span class="token punctuation">.</span><span class="token function">api_key</span> <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span>
+
+<span class="token keyword">class</span> <span class="token class-name">StripeController</span> <span class="token operator">&lt;</span> <span class="token constant">ApplicationController</span>
+  <span class="token comment" spellcheck="true"># If your controller accepts requests other than Stripe webhooks,</span>
+  <span class="token comment" spellcheck="true"># you'll probably want to use `protect_from_forgery` to add CSRF</span>
+  <span class="token comment" spellcheck="true"># protection for your application. But don't forget to exempt</span>
+  <span class="token comment" spellcheck="true"># your webhook route!</span>
+  protect_from_forgery <span class="token symbol">:except</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token symbol">:webhook</span>
+
+  <span class="token keyword">def</span> webhook
+    <span class="token comment" spellcheck="true"># Process webhook data in `params`</span>
+  <span class="token keyword">end</span>
+<span class="token keyword">end</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="python">
+  <pre class=" numbered  language-python"><code class="  language-python"><span class="token comment" spellcheck="true"># Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true"># See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">stripe.api_key</span> <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span>
+
+<span class="token keyword">import</span> json
+
+<span class="token comment" spellcheck="true"># Webhooks are always sent as HTTP POST requests, so we want to ensure</span>
+<span class="token comment" spellcheck="true"># that only POST requests will reach your webhook view. We can do that by</span>
+<span class="token comment" spellcheck="true"># decorating `webhook()` with `require_POST`.</span>
+<span class="token comment" spellcheck="true">#</span>
+<span class="token comment" spellcheck="true"># Then to ensure that the webhook view can receive webhooks, we need</span>
+<span class="token comment" spellcheck="true"># also need to decorate `webhook()` with `csrf_exempt`.</span>
+@require_POST
+@csrf_exempt
+<span class="token keyword">def</span> <span class="token function">webhook</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token comment" spellcheck="true"># Process webhook data in `request.body`</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+    </div>
+  </div>
+
+  <h3 id="receiving-webhooks-with-an-https-server">Receiving webhooks with an HTTPS server<a class="anchor" href="https://stripe.com/docs/webhooks#receiving-webhooks-with-an-https-server"></a></h3>
+
+  <p>If you use an HTTPS URL for your webhook endpoint, Stripe will validate that the connection to your server is secure before sending your webhook data. For this to work, your server must be correctly configured to support HTTPS with a valid server certificate. See our <a href="https://stripe.com/docs/security/ssl">guide on SSL/TLS</a> for details on setting this up.</p>
+</section>
+
+<section>
+  <h2 id="responding-to-a-webhook">Responding to a webhook<a class="anchor" href="https://stripe.com/docs/webhooks#responding-to-a-webhook"></a></h2>
+
+  <p>To acknowledge receipt of a webhook, your endpoint should return a <code>2xx</code> HTTP status code. Any other information returned in the request headers or request body is ignored. All response codes outside this range, including <code>3xx</code> codes, will indicate to Stripe that you did not receive the webhook. This does mean that a URL redirection or a "Not Modified" response will be treated as a failure.</p>
+
+  <p>If a webhook is not successfully received for any reason, Stripe will continue trying to send the webhook once an hour for up to three days (in test mode, only five hourly retries are attempted). Webhooks cannot be manually retried after this time, though you can <a href="https://stripe.com/docs/api#retrieve_event">query for the event</a> to reconcile your data with any missed events.</p>
+
+  <p>When viewing a specific event information through the <a href="https://dashboard.stripe.com/events">Dashboard</a>, you can check how many times we've attempted to send an event to an endpoint by clicking on that endpoint URL in the <strong>Webhook details</strong> section. This will show you the latest response we received from your endpoint, along with a list of all attempted webhooks and the respective HTTP status codes we received.</p>
+</section>
+
+<section>
+  <h2 id="best-practices">Best practices<a class="anchor" href="https://stripe.com/docs/webhooks#best-practices"></a></h2>
+<aside class="note">
+  <h3 id="webhook-monitoring">Webhook monitoring<a class="anchor" href="https://stripe.com/docs/webhooks#webhook-monitoring"></a></h3>
+  <p>You can use our open-source <a href="https://github.com/stripe/stripe-webhook-monitor">webhook monitoring tool</a> that provides a live feed and graph of recent events.</p>
+</aside>
+
+  <p>Before going live, test that your webhook is working properly. You can do so by sending dummy test events from the <a href="https://dashboard.stripe.com/account/webhooks" target="_blank">webhooks settings</a> pane. To do so, be sure you are <strong>viewing test data</strong>, and add the endpoint where test events should be sent.  Then click that endpoint's row to view details, and finally click the <strong>send a test webhook</strong> button. Understand that as these are fake, test events, they will not map to real customers, invoices, charges, or other objects in your account.</p>
+
+  <p>If your webhook script performs complex logic, or makes network calls, it's possible the script would timeout before Stripe sees its complete execution. For that reason, you may want to have your webhook endpoint immediately acknowledge receipt by returning a <code>2xx</code> HTTP status code, and then perform the rest of its duties.</p>
+
+  <p>Webhook endpoints may occasionally receive the same event more than once. We advise you to guard against  duplicated event receipts by making your event processing <a href="https://en.wikipedia.org/wiki/Idempotence">idempotent</a>. One way of doing this is logging the events you've processed, and then not processing already-logged events. Additionally, we recommend <a href="https://stripe.com/docs/webhooks#signatures">verifying webhook signatures</a> to confirm that received events are being sent from Stripe.</p>
+
+</section>
+
+<section>
+  <h2 id="webhooks-and-api-versions">Webhooks and API versions<a class="anchor" href="https://stripe.com/docs/webhooks#webhooks-and-api-versions"></a></h2>
+
+  <p>The structure of an <code>Event</code> object sent in a webhook is dictated by the API version in your account settings at the time of the event's occurrence. For example, if your account is set to an older API version, such as <strong>2015-02-16</strong>, and you change the API version for a specific request via <a href="https://stripe.com/docs/api#versioning">versioning</a>, the <code>Event</code> object generated and sent to your endpoint is still based upon the <strong>2015-02-16</strong> API version.</p>
+
+  <p><code>Event</code> objects can never be changed once created. Subsequent updates to your account's API version do not retroactively alter existing <code>Event</code> objects. Fetching older events by calling <code>/v1/events</code> using a newer API version also has no impact on the structure of the received events.</p>
+
+  <p>Test webhook endpoints can be set to either your API version in use or the most current API version. The <code>Event</code> sent to the webhook URL is structured for the endpoint's specified version. You can use endpoint versioning to help test the latest API version before upgrading to it.</p>
+</section>
+
+<section>
+<h2 id="signatures">Checking signatures<a class="anchor" href="https://stripe.com/docs/webhooks#signatures"></a></h2>
+
+<p>Stripe can optionally sign the webhook events it sends to your endpoint, allowing you to validate that they were not sent by a third-party. You can verify signatures using either our <a href="https://stripe.com/docs/webhooks#verify-official-libraries">official libraries</a> or <a href="https://stripe.com/docs/webhooks#verify-manually">manually</a> using your own solution. To make use of signatures, you first need to retrieve your endpoint’s secret. Stripe then starts to sign each webhook sent to the endpoint. This signature is included in the <code>Stripe-Signature</code> header, and sent along with the event.</p>
+
+<p>You can obtain your endpoint’s secret in your <a href="https://dashboard.stripe.com/account/webhooks">webhooks settings</a> in the Dashboard. Select an endpoint you want to obtain the secret for, then click the <strong>Click to reveal</strong> button. Each secret is unique to the endpoint it corresponds to. If you make use of multiple endpoints, you must obtain a secret for each one.</p>
+
+<h3 id="verify-official-libraries">Verifying signatures using our official libraries<a class="anchor" href="https://stripe.com/docs/webhooks#verify-official-libraries"></a></h3>
+
+<p>We recommend using one of our official libraries to verify signatures. This is done by providing the event payload, the <code>Stripe-Signature</code> header, and the endpoint’s secret. If verification fails, an error is returned.</p>
+  <div class="tabs tabs-code animated" data-platform="server">
+    <nav class="nav-languages">
+        <a data-language="ruby" class="selected">Ruby</a>
+        <a data-language="python">Python</a>
+        <a data-language="php">PHP</a>
+        <a data-language="java">Java</a>
+        <a data-language="node">Node</a>
+        <a data-language="dotnet">.NET</a>
+    </nav>
+    <div class="tabs-content">
+      <div class="code selected" data-language="ruby">
+  <pre class=" numbered  language-ruby"><code class="  language-ruby"><span class="token comment" spellcheck="true"># Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true"># See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">Stripe</span><span class="token punctuation">.</span><span class="token function">api_key</span> <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span>
+
+<span class="token comment" spellcheck="true"># You can find your endpoint's secret in your webhook settings</span>
+endpoint_secret <span class="token operator">=</span> <span class="token string">"whsec_..."</span>
+
+<span class="token comment" spellcheck="true"># Using Sinatra</span>
+post <span class="token string">"/my/webhook/url"</span> <span class="token keyword">do</span>
+  payload <span class="token operator">=</span> request<span class="token punctuation">.</span>body<span class="token punctuation">.</span><span class="token function">read</span>
+  sig_header <span class="token operator">=</span> request<span class="token punctuation">.</span><span class="token function">env</span><span class="token punctuation">[</span><span class="token string">'HTTP_STRIPE_SIGNATURE'</span><span class="token punctuation">]</span>
+  event <span class="token operator">=</span> <span class="token keyword">nil</span>
+
+  <span class="token keyword">begin</span>
+    event <span class="token operator">=</span> <span class="token constant">Stripe</span><span class="token punctuation">:</span><span class="token symbol">:Webhook</span><span class="token punctuation">.</span><span class="token function">construct_event</span><span class="token punctuation">(</span>
+      payload<span class="token punctuation">,</span> sig_header<span class="token punctuation">,</span> endpoint_secret
+    <span class="token punctuation">)</span>
+  <span class="token keyword">rescue</span> <span class="token constant">JSON</span><span class="token punctuation">:</span><span class="token symbol">:ParserError</span> <span class="token operator">=</span><span class="token operator">&gt;</span> e
+    <span class="token comment" spellcheck="true"># Invalid payload</span>
+    status <span class="token number">400</span>
+    <span class="token keyword">return</span>
+  <span class="token keyword">rescue</span> <span class="token constant">Stripe</span><span class="token punctuation">:</span><span class="token symbol">:SignatureVerificationError</span> <span class="token operator">=</span><span class="token operator">&gt;</span> e
+    <span class="token comment" spellcheck="true"># Invalid signature</span>
+    status <span class="token number">400</span>
+    <span class="token keyword">return</span>
+  <span class="token keyword">end</span>
+
+  <span class="token comment" spellcheck="true"># Do something with event</span>
+
+  status <span class="token number">200</span>
+<span class="token keyword">end</span>
+
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="python">
+  <pre class=" numbered  language-python"><code class="  language-python"><span class="token comment" spellcheck="true"># Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true"># See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">stripe.api_key</span> <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span>
+
+<span class="token keyword">from</span> django<span class="token punctuation">.</span><span class="token variable">http</span> <span class="token keyword">import</span> HttpResponse
+
+<span class="token comment" spellcheck="true"># You can find your endpoint's secret in your webhook settings</span>
+endpoint_secret <span class="token operator">=</span> <span class="token string">"whsec_..."</span>
+
+<span class="token comment" spellcheck="true"># Using Django</span>
+@csrf_exempt
+<span class="token keyword">def</span> my_webhook_<span class="token function">view</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  payload <span class="token operator">=</span> request<span class="token punctuation">.</span><span class="token variable">body</span>
+  sig_header <span class="token operator">=</span> request<span class="token punctuation">.</span><span class="token variable">META</span><span class="token punctuation">[</span><span class="token string">'HTTP_STRIPE_SIGNATURE'</span><span class="token punctuation">]</span>
+  event <span class="token operator">=</span> None
+
+  <span class="token keyword">try</span><span class="token punctuation">:</span>
+    event <span class="token operator">=</span> <span class="token constant">stripe.Webhook.construct_</span><span class="token function">event</span><span class="token punctuation">(</span>
+      payload<span class="token punctuation">,</span> sig_header<span class="token punctuation">,</span> endpoint_secret
+    <span class="token punctuation">)</span>
+  <span class="token keyword">except</span> ValueError <span class="token keyword">as</span> e<span class="token punctuation">:</span>
+    <span class="token comment" spellcheck="true"># Invalid payload</span>
+    <span class="token keyword">return</span> <span class="token function">HttpResponse</span><span class="token punctuation">(</span><span class="token parameter">status</span><span class="token operator">=</span><span class="token number">400</span><span class="token punctuation">)</span>
+  <span class="token keyword">except</span> <span class="token constant">stripe.error.SignatureVerificationError</span> <span class="token keyword">as</span> e<span class="token punctuation">:</span>
+    <span class="token comment" spellcheck="true"># Invalid signature</span>
+    <span class="token keyword">return</span> <span class="token function">HttpResponse</span><span class="token punctuation">(</span><span class="token parameter">status</span><span class="token operator">=</span><span class="token number">400</span><span class="token punctuation">)</span>
+
+  <span class="token comment" spellcheck="true"># Do something with event</span>
+
+  <span class="token keyword">return</span> <span class="token function">HttpResponse</span><span class="token punctuation">(</span><span class="token parameter">status</span><span class="token operator">=</span><span class="token number">200</span><span class="token punctuation">)</span>
+
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="php">
+  <pre class=" numbered  language-php"><code class="  language-php"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token namespace">\Stripe</span><span class="token namespace">\Stripe</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">setApiKey</span><span class="token punctuation">(</span><span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// You can find your endpoint's secret in your webhook settings</span>
+<span class="token variable">$endpoint_secret</span> <span class="token operator">=</span> <span class="token string">"whsec_..."</span><span class="token punctuation">;</span>
+
+<span class="token variable">$payload</span> <span class="token operator">=</span> @<span class="token function">file_get_contents</span><span class="token punctuation">(</span><span class="token string">"php://input"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$sig_header</span> <span class="token operator">=</span> <span class="token variable">$_SERVER</span><span class="token punctuation">[</span><span class="token string">"HTTP_STRIPE_SIGNATURE"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token variable">$event</span> <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+<span class="token keyword">try</span> <span class="token punctuation">{</span>
+  <span class="token variable">$event</span> <span class="token operator">=</span> <span class="token namespace">\Stripe</span><span class="token namespace">\Webhook</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">constructEvent</span><span class="token punctuation">(</span>
+    <span class="token variable">$payload</span><span class="token punctuation">,</span> <span class="token variable">$sig_header</span><span class="token punctuation">,</span> <span class="token variable">$endpoint_secret</span>
+  <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span><span class="token namespace">\UnexpectedValueException</span> <span class="token variable">$e</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// Invalid payload</span>
+  <span class="token function">http_response_code</span><span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// PHP 5.4 or greater</span>
+  <span class="token function">exit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span><span class="token namespace">\Stripe</span><span class="token namespace">\Error</span><span class="token namespace">\SignatureVerification</span> <span class="token variable">$e</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// Invalid signature</span>
+  <span class="token function">http_response_code</span><span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// PHP 5.4 or greater</span>
+  <span class="token function">exit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// Do something with $event</span>
+
+<span class="token function">http_response_code</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// PHP 5.4 or greater</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="java">
+  <pre class=" numbered  language-java"><code class="  language-java"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">Stripe</span><span class="token punctuation">.</span>apiKey <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// Using Spark framework (http://sparkjava.com)</span>
+<span class="token keyword">public</span> <span class="token constant">Object</span> <span class="token function">handle</span><span class="token punctuation">(</span><span class="token constant">Request</span> request<span class="token punctuation">,</span> <span class="token constant">Response</span> response<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token constant">String</span> payload <span class="token operator">=</span> request<span class="token punctuation">.</span><span class="token function">body</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token constant">String</span> sigHeader <span class="token operator">=</span> request<span class="token punctuation">.</span><span class="token function">headers</span><span class="token punctuation">(</span><span class="token string">"Stripe-Signature"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token constant">Event</span> event <span class="token operator">=</span> null<span class="token punctuation">;</span>
+
+  <span class="token keyword">try</span> <span class="token punctuation">{</span>
+    event <span class="token operator">=</span> <span class="token constant">Webhook</span><span class="token punctuation">.</span><span class="token function">constructEvent</span><span class="token punctuation">(</span>
+      payload<span class="token punctuation">,</span> sigHeader<span class="token punctuation">,</span> endpointSecret
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token constant">JsonSyntaxException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// Invalid payload</span>
+    response<span class="token punctuation">.</span><span class="token function">status</span><span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token constant">SignatureVerificationException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// Invalid signature</span>
+    response<span class="token punctuation">.</span><span class="token function">status</span><span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token comment" spellcheck="true">// Do something with event</span>
+
+  response<span class="token punctuation">.</span><span class="token function">status</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="node">
+  <pre class=" numbered  language-javascript"><code class="  language-javascript"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token keyword">var</span> stripe <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"stripe"</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// You can find your endpoint's secret in your webhook settings</span>
+<span class="token keyword">const</span> endpointSecret <span class="token operator">=</span> <span class="token string">"whsec_blSjcGhK1UHRbyGwXa9wSaK9FzLErNIS"</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// This example uses Express to receive webhooks</span>
+<span class="token keyword">const</span> app <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"express"</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// Retrieve the raw body as a buffer and match all content types</span>
+app<span class="token punctuation">.</span><span class="token property"></span><span class="token function">use</span><span class="token punctuation">(</span><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"body-parser"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token property"></span><span class="token function">raw</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token symbol">type<span class="token punctuation">:</span></span> <span class="token string">"*/*"</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+app<span class="token punctuation">.</span><span class="token property"></span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">"/webhook/example"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>req<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> sig <span class="token operator">=</span> req<span class="token punctuation">.</span><span class="token property">headers</span><span class="token punctuation">[</span><span class="token string">"stripe-signature"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token keyword">let</span> event <span class="token operator">=</span> stripe<span class="token punctuation">.</span><span class="token property">webhooks</span><span class="token punctuation">.</span><span class="token property"></span><span class="token function">constructEvent</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span><span class="token property">body</span><span class="token punctuation">,</span> sig<span class="token punctuation">,</span> endpointSecret<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment" spellcheck="true">// Do something with the event here</span>
+
+  <span class="token comment" spellcheck="true">// Return a response</span>
+  res<span class="token punctuation">.</span><span class="token property"></span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token symbol">received<span class="token punctuation">:</span></span> <span class="token boolean">true</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+app<span class="token punctuation">.</span><span class="token property"></span><span class="token function">listen</span><span class="token punctuation">(</span><span class="token number">8000</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">&gt;</span> console<span class="token punctuation">.</span><span class="token property"></span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"Running on port 8000"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="dotnet">
+  <pre class=" numbered  language-dotnet"><code class="  language-dotnet"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+StripeConfiguration<span class="token punctuation">.</span><span class="token function">SetApiKey</span><span class="token punctuation">(</span><span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">using</span> System<span class="token punctuation">;</span>
+<span class="token keyword">using</span> System<span class="token punctuation">.</span>IO<span class="token punctuation">;</span>
+<span class="token keyword">using</span> Microsoft<span class="token punctuation">.</span>AspNetCore<span class="token punctuation">.</span>Mvc<span class="token punctuation">;</span>
+<span class="token keyword">using</span> Stripe<span class="token punctuation">;</span>
+
+<span class="token keyword">namespace</span> workspace<span class="token punctuation">.</span>Controllers
+<span class="token punctuation">{</span>
+    <span class="token punctuation">[</span><span class="token function">Route</span><span class="token punctuation">(</span><span class="token string">"api/[controller]"</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">StripeWebHook</span> <span class="token punctuation">:</span> Controller
+    <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// You can find your endpoint's secret in your webhook settings</span>
+        <span class="token keyword">const</span> secret <span class="token operator">=</span> <span class="token string">"whsec_blSjcGhK1UHRbyGwXa9wSaK9FzLErNIS"</span><span class="token punctuation">;</span>
+
+        <span class="token punctuation">[</span>HttpPost<span class="token punctuation">]</span>
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">Index</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">var</span> json <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StreamReader</span><span class="token punctuation">(</span>HttpContext<span class="token punctuation">.</span>Request<span class="token punctuation">.</span>Body<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ReadToEnd</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">var</span> stripeEvent <span class="token operator">=</span> StripeEventUtility<span class="token punctuation">.</span><span class="token function">ConstructEvent</span><span class="token punctuation">(</span>json<span class="token punctuation">,</span>
+                Request<span class="token punctuation">.</span>Headers<span class="token punctuation">[</span><span class="token string">"Stripe-Signature"</span><span class="token punctuation">]</span><span class="token punctuation">,</span> secret<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token comment" spellcheck="true">// Do something with the event here</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+    </div>
+  </div>
+
+<h4 id="replay-attacks">Preventing replay attacks<a class="anchor" href="https://stripe.com/docs/webhooks#replay-attacks"></a></h4>
+
+<p>A replay attack is when an attacker intercepts a valid payload and its signature, and re-transmits them. To mitigate such attacks, Stripe includes a timestamp in the <code>Stripe-Signature</code> header. As this timestamp is part of the signed payload, it is also verified by the signature, so an attacker cannot change the timestamp without invalidating the signature. If the signature is valid but the timestamp is too old, you can also decide to reject the payload.</p>
+
+<p>Our libraries have a default tolerance of five minutes between the timestamp and the current time. You can change this by providing an additional parameter when verifying signatures. We recommend that you use Network Time Protocol (<a href="https://en.wikipedia.org/wiki/Network_Time_Protocol">NTP</a>) to ensure that your server’s clock is accurate and synchronizes with the time on Stripe’s servers.</p>
+
+<p>The timestamp and signature are generated each time Stripe sends an event to your endpoint. If Stripe replays an event (e.g., your endpoint previously replied with a non-2xx status code), then a new signature and timestamp are generated for the new delivery attempt.</p>
+
+<h3 id="verify-manually">Verifying signatures manually<a class="anchor" href="https://stripe.com/docs/webhooks#verify-manually"></a></h3>
+
+<p>Although we recommend using our official libraries to verify webhook event signatures, you can use the following information to create a custom solution.</p>
+
+<p>The <code>Stripe-Signature</code> header contains a timestamp and one or more signatures. The timestamp is prefixed by <code>t=</code>, and each signature is prefixed by a “scheme”. Schemes start with <code>v</code>, followed by an integer. The only valid signature scheme at this time is <code>v1</code>.</p><div class="code" data-language="html">
+  <pre class=" numbered  language-html"><code class="  language-html">Stripe-Signature: t=1492774577,
+    v1=5257a869e7ecebeda32affa62cdca3fa51cad7e77a0e56ff536d0ce8e108d8bd,
+    v0=6ffbb59b2300aae63f272406069a9788598b792a944a07aba816edb039989a39
+</code><span class="line-numbers"><span></span><span></span><span></span></span><span class="line-numbers"><span></span><span></span><span></span></span></pre>
+</div>
+
+<p>Note that newlines have been added in the example above for clarity, but a real <code>Stripe-Signature</code> header will be all one line.</p>
+
+<p>Signatures are generated using a hash-based message authentication code (<a href="https://en.wikipedia.org/wiki/Hash-based_message_authentication_code">HMAC</a>) with <a href="https://en.wikipedia.org/wiki/SHA-2">SHA-256</a>. To prevent downgrade attacks, you should ignore all other schemes that are not <code>v1</code>. To aid with testing, Stripe sends an additional signature with a fake <code>v0</code> scheme for test mode events.</p>
+
+<p>It is possible to have multiple signatures with the same scheme. This can happen when you roll an endpoint’s secret from the Dashboard, and choose to keep the previous secret active for up to 24 hours. During this time, your endpoint has multiple active secrets and Stripe generates one signature for each secret.</p>
+
+<h4 id="extract-timestamp"><span class="step">Step 1: </span>Extract the timestamp and signatures from the header<a class="anchor" href="https://stripe.com/docs/webhooks#extract-timestamp"></a></h4>
+
+<p>Split the header using the <code>,</code> character as the separator to get a list of elements. Then, split each element, using the <code>=</code> character as the separator, to get a prefix and value pair.</p>
+
+<p>The value for the prefix <code>t</code> corresponds to the timestamp, and <code>v1</code> corresponds to the signature(s). All other elements can be discarded.</p>
+
+<h4 id="prepare-payload"><span class="step">Step 2: </span>Prepare the <code>signed_payload</code> string<a class="anchor" href="https://stripe.com/docs/webhooks#prepare-payload"></a></h4>
+
+<p>This is achieved by concatenating:</p>
+
+<ul>
+  <li>The timestamp (as a string)</li>
+  <li>The character <code>.</code></li>
+  <li>The actual JSON payload (i.e., the request’s body)</li>
+</ul>
+
+<h4 id="determine-expected-signature"><span class="step">Step 3: </span>Determine the expected signature<a class="anchor" href="https://stripe.com/docs/webhooks#determine-expected-signature"></a></h4>
+
+<p>Compute a HMAC with the SHA256 hash function, using the endpoint’s signing secret as the key and the <code>signed_payload</code> string as the message.</p>
+
+<h4 id="compare-signatures"><span class="step">Step 4: </span>Compare signatures<a class="anchor" href="https://stripe.com/docs/webhooks#compare-signatures"></a></h4>
+
+<p>Compare the signature(s) in the header to the expected signature. If a signature matches, compute the difference between the current timestamp and the received timestamp, then decide if the difference is within your tolerance.</p>
+
+<p>To prevent against timing attacks, use a constant-time string comparison to compare the expected signature to each of the received signatures.</p>
+</section>
+
+<section>
+  <h2 id="next_steps">More information<a class="anchor" href="https://stripe.com/docs/webhooks#next_steps"></a></h2>
+<ul class="next-steps">
+    <li><a href="https://stripe.com/docs/api#event_types"><span>List of all event types</span></a></li>
+    <li><a href="https://stripe.com/docs/ips"><span>List of IP addresses Stripe uses</span></a></li>
+    <li><a href="https://stripe.com/docs/recipes/sending-emails-for-failed-payments"><span>Recipe for sending emails to customers for failed subscription payments</span></a></li>
+    <li><a href="https://github.com/stripe/stripe-webhook-monitor"><span>Stripe Webhook Monitor</span></a></li>
+</ul>
+
+</section>
+
+
+          <footer>
+  <h2 data-no-anchor="">Questions?</h2>
+  <p>We're always happy to help with code or other questions you might have! <a href="https://stripe.com/docs/webhooks#" class="search-link">Search</a> our documentation, <a href="https://support.stripe.com/email">contact support</a>, or <a href="https://stripe.com/contact/sales">connect with our sales team</a>. You can also chat live with other developers in <a href="irc://irc.freenode.net/stripe">#stripe</a> on freenode.</p>
+</footer>
+
+        </article>
+      </div>
+    </div>
+
+    <div id="loading-bar"></div>
+
+    <script src="./Using Webhooks_files/jquery.min-356cfe6f83a29dcc6fd2cd9ac777637e.js"></script>
+    <script src="./Using Webhooks_files/prism-d97c2fbc02243c145440b270c43ec26b.js"></script>
+    <script src="./Using Webhooks_files/dynamics.min-f8b2e1648525e57b196b53792a19cda3.js"></script>
+    <script src="./Using Webhooks_files/jquery.cookie-368e8ec1948575a79f6830f8d13db348.js"></script>
+    <script src="./Using Webhooks_files/documentation-9d21cec0f3371635162f9c978350719d.js"></script>
+      <script src="./Using Webhooks_files/algoliasearch-ccb98f296c1e54994357b8d396b3ce13.js"></script>
+      <script src="./Using Webhooks_files/documentation-search-76a887ea03340dcf4d184728b1daad3d.js"></script>
+    <script>
+      parseKey("sk_test_BQokikJOvBiI2HlWgH4olfQ2", "secret-key", null);
+      parseKey("pk_test_6pRNASCoBOKtIshFeQd4XMUh", "publishable-key", null);
+    </script>
+      <script type="text/javascript" src="./Using Webhooks_files/saved_resource"></script>
+  <script type="text/javascript" src="./Using Webhooks_files/saved_resource(1)"></script>
+
+    
+    
+
+<script type="application/json" id="site-analytics-config">{"generalAnalyticsConfig":{"mixpanel":{"identifier":"eb71b6171a4f7ed97de9b7a0395b7ca5"},"ga":{},"trackpage":true,"flags":{"site.experiments.home_page_cta":true,"site.experiments.nav_login_cta":false,"site.experiments.get_started_copy":false,"site.experiments.request_demo_copy":false,"site.experiments.contact_sales_content":false},"locale":"en"},"siteSpecificAnalyticsConfig":{"trackPageViewed":false}}</script>
+
+
+<!-- Google Tag Manager (noscript) -->
+<noscript>&lt;iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K8JKCBR"
+height="0" width="0" style="display:none;visibility:hidden"&gt;&lt;/iframe&gt;</noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+<script defer="" src="./Using Webhooks_files/analytics.min.js"></script>
+<script defer="" src="./Using Webhooks_files/stripe-m-preview.js"></script>
+ 
+    <script src="./Using Webhooks_files/documentation-analytics-7e4ac19718751588692cdd0955dba883.js"></script>
+  
+
+<div id="MultiLookup" style="opacity: 0.8" class="black"></div><div id="dict" class="card-panel grey lighten-4"><div id="dict-inner"></div><img id="toktogi-lock" class="toktogi-icon" src="chrome-extension://domfinmkohodhgghgedfdcmonefafolm/images/unlock.png"></div><div id="toktogi-notification" class="card-panel grey lighten-4">Toktogi is on</div><iframe frameborder="0" allowtransparency="true" scrolling="no" name="__privateStripeMetricsController0" allowpaymentrequest="true" src="./Using Webhooks_files/outer.html" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important;"></iframe></body><div></div></html>

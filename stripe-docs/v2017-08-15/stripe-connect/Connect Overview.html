@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<!-- saved from url=(0031)https://stripe.com/docs/connect -->
+<html lang="en" data-ember-extension="1"><script type="text/javascript" async="" src="./Connect Overview_files/mixpanel-2.2.min.js"></script><script async="" src="./Connect Overview_files/analytics.js"></script><script async="" src="./Connect Overview_files/gtm.js"></script><script src="./Connect Overview_files/742650679237989" async=""></script><script async="" src="./Connect Overview_files/fbevents.js"></script><script type="text/javascript">window["_gaUserPrefs"] = { ioo : function() { return true; } }</script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    <meta name="google-site-verification" content="f0LCrdI6z4Fo8zld4sHCgo5SiUE4EYYRUa6KVeX3Mw8">
+    <meta name="csrf-token" content="ACmByp9VS-5dgI-ZXH4IDjQKupcbFRMLHUfMREA8ebLWGyvN9zdYqelEZg-tdQCE2ww411MvMRPNy_WDfbOyUg==">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Connect Overview</title>
+
+    <meta name="description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+
+
+    <link rel="shortcut icon" href="https://stripe.com/favicon.ico">
+
+    <link rel="apple-touch-icon-precomposed" href="https://stripe.com/img/apple-touch-icon/180x180.png">
+    <link rel="icon" href="https://stripe.com/img/apple-touch-icon/180x180.png">
+
+
+    <link rel="image_src" type="image/png" href="https://stripe.com/img/v3/home/social.png">
+
+
+        <link rel="canonical" href="https://stripe.com/docs/connect/authentication">
+
+    <meta property="og:title" content="Authentication with Connect">
+    <meta property="og:url" content="https://stripe.com/docs/connect/authentication">
+    <meta property="og:description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+    <meta property="og:image" content="https://stripe.com/img/v3/home/social.png">
+
+      <meta name="twitter:card" content="summary">
+      <meta name="twitter:image" content="https://stripe.com/img/v3/home/twitter.png">
+    <meta name="twitter:site" content="@stripe">
+    <meta name="twitter:title" content="Authentication with Connect">
+    <meta name="twitter:description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+
+
+    <script type="application/json" id="strut_files">{&quot;v3/shared/navigation_ie10.css&quot;:&quot;/assets/v3/shared/navigation_ie10-fad8432db8a0ef02ccfc88df4a0b8535.css&quot;}</script>
+
+    
+
+    
+
+    <link rel="stylesheet" href="./Connect Overview_files/default-6388c486f7388db1252f0d7c85db5e15.css">
+    <link rel="stylesheet" href="./Connect Overview_files/common-966a7c7414d89c40541b15f2adfa6a26.css">
+    <link rel="stylesheet" href="./Connect Overview_files/base-3cdaeb306a5f322afd95a5e0122a3388.css">
+    <link rel="stylesheet" href="./Connect Overview_files/prism_light-6e629a34ce1570d4f33f7e2ee8bebbc2.css">
+    
+    
+    <meta name="viewport" content="width=1060">
+    <meta name="robots" content="noarchive">
+    <link rel="stylesheet" href="./Connect Overview_files/connect_button-9fd48f5cd30c2680d9e4a099d67cd9b1.css">
+<style>
+.testing-overview {
+  column-count: 2;
+  list-style: none;
+}
+
+.testing-overview li {
+  padding-left: 0;
+  margin: 0;
+}
+
+.testing-overview li:before {
+  display: none;
+}
+</style>
+</head>
+  <body class="">
+    
+    <div id="docs">
+      <div id="sidebar" class="">
+        <div class="logo">
+          <a class="site" href="https://stripe.com/" title="Stripe"></a>
+          <a class="extension" href="https://stripe.com/docs">docs</a>
+        </div>
+        <div class="nav-border"></div>
+        <nav>
+          <h1 class="home"><a href="https://stripe.com/docs">Home</a></h1>
+          <h1 class="payments"><a class="toggle-content" data-trigger-id="0">Payments</a></h1>
+<ul class="hidden" data-hidden="true" data-height="889" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/quickstart">Quickstart</a>
+    </li>
+    <li class="category">Collecting payment details
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/checkout/tutorial" data-trigger-id="9">Checkout</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/checkout">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js" data-trigger-id="10">Stripe.js &amp; Elements</a>
+      <ul class="hidden" data-hidden="true" data-height="112" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/quickstart">Quickstart</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/payment-request-button">Payment Request Button</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/migrating">Migration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/reference">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios" data-trigger-id="11">iOS</a>
+      <ul class="hidden" data-hidden="true" data-height="112" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/standard">Standard Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/custom">Custom Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/apple-pay/apps">Apple Pay in Apps</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/sources">Using Sources</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android" data-trigger-id="12">Android</a>
+      <ul class="hidden" data-hidden="true" data-height="168" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/standard">Standard Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/pay-with-google">Pay with Google</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/alipay-android">Working with Alipay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/android-pay">Android Pay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/customer-information">Customer Information</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/sources">Using Sources</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/saving-cards">Saving Cards</a>
+    </li>
+    <li class="category">Charges
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/charges">Creating Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/declines" data-trigger-id="13">Declines &amp; Failed Payments</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/declines/codes">Decline Codes</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/disputes" data-trigger-id="14">Disputes &amp; Fraud</a>
+      <ul class="hidden" data-hidden="true" data-height="56" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/disputes/categories">Dispute Categories</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/disputes/prevention">Prevention</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/refunds">Refunds</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/payouts">Receiving Payouts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/currencies" data-trigger-id="15">Supported Currencies</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/currencies/conversions">Currency Conversions</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="category">Sources
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources" data-trigger-id="16">Payment Methods</a>
+      <ul class="hidden" data-hidden="true" data-height="308" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/sources/cards">Cards</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/three-d-secure">3D Secure</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/alipay">Alipay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/ach-credit-transfer">ACH Credit Transfer</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/bancontact">Bancontact</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/bitcoin">Bitcoin</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/giropay">Giropay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/ideal">iDEAL</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/p24">P24</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/sepa-debit">SEPA Direct Debit</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/sofort">SOFORT</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/best-practices">Best Practices</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/customers">Sources &amp; Customers</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/connect">Connect Platforms</a>
+    </li>
+    <li class="category">Other Payment Methods
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/ach">ACH</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/amex-express-checkout">Amex Express Checkout</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/apple-pay">Apple Pay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/pay-with-google">Pay with Google</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/payment-request-api">Payment Request API</a>
+    </li>
+    <li class="category">Products &amp; Orders
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders" data-trigger-id="17">Orders</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/orders/guide">Guide</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders/tax-integration">Tax Integrations</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders/shipping-integration">Shipping Integrations</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="subscriptions"><a class="toggle-content" data-trigger-id="1">Subscriptions</a></h1>
+<ul class="hidden" data-hidden="true" data-height="528" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/quickstart">Quickstart</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/creating" data-trigger-id="18">Creating Subscriptions</a>
+      <ul data-collapsable="false" data-height="168">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/multiplan">Using Multiple Plans</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/discounts">Applying Discounts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/trials">Using Trial Periods</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/quantities">Setting Quantities</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/taxes">Adding Taxes</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/multiple">Multiple Subscriptions</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/lifecycle">Lifecycle &amp; Events</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/webhooks">Using Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/changing" data-trigger-id="19">Changing Subscriptions</a>
+      <ul data-collapsable="false" data-height="84">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/upgrading-downgrading">Upgrading &amp; Downgrading</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/billing-cycle">Billing Cycle</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/canceling-pausing">Canceling &amp; Pausing</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/invoices" data-trigger-id="20">Working with Invoices</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/ach-credit">ACH Credit Transfers</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/plans">Managing Plans</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/subscriptions/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="connect"><a class="toggle-content" data-trigger-id="2">Connect</a></h1>
+<ul class="" data-height="566" style="opacity: 1; height: 566px;">
+    <li>
+      <a href="https://stripe.com/docs/connect" class="selected">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/quickstart" class="">Quickstart</a>
+    </li>
+    <li class="category">Account Types
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/accounts">Accounts Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/standard-accounts">Standard</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/express-accounts">Express</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/custom-accounts" data-trigger-id="21">Custom</a>
+      <ul class="hidden" data-hidden="true" data-height="84" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/connect/updating-accounts">Updating Accounts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/identity-verification">Identity Verification</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/required-verification-information">Required Info</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="category">Processing Payments
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/charges" data-trigger-id="22" class="">Creating Charges</a>
+      <ul class="hidden" data-height="104" style="opacity: 0; height: 0px;" data-hidden="true">
+    <li>
+      <a href="https://stripe.com/docs/connect/direct-charges" class="">Direct Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/destination-charges" class="">Destination Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/charges-transfers" class="">Separate Charges and Transfers</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/account-debits" class="">Account Debits</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/subscriptions" class="">Using Subscriptions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/currencies">Multiple Currencies</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/account-balances" class="">Account Balances</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/payouts" class="">Bank Payouts</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/connect/best-practices" class="">Best Practices</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/migrating" class="">Migrating</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/reference" class="">OAuth Reference</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/webhooks" class="">Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/testing" class="">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="sigma"><a class="toggle-content" data-trigger-id="3">Sigma</a></h1>
+<ul class="hidden" data-hidden="true" data-height="150" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/sigma">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/transactions">Transactions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/subscriptions">Subscriptions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/connect">Connect</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/scheduled-queries">Scheduled Queries</a>
+    </li>
+</ul>
+
+          <h1 class="radar"><a class="toggle-content" data-trigger-id="4">Radar</a></h1>
+<ul class="hidden" data-hidden="true" data-height="248" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/radar">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/risk-evaluation">Risk Evaluation</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/blocklist">Blocklist</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/review" data-trigger-id="23">Review</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/radar/review/auth-and-capture">Uncaptured Payments</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/rules" data-trigger-id="24">Rules</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/radar/rules/reference">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/radar/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="relay"><a class="toggle-content" data-trigger-id="5">Relay</a></h1>
+<ul class="hidden" data-hidden="true" data-height="94" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/relay">Selling in Other Apps</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/relay/apps-guide" data-trigger-id="25">Accepting Orders in Your App</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/relay/apps-error-guide">Error Handling</a>
+    </li>
+</ul>
+
+    </li>
+</ul>
+
+          <h1 class="account"><a class="toggle-content" data-trigger-id="6">Account</a></h1>
+<ul class="hidden" data-hidden="true" data-height="150" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/dashboard">Your Account</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/dashboard/receipts">Email Receipts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/checklist">Going Live Checklist</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/reporting">Reporting</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/dashboard/search">Search</a>
+    </li>
+</ul>
+
+          <h1 class="api"><a class="toggle-content" data-trigger-id="7">Development</a></h1>
+<ul class="hidden" data-hidden="true" data-height="206" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/libraries">API Libraries</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/upgrades">API Upgrades</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/webhooks">Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/building-integrations">Building Integrations</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/building-plugins">Building Plugins &amp; Libraries</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/recipes">Recipes</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/security">Security</a>
+    </li>
+</ul>
+
+          <h1 class="atlas"><a class="toggle-content" data-trigger-id="8">Atlas</a></h1>
+<ul class="hidden" data-hidden="true" data-height="122" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/atlas">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/application">Application</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/account-progress">Account Progress</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/next">What's Next</a>
+    </li>
+</ul>
+
+          <h1 class="references"><a href="https://stripe.com/docs/api" class="external" target="_blank">API Reference</a></h1>
+        </nav>
+      </div>
+      <div id="content-wrapper" tabindex="0">
+        <div class="overlay"></div>
+          <div class="search-results">
+            <ul class="results"></ul>
+          </div>
+          <form class="search">
+            <input type="search" placeholder="Search documentation...">
+            <div class="search-after">
+              <span class="search-text"></span>
+              <span class="search-after-text--no-results">— No Results</span>
+            </div>
+          </form>
+        <header id="main-header">
+          <nav>
+            <ul class="external">
+              <li><a href="https://support.stripe.com/">Support</a></li>
+
+              <li class="button">
+                <a data-adroll-segment="submit_two" href="https://dashboard.stripe.com/login">Sign in</a>
+              </li>
+            </ul>
+          </nav>
+        </header>
+        <article id="content"><header>
+  <h1>Connect Overview</h1>
+  <p>Learn how to use <a href="https://stripe.com/connect">Connect</a>, our solution for any business that needs to process payments and pay out to multiple parties.</p>
+</header>
+
+<section>
+<p><a href="https://stripe.com/connect">Stripe Connect</a> is a full-stack solution for using Stripe’s capabilities on behalf of others. Connect provides a powerful API and other tools you need to make charges, as well as onboard, verify, and pay sellers, contractors, service providers: whomever your business’s users are.</p>
+
+<p>You can tailor your integration in various ways, including:</p>
+
+<ul>
+  <li>Specifying how money moves from the customer to you, and ultimately to your platform’s sellers or recipients</li>
+  <li>Collecting fees for your service</li>
+  <li>Assigning payout schedules and payout methods</li>
+  <li>Supporting different types of Stripe accounts</li>
+</ul>
+
+<p>You can connect your platform to existing Stripe accounts or create new ones.</p>
+
+<div class="image full">
+  <p><a href="./Connect Overview_files/overview.png" class="zoomable" data-width="1800" data-height="1162"><img src="./Connect Overview_files/overview.png" width="100%"></a></p>
+  <p>With Connect, you can process payments from customers, transfer money to and from connected accounts, and pay out funds to bank accounts and debit cards.</p>
+</div></section>
+
+<section>
+  <h2 id="connect-use-cases">Connect use cases<a class="anchor" href="https://stripe.com/docs/connect#connect-use-cases"></a></h2>
+  <aside class="note">
+    <h3 id="data-access-only">Data access only<a class="anchor" href="https://stripe.com/docs/connect#data-access-only"></a></h3>
+    <p>If your integration won't create charges on behalf of others and only needs to access their data (e.g., for analytics purposes), you can <a href="https://stripe.com/docs/building-integrations">build an integration</a> using our OAuth flow instead of using Connect. </p>
+  </aside>
+
+<p>Connect is a flexible and potent combination of features designed to support a wide range of uses:</p>
+
+<ul>
+  <li>Crowdfunding services, like Kickstarter and Ulule</li>
+  <li>E-commerce platforms, like Shopify and ASOS marketplaces</li>
+  <li>Marketplaces, like OfferUp and Catawiki</li>
+  <li>On-demand services, like Lyft and Glovo</li>
+  <li>Invoicing solutions, like Xero</li>
+  <li>Booking platforms, like OpenTable</li>
+  <li>Travel and event providers, like Tito and Musement</li>
+</ul>
+
+<p>Or if you have another business model that simply needs the ability to pay out businesses or individuals, Connect is likely the right solution.</p></section>
+
+<section>
+<h2 id="key-connect-components">Key Connect components<a class="anchor" href="https://stripe.com/docs/connect#key-connect-components"></a></h2>
+
+<p>Connect begins by registering your Stripe account as a <em>platform</em>. Third parties—sellers, contractors, and so forth—then associate their Stripe accounts with your platform account. Or your platform can create Stripe accounts for them.</p>
+
+<p>In designing a Connect integration, the platform decides what <a href="https://stripe.com/docs/connect/accounts">Stripe account types</a> to support. There are three types—Standard, Express, and Custom—each with different responsibilities and levels of control.</p>  <table>
+    <thead>
+    <tr>
+      <th>&nbsp;</th>
+      <th style="width:24%;">Standard</th>
+      <th style="width:22%;">Express</th>
+      <th style="width:18%;">Custom</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td><strong>Branding control</strong></td>
+      <td>Partial</td>
+      <td>Significant</td>
+      <td>Complete</td>
+    </tr>
+    <tr>
+      <td><strong>Integration effort</strong></td>
+      <td>Lowest</td>
+      <td>Low</td>
+      <td>Typically higher</td>
+    </tr>
+    <tr>
+      <td><strong>Ideal for users that are:</strong></td>
+      <td>Experienced online businesses</td>
+      <td>Individuals</td>
+      <td>Any type</td>
+    </tr>
+    </tbody>
+  </table>
+<p>Regardless of the type of account in use, once a third party associates their Stripe account with a platform, the platform can use the full power of the Stripe API on their behalf, including:</p>
+
+<ul>
+  <li>Processing charges</li>
+  <li>Specifying the flow of funds</li>
+  <li>Managing refunds and disputes</li>
+</ul>
+
+<p>Platforms using Express and Custom accounts have additional abilities, such as setting the payout schedule, issuing <a href="https://stripe.com/docs/connect/payouts#instant-payouts">Instant Payouts</a>, and performing <a href="https://stripe.com/docs/connect/account-debits">account debits</a>.</p>  <aside class="important">
+<p><strong>The Connect account types have new names as of May 2017!</strong> We've changed "Standalone" to "Standard" and "Managed" to "Custom". This is a name change only; the functionality for both remains the same.</p>
+</aside>
+
+</section>
+
+<section>
+<h2 id="recipes">Recipes<a class="anchor" href="https://stripe.com/docs/connect#recipes"></a></h2>
+
+<p>If you know what type of platform you’d like to build, we’ve written up some sample recipes for specific types of platforms:</p>
+
+<ul>
+  <li><a href="https://stripe.com/docs/recipes/on-demand-app">On-demand apps</a>: building an app like <a href="https://www.lyft.com/">Lyft</a> or <a href="https://www.handy.com/">Handy</a>.</li>
+  <li><a href="https://stripe.com/docs/recipes/store-builder">Store builders</a>: allowing other people to sell on your platform, like <a href="https://www.squarespace.com/">Squarespace</a> or <a href="https://www.bigcommerce.com/">Bigcommerce</a>.</li>
+</ul>
+
+<p>Even if you’re not striving for one of those exactly, these examples should help you figure out how you’d implement yours.</p>
+
+<p>If you’re building a service on top of Stripe account data, for instance an analytics service like <a href="https://baremetrics.com/">Baremetrics</a>, read our guide to <a href="https://stripe.com/docs/building-integrations">build an integration</a>.</p></section>
+
+<section>
+<h2 id="availability">Availability<a class="anchor" href="https://stripe.com/docs/connect#availability"></a></h2>
+
+<p>Connect is available for platforms and Standard accounts in <a href="https://stripe.com/global">any country Stripe supports</a>. Platforms in any supported country can create <a href="https://stripe.com/docs/connect/express-accounts">Express accounts</a> for individuals and sole proprietorships in the United States.</p>
+
+<p>Custom accounts are only supported for platforms located in Australia, Austria, Belgium, Canada, Denmark, Finland, France, Germany, Hong Kong, Ireland, Italy, Japan, Luxembourg, the Netherlands, New Zealand, Norway, Portugal, Spain, Sweden, Switzerland, the United Kingdom, or the United States.</p></section>
+
+<section>
+  <h2 id="next-steps">Next steps<a class="anchor" href="https://stripe.com/docs/connect#next-steps"></a></h2>
+<p>Read on to get started with Connect!</p><ul class="next-steps">
+    <li><a href="https://stripe.com/docs/connect/quickstart"><span>Connect Quickstart</span></a></li>
+    <li><a href="https://stripe.com/docs/connect/charges"><span>Creating Charges</span></a></li>
+    <li><a href="https://stripe.com/docs/connect/accounts"><span>Account Types</span></a></li>
+    <li><a href="https://stripe.com/docs/recipes"><span>Recipes</span></a></li>
+</ul>
+</section>
+<footer>
+  <h2 data-no-anchor="">Questions?</h2>
+  <p>We're always happy to help with code or other questions you might have! <a href="https://stripe.com/docs/connect#" class="search-link">Search</a> our documentation, <a href="https://support.stripe.com/email">contact support</a>, or <a href="https://stripe.com/contact/sales">connect with our sales team</a>. You can also chat live with other developers in <a href="irc://irc.freenode.net/stripe">#stripe</a> on freenode.</p>
+</footer>
+</article>
+      </div>
+    </div>
+
+    <div id="loading-bar" class="hidden" style="width: 0%;"></div>
+
+    <script src="./Connect Overview_files/jquery.min-356cfe6f83a29dcc6fd2cd9ac777637e.js"></script>
+    <script src="./Connect Overview_files/prism-d97c2fbc02243c145440b270c43ec26b.js"></script>
+    <script src="./Connect Overview_files/dynamics.min-f8b2e1648525e57b196b53792a19cda3.js"></script>
+    <script src="./Connect Overview_files/jquery.cookie-368e8ec1948575a79f6830f8d13db348.js"></script>
+    <script src="./Connect Overview_files/documentation-9d21cec0f3371635162f9c978350719d.js"></script>
+      <script src="./Connect Overview_files/algoliasearch-ccb98f296c1e54994357b8d396b3ce13.js"></script>
+      <script src="./Connect Overview_files/documentation-search-76a887ea03340dcf4d184728b1daad3d.js"></script>
+    <script>
+      parseKey("sk_test_BQokikJOvBiI2HlWgH4olfQ2", "secret-key", null);
+      parseKey("pk_test_6pRNASCoBOKtIshFeQd4XMUh", "publishable-key", null);
+    </script>
+      <script type="text/javascript" src="./Connect Overview_files/saved_resource"></script>
+  <script type="text/javascript" src="./Connect Overview_files/saved_resource(1)"></script>
+
+    
+    
+
+<script type="application/json" id="site-analytics-config">{"generalAnalyticsConfig":{"mixpanel":{"identifier":"eb71b6171a4f7ed97de9b7a0395b7ca5"},"ga":{},"trackpage":true,"flags":{"site.experiments.home_page_cta":true,"site.experiments.nav_login_cta":false,"site.experiments.get_started_copy":false,"site.experiments.request_demo_copy":false,"site.experiments.contact_sales_content":false},"locale":"en"},"siteSpecificAnalyticsConfig":{"trackPageViewed":false}}</script>
+
+
+<!-- Google Tag Manager (noscript) -->
+<noscript>&lt;iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K8JKCBR"
+height="0" width="0" style="display:none;visibility:hidden"&gt;&lt;/iframe&gt;</noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+<script defer="" src="./Connect Overview_files/analytics.min.js"></script>
+<script defer="" src="./Connect Overview_files/stripe-m-preview.js"></script>
+ 
+    <script src="./Connect Overview_files/documentation-analytics-7e4ac19718751588692cdd0955dba883.js"></script>
+  
+
+<div id="MultiLookup" style="opacity: 0.8" class="black"></div><div id="dict" class="card-panel grey lighten-4"><div id="dict-inner"></div><img id="toktogi-lock" class="toktogi-icon" src="chrome-extension://domfinmkohodhgghgedfdcmonefafolm/images/unlock.png"></div><div id="toktogi-notification" class="card-panel grey lighten-4">Toktogi is on</div><iframe frameborder="0" allowtransparency="true" scrolling="no" name="__privateStripeMetricsController0" allowpaymentrequest="true" src="./Connect Overview_files/outer.html" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important;"></iframe><script>
+$(function() {
+  if (location.search.match(/[?&]code=/)) {
+    var el = $("h3#express-account-creation > a");
+    if (el.length > 0) el[0].click();
+  }
+});
+</script>
+</body><div></div></html>

@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)https://stripe.com/docs/connect/custom-accounts -->
+<html lang="en" data-ember-extension="1"><script type="text/javascript" async="" src="./Using Connect with Custom Accounts_files/mixpanel-2.2.min.js"></script><script async="" src="./Using Connect with Custom Accounts_files/analytics.js"></script><script async="" src="./Using Connect with Custom Accounts_files/gtm.js"></script><script src="./Using Connect with Custom Accounts_files/742650679237989" async=""></script><script async="" src="./Using Connect with Custom Accounts_files/fbevents.js"></script><script type="text/javascript">window["_gaUserPrefs"] = { ioo : function() { return true; } }</script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    <meta name="google-site-verification" content="f0LCrdI6z4Fo8zld4sHCgo5SiUE4EYYRUa6KVeX3Mw8">
+    <meta name="csrf-token" content="ACmByp9VS-5dgI-ZXH4IDjQKupcbFRMLHUfMREA8ebLWGyvN9zdYqelEZg-tdQCE2ww411MvMRPNy_WDfbOyUg==">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Using Connect with Custom Accounts</title>
+
+    <meta name="description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+
+
+    <link rel="shortcut icon" href="https://stripe.com/favicon.ico">
+
+    <link rel="apple-touch-icon-precomposed" href="https://stripe.com/img/apple-touch-icon/180x180.png">
+    <link rel="icon" href="https://stripe.com/img/apple-touch-icon/180x180.png">
+
+
+    <link rel="image_src" type="image/png" href="https://stripe.com/img/v3/home/social.png">
+
+
+        <link rel="canonical" href="https://stripe.com/docs/connect/authentication">
+
+    <meta property="og:title" content="Authentication with Connect">
+    <meta property="og:url" content="https://stripe.com/docs/connect/authentication">
+    <meta property="og:description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+    <meta property="og:image" content="https://stripe.com/img/v3/home/social.png">
+
+      <meta name="twitter:card" content="summary">
+      <meta name="twitter:image" content="https://stripe.com/img/v3/home/twitter.png">
+    <meta name="twitter:site" content="@stripe">
+    <meta name="twitter:title" content="Authentication with Connect">
+    <meta name="twitter:description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+
+
+    <script type="application/json" id="strut_files">{&quot;v3/shared/navigation_ie10.css&quot;:&quot;/assets/v3/shared/navigation_ie10-fad8432db8a0ef02ccfc88df4a0b8535.css&quot;}</script>
+
+    
+
+    
+
+    <link rel="stylesheet" href="./Using Connect with Custom Accounts_files/default-6388c486f7388db1252f0d7c85db5e15.css">
+    <link rel="stylesheet" href="./Using Connect with Custom Accounts_files/common-966a7c7414d89c40541b15f2adfa6a26.css">
+    <link rel="stylesheet" href="./Using Connect with Custom Accounts_files/base-3cdaeb306a5f322afd95a5e0122a3388.css">
+    <link rel="stylesheet" href="./Using Connect with Custom Accounts_files/prism_light-6e629a34ce1570d4f33f7e2ee8bebbc2.css">
+    
+    
+    <meta name="viewport" content="width=1060">
+    <meta name="robots" content="noarchive">
+    <link rel="stylesheet" href="./Using Connect with Custom Accounts_files/connect_button-9fd48f5cd30c2680d9e4a099d67cd9b1.css">
+<style>
+.testing-overview {
+  column-count: 2;
+  list-style: none;
+}
+
+.testing-overview li {
+  padding-left: 0;
+  margin: 0;
+}
+
+.testing-overview li:before {
+  display: none;
+}
+</style>
+  <link rel="stylesheet" href="./Using Connect with Custom Accounts_files/connect_button-9fd48f5cd30c2680d9e4a099d67cd9b1.css">
+  <link rel="stylesheet" href="./Using Connect with Custom Accounts_files/connect_button-9fd48f5cd30c2680d9e4a099d67cd9b1.css">
+  <link rel="stylesheet" href="./Using Connect with Custom Accounts_files/connect_button-9fd48f5cd30c2680d9e4a099d67cd9b1.css">
+</head>
+  <body class="">
+    
+    <div id="docs">
+      <div id="sidebar" class="">
+        <div class="logo">
+          <a class="site" href="https://stripe.com/" title="Stripe"></a>
+          <a class="extension" href="https://stripe.com/docs">docs</a>
+        </div>
+        <div class="nav-border"></div>
+        <nav>
+          <h1 class="home"><a href="https://stripe.com/docs">Home</a></h1>
+          <h1 class="payments"><a class="toggle-content" data-trigger-id="0">Payments</a></h1>
+<ul class="hidden" data-hidden="true" data-height="889" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/quickstart">Quickstart</a>
+    </li>
+    <li class="category">Collecting payment details
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/checkout/tutorial" data-trigger-id="9">Checkout</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/checkout">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js" data-trigger-id="10">Stripe.js &amp; Elements</a>
+      <ul class="hidden" data-hidden="true" data-height="112" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/quickstart">Quickstart</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/payment-request-button">Payment Request Button</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/migrating">Migration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/reference">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios" data-trigger-id="11">iOS</a>
+      <ul class="hidden" data-hidden="true" data-height="112" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/standard">Standard Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/custom">Custom Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/apple-pay/apps">Apple Pay in Apps</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/sources">Using Sources</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android" data-trigger-id="12">Android</a>
+      <ul class="hidden" data-hidden="true" data-height="168" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/standard">Standard Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/pay-with-google">Pay with Google</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/alipay-android">Working with Alipay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/android-pay">Android Pay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/customer-information">Customer Information</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/sources">Using Sources</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/saving-cards">Saving Cards</a>
+    </li>
+    <li class="category">Charges
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/charges">Creating Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/declines" data-trigger-id="13">Declines &amp; Failed Payments</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/declines/codes">Decline Codes</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/disputes" data-trigger-id="14">Disputes &amp; Fraud</a>
+      <ul class="hidden" data-hidden="true" data-height="56" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/disputes/categories">Dispute Categories</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/disputes/prevention">Prevention</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/refunds">Refunds</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/payouts">Receiving Payouts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/currencies" data-trigger-id="15">Supported Currencies</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/currencies/conversions">Currency Conversions</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="category">Sources
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources" data-trigger-id="16">Payment Methods</a>
+      <ul class="hidden" data-hidden="true" data-height="308" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/sources/cards">Cards</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/three-d-secure">3D Secure</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/alipay">Alipay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/ach-credit-transfer">ACH Credit Transfer</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/bancontact">Bancontact</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/bitcoin">Bitcoin</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/giropay">Giropay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/ideal">iDEAL</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/p24">P24</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/sepa-debit">SEPA Direct Debit</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/sofort">SOFORT</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/best-practices">Best Practices</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/customers">Sources &amp; Customers</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/connect">Connect Platforms</a>
+    </li>
+    <li class="category">Other Payment Methods
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/ach">ACH</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/amex-express-checkout">Amex Express Checkout</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/apple-pay">Apple Pay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/pay-with-google">Pay with Google</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/payment-request-api">Payment Request API</a>
+    </li>
+    <li class="category">Products &amp; Orders
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders" data-trigger-id="17">Orders</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/orders/guide">Guide</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders/tax-integration">Tax Integrations</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders/shipping-integration">Shipping Integrations</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="subscriptions"><a class="toggle-content" data-trigger-id="1">Subscriptions</a></h1>
+<ul class="hidden" data-hidden="true" data-height="528" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/quickstart">Quickstart</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/creating" data-trigger-id="18">Creating Subscriptions</a>
+      <ul data-collapsable="false" data-height="168">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/multiplan">Using Multiple Plans</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/discounts">Applying Discounts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/trials">Using Trial Periods</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/quantities">Setting Quantities</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/taxes">Adding Taxes</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/multiple">Multiple Subscriptions</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/lifecycle">Lifecycle &amp; Events</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/webhooks">Using Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/changing" data-trigger-id="19">Changing Subscriptions</a>
+      <ul data-collapsable="false" data-height="84">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/upgrading-downgrading">Upgrading &amp; Downgrading</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/billing-cycle">Billing Cycle</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/canceling-pausing">Canceling &amp; Pausing</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/invoices" data-trigger-id="20">Working with Invoices</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/ach-credit">ACH Credit Transfers</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/plans">Managing Plans</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/subscriptions/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="connect"><a class="toggle-content" data-trigger-id="2">Connect</a></h1>
+<ul class="" data-height="566" style="opacity: 1; height: 650px;">
+    <li>
+      <a href="https://stripe.com/docs/connect" class="">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/quickstart" class="">Quickstart</a>
+    </li>
+    <li class="category">Account Types
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/accounts" class="">Accounts Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/standard-accounts" class="">Standard</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/express-accounts" class="">Express</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/custom-accounts" data-trigger-id="21" class="selected">Custom</a>
+      <ul class="" data-height="84" style="opacity: 1; height: 84px;">
+    <li>
+      <a href="https://stripe.com/docs/connect/updating-accounts">Updating Accounts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/identity-verification">Identity Verification</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/required-verification-information">Required Info</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="category">Processing Payments
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/charges" data-trigger-id="22" class="">Creating Charges</a>
+      <ul class="hidden" data-height="104" style="opacity: 0; height: 0px;" data-hidden="true">
+    <li>
+      <a href="https://stripe.com/docs/connect/direct-charges" class="">Direct Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/destination-charges" class="">Destination Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/charges-transfers" class="">Separate Charges and Transfers</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/account-debits" class="">Account Debits</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/subscriptions" class="">Using Subscriptions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/currencies">Multiple Currencies</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/account-balances" class="">Account Balances</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/payouts" class="">Bank Payouts</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/connect/best-practices" class="">Best Practices</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/migrating" class="">Migrating</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/reference" class="">OAuth Reference</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/webhooks" class="">Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/testing" class="">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="sigma"><a class="toggle-content" data-trigger-id="3">Sigma</a></h1>
+<ul class="hidden" data-hidden="true" data-height="150" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/sigma">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/transactions">Transactions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/subscriptions">Subscriptions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/connect">Connect</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/scheduled-queries">Scheduled Queries</a>
+    </li>
+</ul>
+
+          <h1 class="radar"><a class="toggle-content" data-trigger-id="4">Radar</a></h1>
+<ul class="hidden" data-hidden="true" data-height="248" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/radar">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/risk-evaluation">Risk Evaluation</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/blocklist">Blocklist</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/review" data-trigger-id="23">Review</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/radar/review/auth-and-capture">Uncaptured Payments</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/rules" data-trigger-id="24">Rules</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/radar/rules/reference">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/radar/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="relay"><a class="toggle-content" data-trigger-id="5">Relay</a></h1>
+<ul class="hidden" data-hidden="true" data-height="94" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/relay">Selling in Other Apps</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/relay/apps-guide" data-trigger-id="25">Accepting Orders in Your App</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/relay/apps-error-guide">Error Handling</a>
+    </li>
+</ul>
+
+    </li>
+</ul>
+
+          <h1 class="account"><a class="toggle-content" data-trigger-id="6">Account</a></h1>
+<ul class="hidden" data-hidden="true" data-height="150" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/dashboard">Your Account</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/dashboard/receipts">Email Receipts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/checklist">Going Live Checklist</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/reporting">Reporting</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/dashboard/search">Search</a>
+    </li>
+</ul>
+
+          <h1 class="api"><a class="toggle-content" data-trigger-id="7">Development</a></h1>
+<ul class="hidden" data-hidden="true" data-height="206" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/libraries">API Libraries</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/upgrades">API Upgrades</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/webhooks">Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/building-integrations">Building Integrations</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/building-plugins">Building Plugins &amp; Libraries</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/recipes">Recipes</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/security">Security</a>
+    </li>
+</ul>
+
+          <h1 class="atlas"><a class="toggle-content" data-trigger-id="8">Atlas</a></h1>
+<ul class="hidden" data-hidden="true" data-height="122" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/atlas">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/application">Application</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/account-progress">Account Progress</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/next">What's Next</a>
+    </li>
+</ul>
+
+          <h1 class="references"><a href="https://stripe.com/docs/api" class="external" target="_blank">API Reference</a></h1>
+        </nav>
+      </div>
+      <div id="content-wrapper" tabindex="0">
+        <div class="overlay"></div>
+          <div class="search-results">
+            <ul class="results"></ul>
+          </div>
+          <form class="search">
+            <input type="search" placeholder="Search documentation...">
+            <div class="search-after">
+              <span class="search-text"></span>
+              <span class="search-after-text--no-results">— No Results</span>
+            </div>
+          </form>
+        <header id="main-header">
+          <nav>
+            <ul class="external">
+              <li><a href="https://support.stripe.com/">Support</a></li>
+
+              <li class="button">
+                <a data-adroll-segment="submit_two" href="https://dashboard.stripe.com/login">Sign in</a>
+              </li>
+            </ul>
+          </nav>
+        </header>
+        <article id="content"><header>
+  <h1>Using Connect with Custom Accounts </h1>
+  <p>Use Custom accounts with <a href="https://stripe.com/connect">Connect</a> to control your users' entire  experience.</p>
+</header>
+
+<section>
+  <aside class="note">
+    <h3 id="name-change">Name change<a class="anchor" href="https://stripe.com/docs/connect/custom-accounts#name-change"></a></h3>
+    <p>As of May 2017, the name of "Managed" accounts has been changed to "Custom" accounts. The functionality and usage remains the same, however.</p>
+  </aside>
+<p>With Connect, users of your platform can have one of three types of Stripe accounts:</p>
+
+<ul>
+  <li><a href="https://stripe.com/docs/connect/standard-accounts">Standard</a></li>
+  <li><a href="https://stripe.com/docs/connect/express-accounts">Express</a></li>
+  <li><a href="https://stripe.com/docs/connect/custom-accounts">Custom</a></li>
+</ul>
+
+<p>A <em>Custom</em> Stripe account is almost completely invisible to the account holder. You, the platform, are responsible for all interactions with your users and for collecting all the information Stripe needs.</p>
+
+<p>With Custom accounts you can modify the connected account’s details and settings through the API, including managing their bank accounts and payout schedule. Since Custom account holders can’t log into Stripe it’s up to you to build the onboarding flow, user dashboard, reporting functionality, and communication channels.</p>
+
+<aside class="note">
+  <h3 id="integration-recipe">Integration recipe<a class="anchor" href="https://stripe.com/docs/connect/custom-accounts#integration-recipe"></a></h3>
+  <p>For an example walk-through of creating and managing Custom accounts, see the <a href="https://stripe.com/docs/recipes/on-demand-app">Building an On-demand App</a> recipe.</p>
+</aside>
+
+<p>Although a simple API call creates a Custom account, there are three steps to consider for each account you create:</p>
+
+<ol>
+  <li>Properly identify the <a href="https://stripe.com/docs/connect/custom-accounts#country">country</a> to use.</li>
+  <li><a href="https://stripe.com/docs/connect/custom-accounts#create">Create</a> the account.</li>
+  <li>Move onto the <a href="https://stripe.com/docs/connect/custom-accounts#identity-verification">identity verification</a> process.</li>
+</ol>
+
+<p>But first, ensure you meet the <a href="https://stripe.com/docs/connect/custom-accounts#requirements">minimum requirements</a>.</p>
+    <aside class="important">
+      <p>This tutorial assumes you have already <a href="https://dashboard.stripe.com/account/applications/settings" class="arrow">registered your platform</a>.</p>
+    </aside>
+</section>
+
+<section id="requirements-for-creating-managed-accounts">
+<h2 id="requirements">Requirements for creating Custom accounts<a class="anchor" href="https://stripe.com/docs/connect/custom-accounts#requirements"></a></h2>
+
+<p>To use Custom accounts, you must meet all of these requirements:</p>
+
+<ul>
+  <li><strong>Minimum API version</strong>, you must be using an API version at least as recent as 2014-12-17.</li>
+  <li><strong>Terms of Service update</strong>, creating Custom accounts requires an <a href="https://stripe.com/docs/connect/updating-accounts#tos-acceptance">update to your terms of service</a>, as they must include a reference to Stripe’s services agreement. You should also consult with your attorneys on whether you should update your terms acceptance language to include reference to Stripe’s terms.</li>
+  <li><strong>Handling information requests</strong>, instead of requesting information—such as a Social Security Number or passport scan—directly from the account holder (your user), Stripe requests the information it needs from you. You must collect this information from the user and provide it to Stripe, otherwise Stripe may disable payouts to the connected account.</li>
+  <li><strong>Platform in a supported country</strong>, platforms in Australia, Austria, Belgium, Canada, Denmark, Finland, France, Germany, Hong Kong, Ireland, Italy, Japan, Luxembourg, the Netherlands, New Zealand, Norway, Portugal, Spain, Sweden, Switzerland, the United Kingdom, and the United States can create Custom accounts for any country <a href="https://stripe.com/global">Stripe supports</a>. If you would like to be notified when platforms in your country can use Custom accounts, <a href="mailto:connect@stripe.com">let us know</a>.</li>
+  <li><strong>Vetting for fraud</strong>, your platform is ultimately responsible for  losses incurred by Custom accounts. To best protect against this, you  need to scrutinize all accounts that sign up via your platform for potential fraud. Refer to our <a href="https://stripe.com/docs/connect/best-practices#fraud">best practices</a> guide for more.</li>
+</ul>
+
+<p>Note there’s an <a href="https://stripe.com/connect/pricing">additional cost</a> for active Custom accounts. A Custom account is considered active if it has received at least one successful payout in a given month.</p>  <aside class="important"><p>Custom accounts are currently in preview for platforms outside the United States.</p></aside>
+</section>
+
+<section>
+  <h2 id="country"><span class="step">Step 1:</span> Identify the country to use<a class="anchor" href="https://stripe.com/docs/connect/custom-accounts#country"></a></h2>
+<p>The only piece of information you need to create a Custom account is its country: everything else can be collected and updated at a later time. <strong>The country value is for the Custom account</strong>: where the account representative lives or that business is legally established. The country, once set, cannot be changed.</p>
+
+<p>For example, if you are in the United States and the business or user you’re creating an account for is legally represented in Canada, use <strong>CA</strong> as the country for the account being created.</p>
+
+<p>The country value also determines the <a href="https://stripe.com/docs/connect/required-verification-information">required verification information</a> for the connected account.</p></section>
+
+<section id="creating-a-managed-account">
+  <h2 id="create"><span class="step">Step 2:</span> Create a Custom account<a class="anchor" href="https://stripe.com/docs/connect/custom-accounts#create"></a></h2>
+
+<p>At the bare minimum, to create and connect to a Custom account, simply set <code>type</code> to <strong>custom</strong> in the account creation request and provide a country.</p>
+  <div class="tabs tabs-code animated" data-platform="server">
+    <nav class="nav-languages">
+        <a data-language="curl" class="selected">curl</a>
+        <a data-language="ruby">Ruby</a>
+        <a data-language="python">Python</a>
+        <a data-language="php">PHP</a>
+        <a data-language="java">Java</a>
+        <a data-language="node">Node</a>
+        <a data-language="go">Go</a>
+    </nav>
+    <div class="tabs-content">
+      <div class="code selected" data-language="curl">
+  <pre class=" numbered selected language-curl"><code class=" language-curl"><span class="token curl">curl</span> <span class="token url">https://api.stripe.com/v1/accounts</span> \
+<span class="token option">   -u</span> <span class="token value secret-key" style="pointer-events: none;">sk_test_BQokikJOvBiI2HlWgH4olfQ2</span>: \
+<span class="token option">   -d</span> <span class="token parameter">country</span>=<span class="token value">US</span> \
+<span class="token option">   -d</span> <span class="token parameter">type</span>=<span class="token value">custom</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="ruby">
+  <pre class=" numbered language-ruby"><code class=" language-ruby"><span class="token comment" spellcheck="true"># Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true"># See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">Stripe</span><span class="token punctuation">.</span><span class="token function">api_key</span> <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span>
+
+acct <span class="token operator">=</span> <span class="token constant">Stripe</span><span class="token punctuation">:</span><span class="token symbol">:Account</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    <span class="token symbol">:country</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token string">"US"</span><span class="token punctuation">,</span>
+    <span class="token symbol">:type</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token string">"custom"</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="python">
+  <pre class=" numbered language-python"><code class=" language-python"><span class="token comment" spellcheck="true"># Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true"># See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">stripe.api_key</span> <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span>
+
+acct <span class="token operator">=</span> <span class="token constant">stripe.Account.</span><span class="token function">create</span><span class="token punctuation">(</span>
+  <span class="token parameter">country</span><span class="token operator">=</span><span class="token string">"US"</span><span class="token punctuation">,</span>
+  <span class="token parameter">type</span><span class="token operator">=</span><span class="token string">"custom"</span>
+<span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="php">
+  <pre class=" numbered language-php"><code class=" language-php"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token namespace">\Stripe</span><span class="token namespace">\Stripe</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">setApiKey</span><span class="token punctuation">(</span><span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token variable">$acct</span> <span class="token operator">=</span> <span class="token namespace">\Stripe</span><span class="token namespace">\Account</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token keyword">array</span><span class="token punctuation">(</span>
+    <span class="token string">"country"</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token string">"US"</span><span class="token punctuation">,</span>
+    <span class="token string">"type"</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token string">"custom"</span>
+<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="java">
+  <pre class=" numbered language-java"><code class=" language-java"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">Stripe</span><span class="token punctuation">.</span>apiKey <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">;</span>
+
+<span class="token constant">Map&lt;String, Object&gt;</span> params <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constant">HashMap&lt;String, Object&gt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+params<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"country"</span><span class="token punctuation">,</span> <span class="token string">"US"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+params<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"type"</span><span class="token punctuation">,</span> <span class="token string">"custom"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token constant">Account</span> acct <span class="token operator">=</span> <span class="token constant">Account</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>params<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="node">
+  <pre class=" numbered language-javascript"><code class=" language-javascript"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token keyword">var</span> stripe <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"stripe"</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+stripe<span class="token punctuation">.</span><span class="token property">accounts</span><span class="token punctuation">.</span><span class="token property"></span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  <span class="token symbol">country<span class="token punctuation">:</span></span> <span class="token string">"US"</span><span class="token punctuation">,</span>
+  <span class="token symbol">type<span class="token punctuation">:</span></span> <span class="token string">"custom"</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token property"></span><span class="token function">then</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>acct<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// asynchronously called</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="go">
+  <pre class=" numbered language-go"><code class=" language-go"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+stripe<span class="token punctuation">.</span>Key <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span>
+
+params <span class="token operator">:=</span> <span class="token constant">&amp;stripe.AccountParams</span><span class="token punctuation">{</span>
+  <span class="token symbol">Country:</span> <span class="token string">"US"</span><span class="token punctuation">,</span>
+  <span class="token symbol">Type:</span> <span class="token string">"custom"</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+acct<span class="token punctuation">,</span> err <span class="token operator">:=</span> account<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span>params<span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+    </div>
+  </div>
+
+  <p>The result of a successful API call is the user's account information:</p>
+
+<div class="code" data-language="json">
+  <pre class=" numbered language-javascript"><code class=" language-javascript"><span class="token punctuation">{</span>
+  <span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">.</span><span class="token property"></span>
+  <span class="token string">"id"</span><span class="token punctuation">:</span> <span class="token string">"acct_12QkqYGSOD4VcegJ"</span><span class="token punctuation">,</span>
+  <span class="token string">"keys"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token string">"secret"</span><span class="token punctuation">:</span> <span class="token string">"sk_live_AxSI9q6ieYWjGIeRbURf6EG0"</span><span class="token punctuation">,</span>
+    <span class="token string">"publishable"</span><span class="token punctuation">:</span> <span class="token string">"pk_live_h9xguYGf2GcfytemKs5tHrtg"</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token string">"type"</span><span class="token punctuation">:</span> <span class="token string">"custom"</span>
+  <span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">.</span><span class="token property"></span>
+<span class="token punctuation">}</span></code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+<p>Store the <code>id</code> in your database—it’s the account ID. You’ll provide this value to <a href="https://stripe.com/docs/connect/authentication">authenticate</a> as the connected account by passing it into requests in the <code>Stripe-Account</code> header. (It’s also possible to authenticate with the secret key returned here, but it’s more secure to store and use only the account ID instead.)</p>
+  <aside class="important">
+    <p><strong>Store the received account ID!</strong> Platforms need this information to perform requests on the user's behalf.</p>
+  </aside>
+</section>
+
+<section>
+  <h2 id="identity-verification"><span class="step">Step 3:</span> Start the identity verification process<a class="anchor" href="https://stripe.com/docs/connect/custom-accounts#identity-verification"></a></h2>
+<p>An account created with only a country is fairly limited: it can only receive a small amount of funds. If you wish to enable payouts and keep the account in good standing, you need to <a href="https://stripe.com/docs/connect/identity-verification">provide more information</a> about the account holder.</p>
+
+<p>The <a href="https://stripe.com/docs/connect/required-verification-information">required verification information</a> page lists the minimum and likely identity verification requirements. You can provide these when you <a href="https://stripe.com/docs/api#create_account">create the account</a> or by <a href="https://stripe.com/docs/api#update_account">updating the account</a> later.</p>
+
+<p>At the very least, we recommend collected and providing the user’s name and date of birth upfront.</p></section>
+
+<section>
+<h2 id="webhooks">Webhooks<a class="anchor" href="https://stripe.com/docs/connect/custom-accounts#webhooks"></a></h2>
+
+<p>Once created, all account change notifications are delivered via <a href="https://stripe.com/docs/connect/webhooks">webhooks</a> as an <code>account.updated</code> event. Establish a Connect webhook URL in your <a href="https://dashboard.stripe.com/account/webhooks">account settings</a> to watch for and respond to these.</p></section>
+
+<section>
+  <h2 id="next-steps">Next steps<a class="anchor" href="https://stripe.com/docs/connect/custom-accounts#next-steps"></a></h2>
+  <p>Congrats! You've created a Custom account. Now learn more about working with Custom accounts.</p>
+<ul class="next-steps">
+    <li><a href="https://stripe.com/docs/connect/updating-accounts"><span>Updating Accounts</span></a></li>
+    <li><a href="https://stripe.com/docs/connect/identity-verification"><span>Identity Verification</span></a></li>
+    <li><a href="https://stripe.com/docs/connect/authentication"><span>Authentication</span></a></li>
+    <li><a href="https://stripe.com/docs/connect/charges"><span>Creating Charges</span></a></li>
+    <li><a href="https://stripe.com/docs/api"><span>Full API Reference</span></a></li>
+</ul>
+
+</section>
+<footer>
+  <h2 data-no-anchor="">Questions?</h2>
+  <p>We're always happy to help with code or other questions you might have! <a href="https://stripe.com/docs/connect/custom-accounts#" class="search-link">Search</a> our documentation, <a href="https://support.stripe.com/email">contact support</a>, or <a href="https://stripe.com/contact/sales">connect with our sales team</a>. You can also chat live with other developers in <a href="irc://irc.freenode.net/stripe">#stripe</a> on freenode.</p>
+</footer>
+</article>
+      </div>
+    </div>
+
+    <div id="loading-bar" class="hidden" style="width: 100%;"></div>
+
+    <script src="./Using Connect with Custom Accounts_files/jquery.min-356cfe6f83a29dcc6fd2cd9ac777637e.js"></script>
+    <script src="./Using Connect with Custom Accounts_files/prism-d97c2fbc02243c145440b270c43ec26b.js"></script>
+    <script src="./Using Connect with Custom Accounts_files/dynamics.min-f8b2e1648525e57b196b53792a19cda3.js"></script>
+    <script src="./Using Connect with Custom Accounts_files/jquery.cookie-368e8ec1948575a79f6830f8d13db348.js"></script>
+    <script src="./Using Connect with Custom Accounts_files/documentation-9d21cec0f3371635162f9c978350719d.js"></script>
+      <script src="./Using Connect with Custom Accounts_files/algoliasearch-ccb98f296c1e54994357b8d396b3ce13.js"></script>
+      <script src="./Using Connect with Custom Accounts_files/documentation-search-76a887ea03340dcf4d184728b1daad3d.js"></script>
+    <script>
+      parseKey("sk_test_BQokikJOvBiI2HlWgH4olfQ2", "secret-key", null);
+      parseKey("pk_test_6pRNASCoBOKtIshFeQd4XMUh", "publishable-key", null);
+    </script>
+      <script type="text/javascript" src="./Using Connect with Custom Accounts_files/saved_resource"></script>
+  <script type="text/javascript" src="./Using Connect with Custom Accounts_files/saved_resource(1)"></script>
+
+    
+    
+
+<script type="application/json" id="site-analytics-config">{"generalAnalyticsConfig":{"mixpanel":{"identifier":"eb71b6171a4f7ed97de9b7a0395b7ca5"},"ga":{},"trackpage":true,"flags":{"site.experiments.home_page_cta":true,"site.experiments.nav_login_cta":false,"site.experiments.get_started_copy":false,"site.experiments.request_demo_copy":false,"site.experiments.contact_sales_content":false},"locale":"en"},"siteSpecificAnalyticsConfig":{"trackPageViewed":false}}</script>
+
+
+<!-- Google Tag Manager (noscript) -->
+<noscript>&lt;iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K8JKCBR"
+height="0" width="0" style="display:none;visibility:hidden"&gt;&lt;/iframe&gt;</noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+<script defer="" src="./Using Connect with Custom Accounts_files/analytics.min.js"></script>
+<script defer="" src="./Using Connect with Custom Accounts_files/stripe-m-preview.js"></script>
+ 
+    <script src="./Using Connect with Custom Accounts_files/documentation-analytics-7e4ac19718751588692cdd0955dba883.js"></script>
+  
+
+<div id="MultiLookup" style="opacity: 0.8" class="black"></div><div id="dict" class="card-panel grey lighten-4"><div id="dict-inner"></div><img id="toktogi-lock" class="toktogi-icon" src="chrome-extension://domfinmkohodhgghgedfdcmonefafolm/images/unlock.png"></div><div id="toktogi-notification" class="card-panel grey lighten-4">Toktogi is on</div><iframe frameborder="0" allowtransparency="true" scrolling="no" name="__privateStripeMetricsController0" allowpaymentrequest="true" src="./Using Connect with Custom Accounts_files/outer.html" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important;"></iframe><script>
+$(function() {
+  if (location.search.match(/[?&]code=/)) {
+    var el = $("h3#express-account-creation > a");
+    if (el.length > 0) el[0].click();
+  }
+});
+</script>
+<script>
+$(function() {
+  if (location.search.match(/[?&]code=/)) {
+    var el = $("h3#express-account-creation > a");
+    if (el.length > 0) el[0].click();
+  }
+});
+</script>
+</body><div></div></html>

@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)https://stripe.com/docs/connect/oauth-reference -->
+<html lang="en" data-ember-extension="1"><script type="text/javascript" async="" src="./Connect OAuth Reference_files/mixpanel-2.2.min.js"></script><script async="" src="./Connect OAuth Reference_files/analytics.js"></script><script async="" src="./Connect OAuth Reference_files/gtm.js"></script><script src="./Connect OAuth Reference_files/742650679237989" async=""></script><script async="" src="./Connect OAuth Reference_files/fbevents.js"></script><script type="text/javascript">window["_gaUserPrefs"] = { ioo : function() { return true; } }</script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    <meta name="google-site-verification" content="f0LCrdI6z4Fo8zld4sHCgo5SiUE4EYYRUa6KVeX3Mw8">
+    <meta name="csrf-token" content="ACmByp9VS-5dgI-ZXH4IDjQKupcbFRMLHUfMREA8ebLWGyvN9zdYqelEZg-tdQCE2ww411MvMRPNy_WDfbOyUg==">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Connect OAuth Reference</title>
+
+    <meta name="description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+
+
+    <link rel="shortcut icon" href="https://stripe.com/favicon.ico">
+
+    <link rel="apple-touch-icon-precomposed" href="https://stripe.com/img/apple-touch-icon/180x180.png">
+    <link rel="icon" href="https://stripe.com/img/apple-touch-icon/180x180.png">
+
+
+    <link rel="image_src" type="image/png" href="https://stripe.com/img/v3/home/social.png">
+
+
+        <link rel="canonical" href="https://stripe.com/docs/connect/authentication">
+
+    <meta property="og:title" content="Authentication with Connect">
+    <meta property="og:url" content="https://stripe.com/docs/connect/authentication">
+    <meta property="og:description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+    <meta property="og:image" content="https://stripe.com/img/v3/home/social.png">
+
+      <meta name="twitter:card" content="summary">
+      <meta name="twitter:image" content="https://stripe.com/img/v3/home/twitter.png">
+    <meta name="twitter:site" content="@stripe">
+    <meta name="twitter:title" content="Authentication with Connect">
+    <meta name="twitter:description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+
+
+    <script type="application/json" id="strut_files">{&quot;v3/shared/navigation_ie10.css&quot;:&quot;/assets/v3/shared/navigation_ie10-fad8432db8a0ef02ccfc88df4a0b8535.css&quot;}</script>
+
+    
+
+    
+
+    <link rel="stylesheet" href="./Connect OAuth Reference_files/default-6388c486f7388db1252f0d7c85db5e15.css">
+    <link rel="stylesheet" href="./Connect OAuth Reference_files/common-966a7c7414d89c40541b15f2adfa6a26.css">
+    <link rel="stylesheet" href="./Connect OAuth Reference_files/base-3cdaeb306a5f322afd95a5e0122a3388.css">
+    <link rel="stylesheet" href="./Connect OAuth Reference_files/prism_light-6e629a34ce1570d4f33f7e2ee8bebbc2.css">
+    
+    
+    <meta name="viewport" content="width=1060">
+    <meta name="robots" content="noarchive">
+  </head>
+  <body class="">
+    
+    <div id="docs">
+      <div id="sidebar" class="bordered">
+        <div class="logo">
+          <a class="site" href="https://stripe.com/" title="Stripe"></a>
+          <a class="extension" href="https://stripe.com/docs">docs</a>
+        </div>
+        <div class="nav-border"></div>
+        <nav>
+          <h1 class="home"><a href="https://stripe.com/docs">Home</a></h1>
+          <h1 class="payments"><a class="toggle-content" data-trigger-id="0">Payments</a></h1>
+<ul class="hidden" data-hidden="true" data-height="889" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/quickstart">Quickstart</a>
+    </li>
+    <li class="category">Collecting payment details
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/checkout/tutorial" data-trigger-id="9">Checkout</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/checkout">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js" data-trigger-id="10">Stripe.js &amp; Elements</a>
+      <ul class="hidden" data-hidden="true" data-height="112" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/quickstart">Quickstart</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/payment-request-button">Payment Request Button</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/migrating">Migration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/reference">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios" data-trigger-id="11">iOS</a>
+      <ul class="hidden" data-hidden="true" data-height="112" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/standard">Standard Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/custom">Custom Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/apple-pay/apps">Apple Pay in Apps</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/sources">Using Sources</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android" data-trigger-id="12">Android</a>
+      <ul class="hidden" data-hidden="true" data-height="168" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/standard">Standard Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/pay-with-google">Pay with Google</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/alipay-android">Working with Alipay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/android-pay">Android Pay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/customer-information">Customer Information</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/sources">Using Sources</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/saving-cards">Saving Cards</a>
+    </li>
+    <li class="category">Charges
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/charges">Creating Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/declines" data-trigger-id="13">Declines &amp; Failed Payments</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/declines/codes">Decline Codes</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/disputes" data-trigger-id="14">Disputes &amp; Fraud</a>
+      <ul class="hidden" data-hidden="true" data-height="56" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/disputes/categories">Dispute Categories</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/disputes/prevention">Prevention</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/refunds">Refunds</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/payouts">Receiving Payouts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/currencies" data-trigger-id="15">Supported Currencies</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/currencies/conversions">Currency Conversions</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="category">Sources
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources" data-trigger-id="16">Payment Methods</a>
+      <ul class="hidden" data-hidden="true" data-height="308" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/sources/cards">Cards</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/three-d-secure">3D Secure</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/alipay">Alipay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/ach-credit-transfer">ACH Credit Transfer</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/bancontact">Bancontact</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/bitcoin">Bitcoin</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/giropay">Giropay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/ideal">iDEAL</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/p24">P24</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/sepa-debit">SEPA Direct Debit</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/sofort">SOFORT</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/best-practices">Best Practices</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/customers">Sources &amp; Customers</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/connect">Connect Platforms</a>
+    </li>
+    <li class="category">Other Payment Methods
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/ach">ACH</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/amex-express-checkout">Amex Express Checkout</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/apple-pay">Apple Pay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/pay-with-google">Pay with Google</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/payment-request-api">Payment Request API</a>
+    </li>
+    <li class="category">Products &amp; Orders
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders" data-trigger-id="17">Orders</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/orders/guide">Guide</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders/tax-integration">Tax Integrations</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders/shipping-integration">Shipping Integrations</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="subscriptions"><a class="toggle-content" data-trigger-id="1">Subscriptions</a></h1>
+<ul class="hidden" data-hidden="true" data-height="528" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/quickstart">Quickstart</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/creating" data-trigger-id="18">Creating Subscriptions</a>
+      <ul data-collapsable="false" data-height="168">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/multiplan">Using Multiple Plans</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/discounts">Applying Discounts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/trials">Using Trial Periods</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/quantities">Setting Quantities</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/taxes">Adding Taxes</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/multiple">Multiple Subscriptions</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/lifecycle">Lifecycle &amp; Events</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/webhooks">Using Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/changing" data-trigger-id="19">Changing Subscriptions</a>
+      <ul data-collapsable="false" data-height="84">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/upgrading-downgrading">Upgrading &amp; Downgrading</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/billing-cycle">Billing Cycle</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/canceling-pausing">Canceling &amp; Pausing</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/invoices" data-trigger-id="20">Working with Invoices</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/ach-credit">ACH Credit Transfers</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/plans">Managing Plans</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/subscriptions/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="connect"><a class="toggle-content" data-trigger-id="2">Connect</a></h1>
+<ul class="" data-height="566" style="opacity: 1; height: 566px;">
+    <li>
+      <a href="https://stripe.com/docs/connect">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/quickstart">Quickstart</a>
+    </li>
+    <li class="category">Account Types
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/accounts">Accounts Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/standard-accounts">Standard</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/express-accounts">Express</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/custom-accounts" data-trigger-id="21">Custom</a>
+      <ul class="hidden" data-hidden="true" data-height="84" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/connect/updating-accounts">Updating Accounts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/identity-verification">Identity Verification</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/required-verification-information">Required Info</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="category">Processing Payments
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/charges" data-trigger-id="22">Creating Charges</a>
+      <ul class="hidden" data-hidden="true" data-height="104" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/connect/direct-charges">Direct Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/destination-charges">Destination Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/charges-transfers">Separate Charges and Transfers</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/account-debits">Account Debits</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/subscriptions">Using Subscriptions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/currencies">Multiple Currencies</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/account-balances">Account Balances</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/payouts">Bank Payouts</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/connect/best-practices">Best Practices</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/migrating">Migrating</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/reference" class="selected">OAuth Reference</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/webhooks">Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="sigma"><a class="toggle-content" data-trigger-id="3">Sigma</a></h1>
+<ul class="hidden" data-hidden="true" data-height="150" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/sigma">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/transactions">Transactions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/subscriptions">Subscriptions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/connect">Connect</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/scheduled-queries">Scheduled Queries</a>
+    </li>
+</ul>
+
+          <h1 class="radar"><a class="toggle-content" data-trigger-id="4">Radar</a></h1>
+<ul class="hidden" data-hidden="true" data-height="248" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/radar">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/risk-evaluation">Risk Evaluation</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/blocklist">Blocklist</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/review" data-trigger-id="23">Review</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/radar/review/auth-and-capture">Uncaptured Payments</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/rules" data-trigger-id="24">Rules</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/radar/rules/reference">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/radar/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="relay"><a class="toggle-content" data-trigger-id="5">Relay</a></h1>
+<ul class="hidden" data-hidden="true" data-height="94" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/relay">Selling in Other Apps</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/relay/apps-guide" data-trigger-id="25">Accepting Orders in Your App</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/relay/apps-error-guide">Error Handling</a>
+    </li>
+</ul>
+
+    </li>
+</ul>
+
+          <h1 class="account"><a class="toggle-content" data-trigger-id="6">Account</a></h1>
+<ul class="hidden" data-hidden="true" data-height="150" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/dashboard">Your Account</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/dashboard/receipts">Email Receipts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/checklist">Going Live Checklist</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/reporting">Reporting</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/dashboard/search">Search</a>
+    </li>
+</ul>
+
+          <h1 class="api"><a class="toggle-content" data-trigger-id="7">Development</a></h1>
+<ul class="hidden" data-hidden="true" data-height="206" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/libraries">API Libraries</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/upgrades">API Upgrades</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/webhooks">Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/building-integrations">Building Integrations</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/building-plugins">Building Plugins &amp; Libraries</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/recipes">Recipes</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/security">Security</a>
+    </li>
+</ul>
+
+          <h1 class="atlas"><a class="toggle-content" data-trigger-id="8">Atlas</a></h1>
+<ul class="hidden" data-hidden="true" data-height="122" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/atlas">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/application">Application</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/account-progress">Account Progress</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/next">What's Next</a>
+    </li>
+</ul>
+
+          <h1 class="references"><a href="https://stripe.com/docs/api" class="external" target="_blank">API Reference</a></h1>
+        </nav>
+      </div>
+      <div id="content-wrapper" tabindex="0">
+        <div class="overlay"></div>
+          <div class="search-results">
+            <ul class="results"></ul>
+          </div>
+          <form class="search">
+            <input type="search" placeholder="Search documentation...">
+            <div class="search-after">
+              <span class="search-text"></span>
+              <span class="search-after-text--no-results">— No Results</span>
+            </div>
+          </form>
+        <header id="main-header">
+          <nav>
+            <ul class="external">
+              <li><a href="https://support.stripe.com/">Support</a></li>
+
+              <li class="button">
+                <a data-adroll-segment="submit_two" href="https://dashboard.stripe.com/login">Sign in</a>
+              </li>
+            </ul>
+          </nav>
+        </header>
+        <article id="content"><header>
+  <h1>Connect OAuth Reference</h1>
+  <p>This reference lists available public methods for our OAuth endpoints for <a href="https://stripe.com/connect">Connect</a>.</p>
+</header>
+
+<section>
+  <aside class="note">
+<h3 id="account-types">Account types<a class="anchor" href="https://stripe.com/docs/connect/oauth-reference#account-types"></a></h3>
+<p>Connect platforms can work with three different <a href="https://stripe.com/docs/connect/accounts">account types</a>.
+The content on this page only applies to Standard and Express accounts.
+</p>
+</aside>
+
+<p>The OAuth Connect flow allows you to customize the user’s experience by passing additional parameters to Stripe. Some common examples are explained below, and the rest of the reference lists every possible option.</p>
+
+<h3 id="prefilling-fields">Prefilling fields<a class="anchor" href="https://stripe.com/docs/connect/oauth-reference#prefilling-fields"></a></h3>
+
+<p>Provide the best possible user experience for users needing to create a new Stripe account by prefilling the account form fields with information you already have, like the user’s email and name. Prefilling has no effect if your user already has an existing Stripe account.</p>
+
+<h3 id="sending-to-the-login-page">Sending to the login page<a class="anchor" href="https://stripe.com/docs/connect/oauth-reference#sending-to-the-login-page"></a></h3>
+
+<p>If you know your user has a Stripe account already, use the <code>stripe_landing</code> parameter, with a value of <strong>login</strong>, to have Stripe show a login screen instead of the default account application.</p>
+
+<h3 id="redirect-uri">Dynamically setting the redirect URI<a class="anchor" href="https://stripe.com/docs/connect/oauth-reference#redirect-uri"></a></h3>
+
+<p>For security purposes, Stripe only redirects a user to a predefined URI. However, Connect allows you to define more than one redirect URI, which can be used to further customize the user’s experience. For example, you could have some of your users redirected back to <strong>https://sub1.example.com</strong> and others sent to <strong>https://sub2.example.com</strong>.</p>
+
+<p>To dynamically set the redirect URI:</p>
+
+<ol>
+  <li>In your <a href="https://dashboard.stripe.com/account/applications/settings">platform settings</a>, set the redirect URIs to a comma-separated list of allowed URIs.</li>
+  <li>Add a <code>redirect_uri</code> parameter to your authorization request with a value found in your comma-separated list.</li>
+</ol>
+<div class="code" data-language="url">
+  <pre class=" wrap language-url"><code class=" language-url">https://connect.stripe.com/oauth/authorize?<span class="token parameter">response_type</span>=<span class="token value">code</span>&amp;<span class="token parameter">client_id</span>=<span class="token value">ca_32D88BD1qLklliziD7gYQvctJIhWBSQ7</span>&amp;<span class="token parameter">scope</span>=<span class="token value">read_write</span>&amp;<span class="token parameter">redirect_uri</span>=<span class="token value">https://sub2.example.com</span></code></pre>
+</div>
+
+<p>The first URI in your comma-separated list is always be treated as the default.</p>
+</section>
+
+<section>
+<h2 id="express-account-differences">Express account differences<a class="anchor" href="https://stripe.com/docs/connect/oauth-reference#express-account-differences"></a></h2>
+
+<p>The reference information below mostly applies to both <a href="https://stripe.com/docs/connect/standard-accounts">Standard</a> and <a href="https://stripe.com/docs/connect/express-accounts">Express</a> accounts except for the following differences with Express:</p>
+
+<ul>
+  <li>The authorization URL is <strong>https://connect.stripe.com/express/oauth/authorize</strong> (still a GET request, though)</li>
+  <li>You don’t need to request a <code>scope</code> (we’ll always return <strong>express</strong>)</li>
+  <li>Only the <code>stripe_user[phone_number]</code>, <code>stripe_user[email]</code>, <code>stripe_user[first_name]</code>, and <code>stripe_user[last_name]</code> fields can be prefilled</li>
+</ul></section>
+
+<section>
+  <h2 id="get-authorize">GET https://connect.stripe.com/oauth/authorize<a class="anchor" href="https://stripe.com/docs/connect/oauth-reference#get-authorize"></a></h2>
+
+  <p>This endpoint sends the user to Stripe to connect to your platform.</p>
+
+  <h3 id="get-authorize-request">Request<a class="anchor" href="https://stripe.com/docs/connect/oauth-reference#get-authorize-request"></a></h3>
+  <table class="reference">
+    <thead>
+      <tr><th>Parameter</th>
+      <th>Description</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td style="width:40%;"><code>client_id</code></td>
+        <td>
+          <p>The unique identifier provided to your application, found in your <a href="https://dashboard.stripe.com/account/applications/settings">application settings</a>.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>response_type</code></td>
+        <td>
+          <p>The only option at the moment is <strong>code</strong>.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>redirect_uri</code><span class="tag optional">Optional</span></td>
+        <td>
+          <p>The URL for the authorize <a href="https://stripe.com/docs/connect/oauth-reference#get-authorize-response">response</a> redirect. If provided, this must exactly match one of the comma-separated <code>redirect_uri</code> values in your <a href="https://dashboard.stripe.com/account/applications/settings">application settings</a>.</p>
+
+          <p>To protect yourself from certain forms of man-in-the-middle attacks, the live mode <code>redirect_uri</code> must use a secure HTTPS connection.</p>
+
+          <p>Defaults to the <code>redirect_uri</code> in your application settings if not provided.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>scope</code><span class="tag optional">Optional</span></td>
+        <td>
+          <p><strong>read_write</strong> or <strong>read_only</strong>, depending on the level of access you need.</p>
+
+          <p>Defaults to <strong>read_only</strong>.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>state</code><span class="tag optional">Optional</span></td>
+        <td>
+          <p>An arbitrary string value we will pass back to you, useful for CSRF protection.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_landing</code><span class="tag optional">Optional</span></td>
+        <td>
+          <p><strong>login</strong> or <strong>register</strong>, depending on what type of screen you want your users to see. Only override this to be <strong>login</strong> if you expect all your users to have Stripe accounts already (e.g., most read-only applications, like analytics dashboards or accounting software).</p>
+
+          <p>Defaults to <strong>login</strong> for scope <strong>read_only</strong> and <strong>register</strong> for scope <strong>read_write</strong>.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>always_prompt</code><span class="tag optional">Optional</span></td>
+        <td>
+          <p>Boolean to indicate that the user should always be asked to connect, even if they're already connected.</p>
+
+          <p>Defaults to <strong>false</strong>.</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>The following query string parameters are all optional; we will use them to prefill details in the account form for new users. Some prefilled fields (e.g., URL or product category) may be automatically hidden from the user's view. Any parameters with invalid values will be silently ignored. </p>
+
+  <table class="reference">
+    <thead>
+      <tr><th>Parameter</th>
+      <th>Description</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td style="width:40%;"><code>stripe_user[email]</code><span class="tag recommended">Recommended</span></td>
+        <td>
+          <p>The user's email address. Must be a valid email format.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[url]</code><span class="tag recommended">Recommended</span></td>
+        <td>
+          <p>The URL for the user's business. This may be the user's website, a profile page within your application, or another publicly available profile for the business, such as a LinkedIn or Facebook profile.</p>
+
+          <p>Must be URL-encoded and include a scheme (<strong>http</strong> or <strong>https</strong>).</p>
+
+          <p>If you will be prefilling this field, we highly recommend that the linked page contain a description of the user's products or services and their contact information. If we don't have enough information, we'll have to reach out to the user directly before initiating payouts.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[country]</code></td>
+        <td>
+          <p>Two-letter country code (e.g., <strong>US</strong> or <strong>CA</strong>).</p>
+          <p>Must be a country that Stripe currently supports.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[phone_number]</code></td>
+        <td>
+          <p>The business phone number. Must be 10 digits only.</p>
+          <p>Must also prefill <code>stripe_user[country]</code> with the corresponding country.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[business_name]</code></td>
+        <td>
+          <p>The legal name of the business, also used for the statement descriptor.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[business_type]</code></td>
+        <td>
+          <p>The type of the business.</p>
+          <p>Must be one of <strong>sole_prop</strong>, <strong>corporation</strong>, <strong>non_profit</strong>, <strong>partnership</strong>, or <strong>llc</strong>.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[first_name]</code></td>
+        <td>
+          <p>First name of the person who will be filling out a Stripe application.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[last_name]</code></td>
+        <td>
+          <p>Last name of the person who will be filling out a Stripe application.</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <code>stripe_user[dob_day]</code>
+          <code>stripe_user[dob_month]</code>
+          <code>stripe_user[dob_year]</code>
+        </td>
+        <td>
+          <p>Day (<strong>0</strong>-<strong>31</strong>), month (<strong>1</strong>-<strong>12</strong>), and year (<strong>YYYY</strong>, greater than 1900) for the birth date of the person who will be filling out a Stripe application.</p>
+          <p>All three are required.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[street_address]</code></td>
+        <td>
+          <p>Street address of the business.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[city]</code></td>
+        <td>
+          <p>Address city of the business.</p>
+          <p>We highly recommend that you also prefill <code>stripe_user[country]</code> with the corresponding country.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[state]</code></td>
+        <td>
+          <p>Address state of the business. Must be the two-letter state or province code (e.g., <strong>NY</strong> for a U.S. business or <strong>AB</strong> for a Canadian one).</p>
+          <p>Must also prefill <code>stripe_user[country]</code> with the corresponding country.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[zip]</code></td>
+        <td>
+          <p>Address ZIP code of the business. Must be a string.</p>
+          <p>We highly recommend that you also prefill <code>stripe_user[country]</code> with the corresponding country.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[physical_product]</code></td>
+        <td>
+          <p>A string: <strong>true</strong> if the user sells a physical product, <strong>false</strong> otherwise.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[shipping_days]</code></td>
+        <td>
+          <p>Only used if the user sells a physical product, an integer that
+            represents the average number of days it takes this business to ship a product.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[product_category]</code></td>
+        <td>
+          <p>The type of product this business deals with. Should be one of these values:</p>
+          <ul>
+              <li><strong>art_and_graphic_design</strong></li>
+              <li><strong>advertising</strong></li>
+              <li><strong>charity</strong></li>
+              <li><strong>clothing_and_accessories</strong></li>
+              <li><strong>consulting</strong></li>
+              <li><strong>clubs_and_membership_organizations</strong></li>
+              <li><strong>education</strong></li>
+              <li><strong>events_and_ticketing</strong></li>
+              <li><strong>food_and_restaurants</strong></li>
+              <li><strong>software</strong></li>
+              <li><strong>professional_services</strong></li>
+              <li><strong>tourism_and_travel</strong></li>
+              <li><strong>web_development</strong></li>
+              <li><strong>other</strong></li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[product_description]</code></td>
+        <td>
+          <p>A description of what the business is accepting payments for.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[average_payment]</code></td>
+        <td>
+          <p>Average amount per payment for the business. Must be an integer in dollars (e.g., <strong>10000</strong> for $10,000).</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[past_year_volume]</code></td>
+        <td>
+          <p>The estimated past year's volume for the business. Must be an integer in dollars (e.g., <strong>10000</strong> for $10,000.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[currency]</code></td>
+        <td>
+          <p>Three-letter <a href="http://en.wikipedia.org/wiki/ISO_4217">ISO code</a> representing currency, in lowercase (e.g., <strong>usd</strong> or <strong>cad</strong>).</p>
+          <p>Must be a valid country and currency combination that Stripe supports.</p>
+          <p>Must prefill <code>stripe_user[country]</code> with the corresponding country.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[first_name_kana]</code></td>
+        <td>
+          <p>The Kana variation of the first name of the person who will be filling out a Stripe application.</p>
+          <p>Must prefill <code>stripe_user[country]</code> with <strong>JP</strong>, as this parameter is only relevant for Japan.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[first_name_kanji]</code></td>
+        <td>
+          <p>The Kanji variation of the first name of the person who will be filling out a Stripe application.</p>
+          <p>Must prefill <code>stripe_user[country]</code> with <strong>JP</strong>, as this parameter is only relevant for Japan.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[last_name_kana]</code></td>
+        <td>
+          <p>The Kana variation of the last name of the person who will be filling out a Stripe application.</p>
+          <p>Must prefill <code>stripe_user[country]</code> with <strong>JP</strong>, as this parameter is only relevant for Japan.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[last_name_kanji]</code></td>
+        <td>
+          <p>The Kanji variation of the last name of the person who will be filling out a Stripe application.</p>
+          <p>Must prefill <code>stripe_user[country]</code> with <strong>JP</strong>, as this parameter is only relevant for Japan.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[gender]</code></td>
+        <td>
+          <p>The gender of the person who will be filling out a Stripe application. (International regulations require either <strong>male</strong> or <strong>female</strong>.)</p>
+          <p>Must prefill <code>stripe_user[country]</code> with <strong>JP</strong>, as this parameter is only relevant for Japan.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[block_kana]</code></td>
+        <td>
+          <p>The Kana variation of the address block.</p>
+          <p>Must prefill <code>stripe_user[country]</code> with <strong>JP</strong>, as this parameter is only relevant for Japan.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[block_kanji]</code></td>
+        <td>
+          <p>The Kanji variation of the address block.</p>
+          <p>Must prefill <code>stripe_user[country]</code> with <strong>JP</strong>, as this parameter is only relevant for Japan.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[building_kana]</code></td>
+        <td>
+          <p>The Kana variation of the address building.</p>
+          <p>Must prefill <code>stripe_user[country]</code> with <strong>JP</strong>, as this parameter is only relevant for Japan.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user[building_kanji]</code></td>
+        <td>
+          <p>The Kanji variation of the address building.</p>
+          <p>Must prefill <code>stripe_user[country]</code> with <strong>JP</strong>, as this parameter is only relevant for Japan.</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="get-authorize-response">Response<a class="anchor" href="https://stripe.com/docs/connect/oauth-reference#get-authorize-response"></a></h3>
+  <p>The user's browser is redirected back to your <a href="https://dashboard.stripe.com/account/applications/settings">configured redirect URI</a> or the value you passed in the <code>redirect_uri</code> parameter. When successful, you should receive the following query parameters:</p>
+
+  <table class="reference">
+    <thead>
+      <tr><th>Parameter</th>
+      <th>Description</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td style="width:40%;"><code>code</code></td>
+        <td>
+          <p>An authorization code you can use in the next call to get an access token for your user. This can only be used once and expires in 5 minutes.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>scope</code></td>
+        <td>
+          <p><strong>read_write</strong> or <strong>read_only</strong>, depending what you passed on the initial GET request.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>state</code></td>
+        <td>
+          <p>The value of the <code>state</code> parameter you provided on the initial GET request.</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="get-authorize-errors">Error Response<a class="anchor" href="https://stripe.com/docs/connect/oauth-reference#get-authorize-errors"></a></h3>
+  <p>In case of an error, the user's browser will not be redirected except in the case of <code>access_denied</code>. Instead, errors will be returned in a JSON dictionary with the following fields:</p>
+
+  <table class="reference">
+    <thead>
+      <tr><th>Parameter</th>
+      <th>Description</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td style="width:40%;"><code>error</code></td>
+        <td>
+          <p>A unique <a href="https://stripe.com/docs/connect/oauth-reference#get-authorize-error-codes">error code</a> per error type.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>error_description</code></td>
+        <td>
+          <p>A human readable description of the error.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>state</code></td>
+        <td>
+          <p>The value of the <code>state</code> parameter you provided on the initial GET request.</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="get-authorize-error-codes">Error Codes<a class="anchor" href="https://stripe.com/docs/connect/oauth-reference#get-authorize-error-codes"></a></h3>
+
+  <table class="reference">
+    <thead>
+      <tr><th>Parameter</th>
+      <th>Description</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td style="width:40%;"><code>access_denied</code></td>
+        <td>
+          <p>User denied authorization.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>invalid_scope</code></td>
+        <td>
+          <p>Invalid <code>scope</code> parameter provided.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>invalid_redirect_uri</code></td>
+        <td>
+          <p>Provided <code>redirect_uri</code> parameter is either an invalid URL or is not allowed by your <a href="https://dashboard.stripe.com/account/applications/settings">application settings</a>.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>invalid_request</code></td>
+        <td>
+          <p>Missing <code>response_type</code> parameter.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>unsupported_response_type</code></td>
+        <td>
+          <p>Unsupported <code>response_type</code> parameter. Currently the only supported <code>response_type</code> is <strong>code</strong>.</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2 id="post-token">POST https://connect.stripe.com/oauth/token<a class="anchor" href="https://stripe.com/docs/connect/oauth-reference#post-token"></a></h2>
+
+  <p>This endpoint is used both for turning an <code>authorization_code</code> into an <code>access_token</code>, and for getting a new access token using a <code>refresh_token</code>.</p>
+
+  <h3 id="post-token-request">Request<a class="anchor" href="https://stripe.com/docs/connect/oauth-reference#post-token-request"></a></h3>
+  <p>This call should be made using your secret API key as a <code>client_secret</code> POST parameter:</p>
+
+<div class="code" data-language="curl">
+  <pre class=" numbered language-curl"><code class=" language-curl"><span class="token curl">curl</span> <span class="token url">https://connect.stripe.com/oauth/token</span> \
+<span class="token option">   -d</span> <span class="token parameter">client_secret</span>=<span class="token value"></span><span class="token value">"{SECRET_API_KEY}"</span>
+</code><span class="line-numbers"><span></span><span></span></span></pre>
+</div>
+
+  <p>When converting an authorization code to an access token, you must use an API key that matches the mode—live or test—of the authorization code (which depends on whether the <code>client_id</code> used was production or development).</p>
+
+  <p>When using a refresh token to request an access token, you may use either a test or live API key to obtain a test or live access token respectively. Any existing access token with the same scope and mode—live or test—will be revoked.</p>
+
+  <table class="reference">
+    <thead>
+      <tr><th>Parameter</th>
+      <th>Description</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td style="width:40%;"><code>grant_type</code></td>
+        <td>
+          <p><strong>authorization_code</strong> when turning an authorization code into an access token, or <strong>refresh_token</strong> when using a refresh token to get a new access token.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>code</code> or <code>refresh_token</code></td>
+        <td>
+          <p>The value of the <code>code</code> or <code>refresh_token</code>, depending on the <code>grant_type</code>.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>scope</code><span class="tag optional">Optional</span></td>
+        <td>
+          <p>When requesting a new access token from a refresh token, any scope that has an equal or lesser scope as the refresh token. Has no effect when requesting an access token from an authorization code.</p>
+          <p>Defaults to the scope of the refresh token.</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="post-token-response">Response<a class="anchor" href="https://stripe.com/docs/connect/oauth-reference#post-token-response"></a></h3>
+  <table class="reference">
+    <thead>
+      <tr><th>Parameter</th>
+      <th>Description</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td style="width:40%;"><code>access_token</code></td>
+        <td>
+          <p>The access token you can use to make requests on behalf of this Stripe account. Use it as you would any Stripe secret API key.</p>
+          <p>This key does not expire, but may be revoked by the user at any time (you'll get a <code>account.application.deauthorized</code> <a href="https://stripe.com/docs/api#list_events">webhook event</a> when this happens).</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>scope</code></td>
+        <td>
+          <p>The scope granted to the access token, depending on the scope of the authorization code and <code>scope</code> parameter.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>livemode</code></td>
+        <td>
+          <p>The live mode indicator for the token. If <strong>true</strong>, the <code>access_token</code> can be used as a live secret key. If <strong>false</strong>, the <code>access_token</code> can be used as a test secret key.</p>
+          <p>Depends on the mode of the secret API key used to make the request.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>token_type</code></td>
+        <td>
+          <p>Will always have a value of <strong>bearer</strong>.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>refresh_token</code></td>
+        <td>
+          <p>Can be used to get a new access token of an equal or lesser scope, or of a different live mode (where <a href="https://stripe.com/docs/connect/testing#test-keys-for-livemode-applications">applicable</a>).</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user_id</code></td>
+        <td>
+          <p>The unique id of the account you have been granted access to, as a string.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_publishable_key</code></td>
+        <td>
+          <p>A publishable key that can be used with this account. Matches the mode---live or test---of the token.</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="post-token-errors">Error Response<a class="anchor" href="https://stripe.com/docs/connect/oauth-reference#post-token-errors"></a></h3>
+  <table class="reference">
+    <thead>
+      <tr><th>Parameter</th>
+      <th>Description</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td style="width:40%;"><code>error</code></td>
+        <td>
+          <p>A unique <a href="https://stripe.com/docs/connect/oauth-reference#post-token-error-codes">error code</a> per error type.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>error_description</code></td>
+        <td>
+          <p>A human readable description of the error.</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="post-token-error-codes">Error Codes<a class="anchor" href="https://stripe.com/docs/connect/oauth-reference#post-token-error-codes"></a></h3>
+  <table class="reference">
+    <thead>
+      <tr><th>Parameter</th>
+      <th>Description</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td style="width:40%;"><code>invalid_request</code></td>
+        <td>
+          <p>
+            No <code>code</code>, <code>refresh_token</code>, or <code>grant_type</code> parameter provided (where required).
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>invalid_grant</code></td>
+        <td>
+          <p>
+            A variety of things can prompt this error:
+
+            </p><ul>
+              <li><code>code</code> does not exist, is expired, has been used, or does not belong to you</li>
+              <li><code>refresh_token</code> does not exist or does not belong to you</li>
+              <li>API key mode (live or test mode) does not match the <code>code</code> or <code>refresh_token</code> mode</li>
+            </ul>
+          <p></p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>unsupported_grant_type</code></td>
+        <td>
+          <p>
+            Unsupported <code>grant_type</code> parameter specified. The only currently supported types are <strong>authorization_code</strong> and <strong>refresh_token</strong>.
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>invalid_scope</code></td>
+        <td>
+          <p>Invalid <code>scope</code> parameter provided.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>unsupported_response_type</code></td>
+        <td>
+          <p>Unsupported <code>response_type</code> parameter. Currently the only supported <code>response_type</code> is <strong>code</strong>.</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2 id="post-deauthorize">POST https://connect.stripe.com/oauth/deauthorize<a class="anchor" href="https://stripe.com/docs/connect/oauth-reference#post-deauthorize"></a></h2>
+  <p>This endpoint is used for revoking access to an account.</p>
+
+  <h3 id="post-deauthorize-request">Request<a class="anchor" href="https://stripe.com/docs/connect/oauth-reference#post-deauthorize-request"></a></h3>
+  <p>This call should be made using your secret API key as an Authorization header.</p>
+
+  <p>When revoking access to an account, you must use an API key that matches the mode---live or test---of the authorization code (which depends on whether the <code>client_id</code> used was production or development).</p>
+
+  <table class="reference">
+    <thead>
+      <tr><th>Parameter</th>
+      <th>Description</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td style="width:40%;"><code>client_id</code></td>
+        <td>
+          <p>The <code>client_id</code> of the application that you'd like to disconnect the account from. The account must be connected to this application.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>stripe_user_id</code></td>
+        <td>
+          <p>The account you'd like to disconnect from.</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="post-deauthorize-response">Response<a class="anchor" href="https://stripe.com/docs/connect/oauth-reference#post-deauthorize-response"></a></h3>
+  <table class="reference">
+    <thead>
+      <tr><th>Parameter</th>
+      <th>Description</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td style="width:40%;"><code>stripe_user_id</code></td>
+        <td>
+          <p>The unique id of the account you have revoked access to, as a string. This is the same as the <code>stripe_user_id</code> you passed in. If this is returned, the revocation was successful.</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="post-token-errors">Error Response<a class="anchor" href="https://stripe.com/docs/connect/oauth-reference#post-token-errors"></a></h3>
+  <table class="reference">
+    <thead>
+      <tr><th>Parameter</th>
+      <th>Description</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td style="width:40%;"><code>error</code></td>
+        <td>
+          <p>A unique <a href="https://stripe.com/docs/connect/oauth-reference#post-token-error-codes">error code</a> per error type.</p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>error_description</code></td>
+        <td>
+          <p>A human readable description of the error.</p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="post-deauthorize-error-codes">Error Codes<a class="anchor" href="https://stripe.com/docs/connect/oauth-reference#post-deauthorize-error-codes"></a></h3>
+  <table class="reference">
+    <thead>
+      <tr><th>Parameter</th>
+      <th>Description</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td style="width:40%;"><code>invalid_request</code></td>
+        <td>
+          <p>
+            No <code>client_id</code> or <code>stripe_user_id</code> parameter provided (where required).
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <td><code>invalid_client</code></td>
+        <td>
+          <p>
+            A variety of things can prompt this error:
+
+            </p><ul>
+              <li><code>client_id</code> does not belong to you</li>
+              <li><code>stripe_user_id</code> does not exist or is not connect to your application</li>
+              <li>API key mode (live or test mode) does not match the <code>client_id</code> mode</li>
+            </ul>
+          <p></p>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</section>
+<footer>
+  <h2 data-no-anchor="">Questions?</h2>
+  <p>We're always happy to help with code or other questions you might have! <a href="https://stripe.com/docs/connect/oauth-reference#" class="search-link">Search</a> our documentation, <a href="https://support.stripe.com/email">contact support</a>, or <a href="https://stripe.com/contact/sales">connect with our sales team</a>. You can also chat live with other developers in <a href="irc://irc.freenode.net/stripe">#stripe</a> on freenode.</p>
+</footer>
+</article>
+      </div>
+    </div>
+
+    <div id="loading-bar" class="hidden" style="width: 100%;"></div>
+
+    <script src="./Connect OAuth Reference_files/jquery.min-356cfe6f83a29dcc6fd2cd9ac777637e.js"></script>
+    <script src="./Connect OAuth Reference_files/prism-d97c2fbc02243c145440b270c43ec26b.js"></script>
+    <script src="./Connect OAuth Reference_files/dynamics.min-f8b2e1648525e57b196b53792a19cda3.js"></script>
+    <script src="./Connect OAuth Reference_files/jquery.cookie-368e8ec1948575a79f6830f8d13db348.js"></script>
+    <script src="./Connect OAuth Reference_files/documentation-9d21cec0f3371635162f9c978350719d.js"></script>
+      <script src="./Connect OAuth Reference_files/algoliasearch-ccb98f296c1e54994357b8d396b3ce13.js"></script>
+      <script src="./Connect OAuth Reference_files/documentation-search-76a887ea03340dcf4d184728b1daad3d.js"></script>
+    <script>
+      parseKey("sk_test_BQokikJOvBiI2HlWgH4olfQ2", "secret-key", null);
+      parseKey("pk_test_6pRNASCoBOKtIshFeQd4XMUh", "publishable-key", null);
+    </script>
+      <script type="text/javascript" src="./Connect OAuth Reference_files/saved_resource"></script>
+  <script type="text/javascript" src="./Connect OAuth Reference_files/saved_resource(1)"></script>
+
+    
+    
+
+<script type="application/json" id="site-analytics-config">{"generalAnalyticsConfig":{"mixpanel":{"identifier":"eb71b6171a4f7ed97de9b7a0395b7ca5"},"ga":{},"trackpage":true,"flags":{"site.experiments.home_page_cta":true,"site.experiments.nav_login_cta":false,"site.experiments.get_started_copy":false,"site.experiments.request_demo_copy":false,"site.experiments.contact_sales_content":false},"locale":"en"},"siteSpecificAnalyticsConfig":{"trackPageViewed":false}}</script>
+
+
+<!-- Google Tag Manager (noscript) -->
+<noscript>&lt;iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K8JKCBR"
+height="0" width="0" style="display:none;visibility:hidden"&gt;&lt;/iframe&gt;</noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+<script defer="" src="./Connect OAuth Reference_files/analytics.min.js"></script>
+<script defer="" src="./Connect OAuth Reference_files/stripe-m-preview.js"></script>
+ 
+    <script src="./Connect OAuth Reference_files/documentation-analytics-7e4ac19718751588692cdd0955dba883.js"></script>
+  
+
+<div id="MultiLookup" style="opacity: 0.8" class="black"></div><div id="dict" class="card-panel grey lighten-4"><div id="dict-inner"></div><img id="toktogi-lock" class="toktogi-icon" src="chrome-extension://domfinmkohodhgghgedfdcmonefafolm/images/unlock.png"></div><div id="toktogi-notification" class="card-panel grey lighten-4">Toktogi is on</div><iframe frameborder="0" allowtransparency="true" scrolling="no" name="__privateStripeMetricsController0" allowpaymentrequest="true" src="./Connect OAuth Reference_files/outer.html" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important;"></iframe></body><div></div></html>

@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<!-- saved from url=(0041)https://stripe.com/docs/connect/migrating -->
+<html lang="en" data-ember-extension="1"><script type="text/javascript" async="" src="./Recipient to Account Migrations_files/mixpanel-2.2.min.js"></script><script async="" src="./Recipient to Account Migrations_files/analytics.js"></script><script async="" src="./Recipient to Account Migrations_files/gtm.js"></script><script src="./Recipient to Account Migrations_files/742650679237989" async=""></script><script async="" src="./Recipient to Account Migrations_files/fbevents.js"></script><script type="text/javascript">window["_gaUserPrefs"] = { ioo : function() { return true; } }</script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    <meta name="google-site-verification" content="f0LCrdI6z4Fo8zld4sHCgo5SiUE4EYYRUa6KVeX3Mw8">
+    <meta name="csrf-token" content="ACmByp9VS-5dgI-ZXH4IDjQKupcbFRMLHUfMREA8ebLWGyvN9zdYqelEZg-tdQCE2ww411MvMRPNy_WDfbOyUg==">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Recipient to Account Migrations</title>
+
+    <meta name="description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+
+
+    <link rel="shortcut icon" href="https://stripe.com/favicon.ico">
+
+    <link rel="apple-touch-icon-precomposed" href="https://stripe.com/img/apple-touch-icon/180x180.png">
+    <link rel="icon" href="https://stripe.com/img/apple-touch-icon/180x180.png">
+
+
+    <link rel="image_src" type="image/png" href="https://stripe.com/img/v3/home/social.png">
+
+
+        <link rel="canonical" href="https://stripe.com/docs/connect/authentication">
+
+    <meta property="og:title" content="Authentication with Connect">
+    <meta property="og:url" content="https://stripe.com/docs/connect/authentication">
+    <meta property="og:description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+    <meta property="og:image" content="https://stripe.com/img/v3/home/social.png">
+
+      <meta name="twitter:card" content="summary">
+      <meta name="twitter:image" content="https://stripe.com/img/v3/home/twitter.png">
+    <meta name="twitter:site" content="@stripe">
+    <meta name="twitter:title" content="Authentication with Connect">
+    <meta name="twitter:description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+
+
+    <script type="application/json" id="strut_files">{&quot;v3/shared/navigation_ie10.css&quot;:&quot;/assets/v3/shared/navigation_ie10-fad8432db8a0ef02ccfc88df4a0b8535.css&quot;}</script>
+
+    
+
+    
+
+    <link rel="stylesheet" href="./Recipient to Account Migrations_files/default-6388c486f7388db1252f0d7c85db5e15.css">
+    <link rel="stylesheet" href="./Recipient to Account Migrations_files/common-966a7c7414d89c40541b15f2adfa6a26.css">
+    <link rel="stylesheet" href="./Recipient to Account Migrations_files/base-3cdaeb306a5f322afd95a5e0122a3388.css">
+    <link rel="stylesheet" href="./Recipient to Account Migrations_files/prism_light-6e629a34ce1570d4f33f7e2ee8bebbc2.css">
+    
+    
+    <meta name="viewport" content="width=1060">
+    <meta name="robots" content="noarchive">
+    <link rel="stylesheet" href="./Recipient to Account Migrations_files/connect_button-9fd48f5cd30c2680d9e4a099d67cd9b1.css">
+</head>
+  <body class="">
+    
+    <div id="docs">
+      <div id="sidebar" class="bordered">
+        <div class="logo">
+          <a class="site" href="https://stripe.com/" title="Stripe"></a>
+          <a class="extension" href="https://stripe.com/docs">docs</a>
+        </div>
+        <div class="nav-border"></div>
+        <nav>
+          <h1 class="home"><a href="https://stripe.com/docs">Home</a></h1>
+          <h1 class="payments"><a class="toggle-content" data-trigger-id="0">Payments</a></h1>
+<ul class="hidden" data-hidden="true" data-height="889" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/quickstart">Quickstart</a>
+    </li>
+    <li class="category">Collecting payment details
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/checkout/tutorial" data-trigger-id="9">Checkout</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/checkout">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js" data-trigger-id="10">Stripe.js &amp; Elements</a>
+      <ul class="hidden" data-hidden="true" data-height="112" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/quickstart">Quickstart</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/payment-request-button">Payment Request Button</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/migrating">Migration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/reference">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios" data-trigger-id="11">iOS</a>
+      <ul class="hidden" data-hidden="true" data-height="112" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/standard">Standard Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/custom">Custom Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/apple-pay/apps">Apple Pay in Apps</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/sources">Using Sources</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android" data-trigger-id="12">Android</a>
+      <ul class="hidden" data-hidden="true" data-height="168" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/standard">Standard Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/pay-with-google">Pay with Google</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/alipay-android">Working with Alipay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/android-pay">Android Pay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/customer-information">Customer Information</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/sources">Using Sources</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/saving-cards">Saving Cards</a>
+    </li>
+    <li class="category">Charges
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/charges">Creating Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/declines" data-trigger-id="13">Declines &amp; Failed Payments</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/declines/codes">Decline Codes</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/disputes" data-trigger-id="14">Disputes &amp; Fraud</a>
+      <ul class="hidden" data-hidden="true" data-height="56" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/disputes/categories">Dispute Categories</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/disputes/prevention">Prevention</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/refunds">Refunds</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/payouts">Receiving Payouts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/currencies" data-trigger-id="15">Supported Currencies</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/currencies/conversions">Currency Conversions</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="category">Sources
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources" data-trigger-id="16">Payment Methods</a>
+      <ul class="hidden" data-hidden="true" data-height="308" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/sources/cards">Cards</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/three-d-secure">3D Secure</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/alipay">Alipay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/ach-credit-transfer">ACH Credit Transfer</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/bancontact">Bancontact</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/bitcoin">Bitcoin</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/giropay">Giropay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/ideal">iDEAL</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/p24">P24</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/sepa-debit">SEPA Direct Debit</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/sofort">SOFORT</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/best-practices">Best Practices</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/customers">Sources &amp; Customers</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/connect">Connect Platforms</a>
+    </li>
+    <li class="category">Other Payment Methods
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/ach">ACH</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/amex-express-checkout">Amex Express Checkout</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/apple-pay">Apple Pay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/pay-with-google">Pay with Google</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/payment-request-api">Payment Request API</a>
+    </li>
+    <li class="category">Products &amp; Orders
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders" data-trigger-id="17">Orders</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/orders/guide">Guide</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders/tax-integration">Tax Integrations</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders/shipping-integration">Shipping Integrations</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="subscriptions"><a class="toggle-content" data-trigger-id="1">Subscriptions</a></h1>
+<ul class="hidden" data-hidden="true" data-height="528" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/quickstart">Quickstart</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/creating" data-trigger-id="18">Creating Subscriptions</a>
+      <ul data-collapsable="false" data-height="168">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/multiplan">Using Multiple Plans</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/discounts">Applying Discounts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/trials">Using Trial Periods</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/quantities">Setting Quantities</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/taxes">Adding Taxes</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/multiple">Multiple Subscriptions</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/lifecycle">Lifecycle &amp; Events</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/webhooks">Using Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/changing" data-trigger-id="19">Changing Subscriptions</a>
+      <ul data-collapsable="false" data-height="84">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/upgrading-downgrading">Upgrading &amp; Downgrading</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/billing-cycle">Billing Cycle</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/canceling-pausing">Canceling &amp; Pausing</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/invoices" data-trigger-id="20">Working with Invoices</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/ach-credit">ACH Credit Transfers</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/plans">Managing Plans</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/subscriptions/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="connect"><a class="toggle-content" data-trigger-id="2">Connect</a></h1>
+<ul class="" data-height="566" style="opacity: 1; height: 566px;">
+    <li>
+      <a href="https://stripe.com/docs/connect" class="">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/quickstart" class="">Quickstart</a>
+    </li>
+    <li class="category">Account Types
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/accounts">Accounts Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/standard-accounts">Standard</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/express-accounts">Express</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/custom-accounts" data-trigger-id="21">Custom</a>
+      <ul class="hidden" data-hidden="true" data-height="84" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/connect/updating-accounts">Updating Accounts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/identity-verification">Identity Verification</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/required-verification-information">Required Info</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="category">Processing Payments
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/charges" data-trigger-id="22" class="">Creating Charges</a>
+      <ul class="hidden" data-height="104" style="opacity: 0; height: 0px;" data-hidden="true">
+    <li>
+      <a href="https://stripe.com/docs/connect/direct-charges" class="">Direct Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/destination-charges" class="">Destination Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/charges-transfers" class="">Separate Charges and Transfers</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/account-debits" class="">Account Debits</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/subscriptions" class="">Using Subscriptions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/currencies">Multiple Currencies</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/account-balances" class="">Account Balances</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/payouts" class="">Bank Payouts</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/connect/best-practices" class="">Best Practices</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/migrating" class="selected">Migrating</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/reference" class="">OAuth Reference</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/webhooks" class="">Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="sigma"><a class="toggle-content" data-trigger-id="3">Sigma</a></h1>
+<ul class="hidden" data-hidden="true" data-height="150" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/sigma">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/transactions">Transactions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/subscriptions">Subscriptions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/connect">Connect</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/scheduled-queries">Scheduled Queries</a>
+    </li>
+</ul>
+
+          <h1 class="radar"><a class="toggle-content" data-trigger-id="4">Radar</a></h1>
+<ul class="hidden" data-hidden="true" data-height="248" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/radar">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/risk-evaluation">Risk Evaluation</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/blocklist">Blocklist</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/review" data-trigger-id="23">Review</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/radar/review/auth-and-capture">Uncaptured Payments</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/rules" data-trigger-id="24">Rules</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/radar/rules/reference">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/radar/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="relay"><a class="toggle-content" data-trigger-id="5">Relay</a></h1>
+<ul class="hidden" data-hidden="true" data-height="94" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/relay">Selling in Other Apps</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/relay/apps-guide" data-trigger-id="25">Accepting Orders in Your App</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/relay/apps-error-guide">Error Handling</a>
+    </li>
+</ul>
+
+    </li>
+</ul>
+
+          <h1 class="account"><a class="toggle-content" data-trigger-id="6">Account</a></h1>
+<ul class="hidden" data-hidden="true" data-height="150" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/dashboard">Your Account</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/dashboard/receipts">Email Receipts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/checklist">Going Live Checklist</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/reporting">Reporting</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/dashboard/search">Search</a>
+    </li>
+</ul>
+
+          <h1 class="api"><a class="toggle-content" data-trigger-id="7">Development</a></h1>
+<ul class="hidden" data-hidden="true" data-height="206" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/libraries">API Libraries</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/upgrades">API Upgrades</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/webhooks">Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/building-integrations">Building Integrations</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/building-plugins">Building Plugins &amp; Libraries</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/recipes">Recipes</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/security">Security</a>
+    </li>
+</ul>
+
+          <h1 class="atlas"><a class="toggle-content" data-trigger-id="8">Atlas</a></h1>
+<ul class="hidden" data-hidden="true" data-height="122" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/atlas">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/application">Application</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/account-progress">Account Progress</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/next">What's Next</a>
+    </li>
+</ul>
+
+          <h1 class="references"><a href="https://stripe.com/docs/api" class="external" target="_blank">API Reference</a></h1>
+        </nav>
+      </div>
+      <div id="content-wrapper" tabindex="0">
+        <div class="overlay"></div>
+          <div class="search-results">
+            <ul class="results"></ul>
+          </div>
+          <form class="search">
+            <input type="search" placeholder="Search documentation...">
+            <div class="search-after">
+              <span class="search-text"></span>
+              <span class="search-after-text--no-results">— No Results</span>
+            </div>
+          </form>
+        <header id="main-header">
+          <nav>
+            <ul class="external">
+              <li><a href="https://support.stripe.com/">Support</a></li>
+
+              <li class="button">
+                <a data-adroll-segment="submit_two" href="https://dashboard.stripe.com/login">Sign in</a>
+              </li>
+            </ul>
+          </nav>
+        </header>
+        <article id="content"><header>
+  <h1>Recipient to Account Migrations </h1>
+  <p>Learn how to migrate your existing recipients to <a href="https://stripe.com/connect">Connect</a>.</p>
+</header>
+
+<aside class="important">
+  <p>
+    Recent versions of the Stripe API no longer support Recipients. If you have not yet migrated, you should so immediately. Until you complete your migration, you should upgrade to version <a href="https://stripe.com/docs/upgrades#2017-02-14"><code>2017-02-14</code></a> of the Stripe API but do not advance to newer versions released after that date.
+  </p>
+</aside>
+
+
+<section>
+
+<p><a href="https://stripe.com/docs/api#recipients">Recipients</a> were deprecated in March 2015 and <strong>will be removed from the Stripe API during the first half of 2017.</strong> The replacement is <a href="https://stripe.com/connect">Connect</a>, a powerful set of tools for verifying and paying individuals &amp;businesses through Stripe. If your business currently relies on Recipients, you need to migrate to using Connect as soon as possible. You may have already received communications from Stripe with a timeline and next steps for the transition.</p>
+
+<p>After the Recipients API has been removed, anyone receiving funds through Stripe must have a Stripe account. With Connect, you’ll be able to convert your existing Recipients to Custom accounts. With careful testing, you can make the transition seamless.</p>
+
+<p>To help you transition, we created a migration path for turning your <a href="https://stripe.com/docs/api/#recipient_object">Recipient</a> objects into <a href="https://stripe.com/docs/api/#account_object">Account</a> objects. This guide is designed to address common questions about moving to Connect from Transfer Recipients, help you work through your integration changes, and ease your business’s transition to the new API.</p></section>
+
+<section>
+<h3 id="terminology">Terminology<a class="anchor" href="https://stripe.com/docs/connect/migrating#terminology"></a></h3>
+
+<p>In Connect terms, anyone getting paid is a “provider”, who:</p>
+
+<ul>
+  <li>Has their own <a href="https://stripe.com/docs/api/#account_object">Stripe account</a>.</li>
+  <li>Provides the good or performs the service being sold.</li>
+</ul>
+
+<p>Your business is the “platform” through which providers conduct their business. For example, if you have an on-demand taxi service, the “platform” runs the application which allows customers to book a ride, and the “provider” is the driver who picks up the customer and provides the service. When the ride is complete, the platform pays the provider from funds collected from the customer’s credit card.</p>
+
+<p>Your platform creates a <em>Custom</em> account for each provider who is paid through your application or service. A Custom account is a Stripe account but, unlike a Standard account, does not have access to the full Stripe dashboard. All access to Stripe is managed by and mediated through your platform and Stripe integration. Similar to a Recipient, a Custom account is used to moved funds from Stripe to a bank account or debit card.</p>
+
+<p>Each platform can charge an <strong>Application Fee</strong> as part of payments made to the provider. Continuing the taxi example, the platform might collect 10% of each ride as an “application fee”. This fee should be charged at the time the good or service is paid for.</p>
+
+<h3 id="stripe-connect">Stripe Connect<a class="anchor" href="https://stripe.com/docs/connect/migrating#stripe-connect"></a></h3>
+
+<p>At a high level, Connect offers many advantages over the Recipients API:</p>
+
+<ul>
+  <li>
+    <p>Accounting is built into Connect. It is straightforward to track available <a href="https://stripe.com/docs/connect/account-balances">account balances</a> and transactions across all of your connected Stripe accounts. You’re no longer mixing your operating funds with funds designated for your sellers. You can send a transfer to an account by making a single API call.</p>
+  </li>
+  <li>
+    <p>More powerful features: Every new feature we add to Stripe is immediately available to your providers. You’re able to take advantage of features like <a href="https://stripe.com/docs/api/#update_account-statement_descriptor">custom statement descriptors for each account</a>, automatic transfers, and <a href="https://stripe.com/docs/connect/payouts#instant-payouts">Instant Payouts</a></p>
+  </li>
+  <li>
+    <p>New accounts follow a straightforward <a href="https://stripe.com/docs/connect/identity-verification">verification process</a>, and you are able to collect information from the account as needed rather than ask for it all up front.</p>
+  </li>
+  <li>
+    <p>With Connect, you can pay providers in <a href="https://stripe.com/global">a growing number of countries</a>—anywhere Stripe is available. This allows you to expand your business into new markets without significant engineering effort.</p>
+  </li>
+  <li>
+    <p>As a Connect platform, you have full control over <a href="https://stripe.com/docs/connect/charges">the payment flow</a>. For a given refund, you can choose to have your provider pay the refund, or pay the refund from your platform directly. You also choose whether or not you refund your platform’s fee on the transaction. Previously, with recipients, tracking these type of refunds could only be reconciled with manual programming and accounting.</p>
+  </li>
+  <li>
+    <p>Connect provides a full account history for each connected account, which simplifies the design of any reporting tools, reducing the amount of complexity in your application.</p>
+  </li>
+</ul></section>
+
+<section>
+<h2 id="example-migration-project-plan">Example Migration Project Plan<a class="anchor" href="https://stripe.com/docs/connect/migrating#example-migration-project-plan"></a></h2>
+
+<h3 id="user-facing-communications">User-Facing Communications<a class="anchor" href="https://stripe.com/docs/connect/migrating#user-facing-communications"></a></h3>
+
+<ol>
+  <li>Update your existing Terms of Service to include or link to the <a href="https://stripe.com/connect-account/legal">Stripe Connected Account Agreement</a>.</li>
+  <li>Audit existing recipients, find inactive users, determine how many should be migrated to Connect.</li>
+  <li>Notify existing users of your Terms of Service update.</li>
+</ol>
+
+<h3 id="engineering-changes">Engineering Changes<a class="anchor" href="https://stripe.com/docs/connect/migrating#engineering-changes"></a></h3>
+
+<ol>
+  <li><a href="https://dashboard.stripe.com/account/applications/settings">Register your Connect platform on your Dashboard</a>.</li>
+  <li>Verify that your account meets the necessary <a href="https://stripe.com/docs/connect/migrating#required-api--bindings-versions">API and Bindings Versions</a> to use all features of accounts.</li>
+  <li>Update your application to use the Connect APIs. Before replacing your existing Recipient code, you should use Custom accounts for all new providers on your platform, allowing you to test and debug your Connect implementation without breaking your existing payment flow.
+    <ul>
+      <li>Update your <a href="https://stripe.com/docs/connect/migrating#payment-flow-changes">Payment Flow</a>.</li>
+      <li>Update your use of <a href="https://stripe.com/docs/connect/migrating#transferring-funds">Transfers</a> and decide on transfer schedules for your connected accounts.</li>
+      <li>(Optional) Update your <a href="https://stripe.com/docs/connect/migrating#accounting--reporting">Accounting &amp; Reporting</a>.</li>
+    </ul>
+  </li>
+  <li>Establish a <a href="https://stripe.com/docs/connect/authentication#webhooks">Connect Webhook</a> for your Platform.</li>
+  <li>Build and test your <a href="https://stripe.com/docs/connect/identity-verification">Custom account verification flow.</a></li>
+  <li>Begin to use Custom accounts for all new providers on your platform.</li>
+  <li>Audit existing recipients, find inactive users, determine how many will be migrated.</li>
+  <li><a href="https://stripe.com/docs/connect/migrating#migrating-existing-recipients">Migrate a small batch of recipients.</a>
+   <!-- not strictly an engineering change, will require outreach and coordination with user-facing comms -->
+
+    <ul>
+      <li>Migrating over a few recipients at a time and dealing with errors as they happen will allow you to fix problems with your Connect integration gradually rather than dealing with a variety of different errors all at once.</li>
+    </ul>
+    </li><li>Correct any problems with verification flow.</li>
+
+    <li>Continue to migrate over small batches.</li>
+  
+  <li>Once all recipients are migrated, remove inactive Recipients code from your codebase.</li>
+</ol></section>
+
+<section>
+<h3 id="required-api-ampbindings-versions">Required API &amp;Bindings Versions<a class="anchor" href="https://stripe.com/docs/connect/migrating#required-api-ampbindings-versions"></a></h3>
+
+<p>Connect with Custom accounts may require that you upgrade the Stripe API version on your account. If possible, try to upgrade to version
+ <a href="https://stripe.com/docs/upgrades#2017-02-14"><code>2017-02-14</code></a>, but do not advance to any versions released after that date until you have completed your migration. Newer versions of the Stripe API no longer include support for Recipients. The <strong>minimum</strong> API version for Custom accounts is <a href="https://stripe.com/docs/upgrades#2014-12-17"><code>2014-12-17</code></a>.</p>
+
+<p><strong>Caution:</strong> upgrading the API version on your Stripe account <strong>may cause your existing implementation to break</strong>. Please read through <a href="https://stripe.com/docs/upgrades">API Upgrades</a> for a summary of API changes and proceed with caution.</p>
+
+<p>Verify your API version <a href="https://dashboard.stripe.com/account/apikeys">from your Dashboard</a>. If you have more than one account—for example, an extra account for testing—be sure that you check the API settings on your platform’s account.</p>
+
+<p>Rather than set the new version from your Dashboard, we recommend setting your code to <a href="https://stripe.com/docs/api/#versioning">use a specific version</a>. This allows you test the version upgrade without changing the version for your entire account. Later, when you’re satisfied that your implementation works with the latest API version, go ahead and upgrade your API version through the Dashboard.</p>
+
+<p>You may also need to update the version of the Stripe bindings you’re using in order to use all of the features of Connect. While it’s best to use the latest versions of the Stripe libraries, here are the minimum supported versions for using Connect with Custom accounts:</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Binding</th>
+        <th>Recommended</th>
+        <th>Minimum</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody><tr>
+      <td><a href="https://github.com/stripe/stripe-ruby">stripe-ruby</a></td>
+      <td><a href="https://github.com/stripe/stripe-ruby/releases">1.57.1 or later</a></td>
+      <td>1.19.0</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/stripe/stripe-python">stripe-python</a></td>
+      <td><a href="https://github.com/stripe/stripe-python/releases">1.43.0 or later</a></td>
+      <td>1.19.0</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/stripe/stripe-php">stripe-php</a></td>
+      <td><a href="https://github.com/stripe/stripe-php/releases">4.3.0 or later</a></td>
+      <td>3.10.0</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/stripe/stripe-java">stripe-java</a></td>
+      <td><a href="https://github.com/stripe/stripe-java/releases">3.5.0 or later</a></td>
+      <td>1.27.0</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/stripe/stripe-node">stripe-node</a></td>
+      <td><a href="https://github.com/stripe/stripe-node/releases">4.14.0 or later</a></td>
+      <td>3.7.0</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/stripe/stripe-go">stripe-go</a></td>
+      <td><a href="https://github.com/stripe/stripe-go/releases">19.0.1 or later</a></td>
+      <td>6.0.0</td>
+      <td>Always sets the required API version.</td>
+    </tr>
+  </tbody></table>
+
+<h3 id="api-differences">API differences<a class="anchor" href="https://stripe.com/docs/connect/migrating#api-differences"></a></h3>
+
+<p>There are several differences between the connected accounts you’ll be switching to and the recipients you currently use:</p>
+
+<ul>
+  <li>Accounts have <a href="https://stripe.com/docs/connect/account-balances">balances</a>. Whereas with recipients you would transfer funds directly from your balance to a recipient’s bank
+account, accounts hold their own balances. This introduces an extra conceptual step: funds are transferred to the connected account’s
+Stripe balance (normally as part of the charge request), and then the funds are paid out from that balance to their bank account. This enables Stripe to automatically
+handle many payout models automatically. For example, you can use Stripe to payout recipients on a weekly basis
+with no additional work: simply set the account to weekly payouts, and Stripe will accumulate balances for the
+account as payments come in, paying them to the bank account on the schedule you specify.</li>
+  <li>When transferring to an account, you should usually specify the <a href="https://stripe.com/docs/connect/destination-charges">destination</a> at charge time (though you may keep a
+portion of this as an <code>application_fee</code>). While Stripe supports transfers directly from your balance to a third-party
+account’s balance, this should be done fairly infrequently. If you are unable to determine which connected account receives the funds at charge time, Stripe may not be
+able to support your business model.</li>
+</ul>
+</section>
+
+<section>
+
+<h3 id="payment-flow-changes">Payment Flow Changes<a class="anchor" href="https://stripe.com/docs/connect/migrating#payment-flow-changes"></a></h3>
+
+<p>One major change with Connect is that—except in special circumstances—each payment made to a connected account must be linked to an original charge by a customer. By linking each transfer to a customer purchase, you can clearly track the movement of money through your platform, which simplifies both your accounting and compliance flow.</p>
+
+<p>Unlike Recipients, Connect is designed to have the transfer to the connected account happen at the time of purchase. Previously, your application may have tracked the amount due to each provider, keeping payments in your Stripe account balance until you were ready to pay each recipient. With Connect, your platform is paid through <a href="https://stripe.com/docs/connect/direct-charges#collecting-fees">Application Fees</a>, and the transfer to the connected account happens automatically during the charge.</p>
+
+<p>For each charge, your application specifies an “application fee” that is immediately transferred to your platform’s Stripe balance. For example, if your taxi service collects $2.50 for each ride booked through your app, that $2.50 is your “application fee”. Stripe’s processing fees are deducted from the application fees you collect.</p>
+
+<p>While the transfer to your provider’s Stripe balance happens immediately, transfers to your provider’s bank accounts can happen either automatically, or on a manual schedule defined by your software. In general, any funds paid to a connected account must be transferred out to their bank account within 90 days. See <a href="https://stripe.com/docs/connect/payouts">Transfers</a> for more details.</p>
+
+<p>This guide focuses on the use of <a href="https://stripe.com/docs/connect/destination-charges">Destination Charges</a>, which allow you create the necessary charge, transfer, and application fee at the time of purchase with a single API call.</p>
+
+<h3 id="api-differences">API Differences<a class="anchor" href="https://stripe.com/docs/connect/migrating#api-differences"></a></h3>
+
+<p>With Recipients, your payment flow looked something like this (in Ruby):</p><div class="code" data-language="ruby">
+  <pre class=" numbered language-ruby"><code class=" language-ruby"><span class="token comment" spellcheck="true"># First: create the charge</span>
+<span class="token constant">Charge</span><span class="token punctuation">:</span><span class="token symbol">:create</span><span class="token punctuation">(</span>source <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token string">"tok_xxx"</span><span class="token punctuation">,</span> amount <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token number">1000</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># Later: transfer funds to the recipient, less $2.00 fee to platform</span>
+<span class="token constant">Transfer</span><span class="token punctuation">:</span><span class="token symbol">:create</span><span class="token punctuation">(</span>amount <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token number">800</span><span class="token punctuation">,</span> destination <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token string">"rp_198249abl281izck"</span><span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+<p>With Connect, this is now handled with a single <a href="https://stripe.com/docs/api#create_charge">Create Charge</a> API call with the <code>destination</code> parameter:</p>
+  <div class="tabs tabs-code animated" data-platform="server">
+    <nav class="nav-languages">
+        <a data-language="curl" class="selected">curl</a>
+        <a data-language="ruby">Ruby</a>
+        <a data-language="python">Python</a>
+        <a data-language="php">PHP</a>
+        <a data-language="java">Java</a>
+        <a data-language="node">Node</a>
+    </nav>
+    <div class="tabs-content">
+      <div class="code selected" data-language="curl">
+  <pre class=" numbered selected language-curl"><code class=" language-curl"><span class="token curl">curl</span> <span class="token url">https://api.stripe.com/v1/charges</span> \
+<span class="token option">   -u</span> <span class="token value">{PLATFORM_SECRET_KEY}</span>: \
+<span class="token option">   -d</span> <span class="token parameter">amount</span>=<span class="token value">1000</span> \
+<span class="token option">   -d</span> <span class="token parameter">currency</span>=<span class="token value">usd</span> \
+<span class="token option">   -d</span> <span class="token parameter">source</span>=<span class="token value"></span><span class="token value">"{TOKEN}"</span> \
+<span class="token option">   -d</span> <span class="token parameter">destination</span>=<span class="token value"></span><span class="token value">"{CONNECTED_STRIPE_ACCOUNT_ID}"</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="ruby">
+  <pre class=" numbered language-ruby"><code class=" language-ruby"><span class="token comment" spellcheck="true"># Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true"># See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">Stripe</span><span class="token punctuation">.</span><span class="token function">api_key</span> <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span>
+
+<span class="token constant">Stripe</span><span class="token punctuation">:</span><span class="token symbol">:Charge</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  <span class="token symbol">:amount</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token number">1000</span><span class="token punctuation">,</span>
+  <span class="token symbol">:currency</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token string">"usd"</span><span class="token punctuation">,</span>
+  <span class="token symbol">:source</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span><span class="token constant">TOKEN</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token symbol">:destination</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span><span class="token constant">CONNECTED_STRIPE_ACCOUNT_ID</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="python">
+  <pre class=" numbered language-python"><code class=" language-python"><span class="token comment" spellcheck="true"># Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true"># See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">stripe.api_key</span> <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span>
+
+<span class="token constant">stripe.Charge.</span><span class="token function">create</span><span class="token punctuation">(</span>
+  <span class="token parameter">amount</span><span class="token operator">=</span><span class="token number">1000</span><span class="token punctuation">,</span>
+  <span class="token parameter">currency</span><span class="token operator">=</span><span class="token string">"usd"</span><span class="token punctuation">,</span>
+  <span class="token parameter">source</span><span class="token operator">=</span><span class="token punctuation">{</span>TOKEN<span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token parameter">destination</span><span class="token operator">=</span><span class="token punctuation">{</span>CONNECTED_STRIPE_ACCOUNT_ID<span class="token punctuation">}</span>
+<span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="php">
+  <pre class=" numbered language-php"><code class=" language-php"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token namespace">\Stripe</span><span class="token namespace">\Stripe</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">setApiKey</span><span class="token punctuation">(</span><span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token namespace">\Stripe</span><span class="token namespace">\Charge</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token keyword">array</span><span class="token punctuation">(</span>
+  <span class="token string">'amount'</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token number">1000</span><span class="token punctuation">,</span>
+  <span class="token string">'currency'</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token string">'usd'</span><span class="token punctuation">,</span>
+  <span class="token string">'source'</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span><span class="token constant">TOKEN</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token string">'destination'</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">{</span><span class="token constant">CONNECTED_STRIPE_ACCOUNT_ID</span><span class="token punctuation">}</span>
+<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="java">
+  <pre class=" numbered language-java"><code class=" language-java"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">Stripe</span><span class="token punctuation">.</span>apiKey <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">;</span>
+
+<span class="token constant">Map&lt;String, Object&gt;</span> chargeParams <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constant">HashMap&lt;String, Object&gt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+chargeParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"amount"</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+chargeParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"currency"</span><span class="token punctuation">,</span> <span class="token string">"usd"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+chargeParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"source"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token constant">TOKEN</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+chargeParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"destination"</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token constant">CONNECTED_STRIPE_ACCOUNT_ID</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token constant">Charge</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>chargeParams<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="node">
+  <pre class=" numbered language-javascript"><code class=" language-javascript"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token keyword">var</span> stripe <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"stripe"</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+stripe<span class="token punctuation">.</span><span class="token property">charges</span><span class="token punctuation">.</span><span class="token property"></span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  <span class="token symbol">amount<span class="token punctuation">:</span></span> <span class="token number">1000</span><span class="token punctuation">,</span>
+  <span class="token symbol">currency<span class="token punctuation">:</span></span> <span class="token string">'usd'</span><span class="token punctuation">,</span>
+  <span class="token symbol">source<span class="token punctuation">:</span></span> <span class="token punctuation">{</span>TOKEN<span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token symbol">destination<span class="token punctuation">:</span></span> <span class="token punctuation">{</span>CONNECTED_STRIPE_ACCOUNT_ID<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+    </div>
+  </div>
+
+<p>When you use the <code>destination</code> parameter, the following objects are created immediately in the Stripe API:</p>
+
+<ul>
+  <li>The entire amount of the charge will be immediately transferred to the destination account. The ID of the resulting transfer will be returned in the <code>transfer</code> field of the response.</li>
+  <li>The Stripe fee comes out of the charge object on the platform’s account (i.e., you pay the fee).</li>
+  <li>The amount specified by the <code>application_fee</code> parameter (if provided) will be deducted from the total amount and credited to the platform’s account.</li>
+</ul>
+
+<p>The destination account receives a charge object. The platform account will have the charge object and a transfer (the transfer is tied to the destination account’s charge). The platform account will have an application fee object, too, if an <a href="https://stripe.com/docs/connect/direct-charges#collecting-fees">application fee was set</a>. Note, as well, that the Stripe fee is paid by the platform account in this case.</p>
+
+<p>This may seem complicated, but such complexity is necessary to handle many edge cases of currency conversion and possible refunds. This structure allows each part of the flow to be refunded independently of others. For example, you can choose to refund the charge to a customer’s credit card with or without reversing the transfer to the connected account, and with or without reversing the application fee you took.</p>
+
+<p>The following are also true when creating charges with the <code>destination</code> parameter:
+- The charge will be attributed to the destination account for tax reporting.
+- When using a token as the payment source, the token must be created using the platform’s publishable key. If charging a <code>Customer</code> object, the <code>Customer</code> must exist within the platform’s account.
+- The charge will be settled in the default currency of the destination account. The platform will also take its <code>application_fee</code> in this currency, accumulating balances in the currency of the destination account. If the platform does not have a bank account in this currency, the platform may manually <a href="https://stripe.com/docs/connect/currencies">convert these balances to another currency</a>.</p>
+<h4 id="issuing-refunds">Issuing refunds on charges<a class="anchor" href="https://stripe.com/docs/connect/migrating#issuing-refunds"></a></h4>
+  <p>Destination charges created on the platform account can be refunded using the platform account's secret key:</p>
+
+  <div class="tabs tabs-code animated" data-platform="server">
+    <nav class="nav-languages">
+        <a data-language="curl" class="selected">curl</a>
+        <a data-language="ruby">Ruby</a>
+        <a data-language="python">Python</a>
+        <a data-language="php">PHP</a>
+        <a data-language="java">Java</a>
+        <a data-language="node">Node</a>
+    </nav>
+    <div class="tabs-content">
+      <div class="code selected" data-language="curl">
+  <pre class=" numbered selected language-curl"><code class=" language-curl"><span class="token curl">curl</span> <span class="token url">https://api.stripe.com/v1/charges/{CHARGE_ID}/refunds</span> \
+<span class="token option">   -u</span> <span class="token value">{PLATFORM_SECRET_KEY}</span>: \
+<span class="token option">   -d</span> <span class="token parameter">amount</span>=<span class="token value">1000</span>
+</code><span class="line-numbers"><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="ruby">
+  <pre class=" numbered language-ruby"><code class=" language-ruby"><span class="token comment" spellcheck="true"># Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true"># See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">Stripe</span><span class="token punctuation">.</span><span class="token function">api_key</span> <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span>
+
+ch <span class="token operator">=</span> <span class="token constant">Stripe</span><span class="token punctuation">:</span><span class="token symbol">:Charge</span><span class="token punctuation">.</span><span class="token function">retrieve</span><span class="token punctuation">(</span><span class="token constant">CHARGE_ID</span><span class="token punctuation">)</span>
+ch<span class="token punctuation">.</span>refunds<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token symbol">:amount</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token number">1000</span><span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="python">
+  <pre class=" numbered language-python"><code class=" language-python"><span class="token comment" spellcheck="true"># Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true"># See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">stripe.api_key</span> <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span>
+
+ch <span class="token operator">=</span> <span class="token constant">stripe.Charge.</span><span class="token function">retrieve</span><span class="token punctuation">(</span>CHARGE_ID<span class="token punctuation">)</span>
+ch<span class="token punctuation">.</span><span class="token variable">refunds</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token parameter">amount</span><span class="token operator">=</span><span class="token number">1000</span><span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="php">
+  <pre class=" numbered language-php"><code class=" language-php"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token namespace">\Stripe</span><span class="token namespace">\Stripe</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">setApiKey</span><span class="token punctuation">(</span><span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token variable">$ch</span> <span class="token operator">=</span> <span class="token namespace">\Stripe</span><span class="token namespace">\Charge</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">retrieve</span><span class="token punctuation">(</span><span class="token constant">CHARGE_ID</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$ch</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token property">refunds</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token keyword">array</span><span class="token punctuation">(</span><span class="token string">'amount'</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="java">
+  <pre class=" numbered language-java"><code class=" language-java"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">Stripe</span><span class="token punctuation">.</span>apiKey <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">;</span>
+
+<span class="token constant">Charge</span> ch <span class="token operator">=</span> <span class="token constant">Charge</span><span class="token punctuation">.</span><span class="token function">retrieve</span><span class="token punctuation">(</span><span class="token constant">CHARGE_ID</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token constant">Map&lt;String, Object&gt;</span> refundParams <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constant">HashMap&lt;String, Object&gt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+refundParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"amount"</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ch<span class="token punctuation">.</span><span class="token function">refund</span><span class="token punctuation">(</span>refundParams<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="node">
+  <pre class=" numbered language-javascript"><code class=" language-javascript"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token keyword">var</span> stripe <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"stripe"</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+stripe<span class="token punctuation">.</span><span class="token property">charges</span><span class="token punctuation">.</span><span class="token property"></span><span class="token function">createRefund</span><span class="token punctuation">(</span>
+  CHARGE_ID<span class="token punctuation">,</span>
+  <span class="token punctuation">{</span><span class="token symbol">amount<span class="token punctuation">:</span></span> <span class="token number">1000</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token keyword">function</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> refund<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+    </div>
+  </div>
+
+<p>When refunding a charge that has a <code>destination</code> value, by default the destination account will keep the funds that were transferred to it, leaving the platform account to cover the negative balance from the refund. To pull back the funds from the connected account to cover the refund, set the <code>reverse_transfer</code> parameter to true when creating the refund:</p>
+  <div class="tabs tabs-code animated" data-platform="server">
+    <nav class="nav-languages">
+        <a data-language="curl" class="selected">curl</a>
+        <a data-language="ruby">Ruby</a>
+        <a data-language="python">Python</a>
+        <a data-language="php">PHP</a>
+        <a data-language="java">Java</a>
+        <a data-language="node">Node</a>
+    </nav>
+    <div class="tabs-content">
+      <div class="code selected" data-language="curl">
+  <pre class=" numbered selected language-curl"><code class=" language-curl"><span class="token curl">curl</span> <span class="token url">https://api.stripe.com/v1/charges/{CHARGE_ID}/refunds</span> \
+<span class="token option">   -u</span> <span class="token value">{PLATFORM_SECRET_KEY}</span>: \
+<span class="token option">   -d</span> <span class="token parameter">amount</span>=<span class="token value">1000</span> \
+<span class="token option">   -d</span> <span class="token parameter">reverse_transfer</span>=<span class="token value">true</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="ruby">
+  <pre class=" numbered language-ruby"><code class=" language-ruby"><span class="token comment" spellcheck="true"># Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true"># See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">Stripe</span><span class="token punctuation">.</span><span class="token function">api_key</span> <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span>
+
+ch <span class="token operator">=</span> <span class="token constant">Stripe</span><span class="token punctuation">:</span><span class="token symbol">:Charge</span><span class="token punctuation">.</span><span class="token function">retrieve</span><span class="token punctuation">(</span><span class="token constant">CHARGE_ID</span><span class="token punctuation">)</span>
+ch<span class="token punctuation">.</span>refunds<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token symbol">:amount</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token number">1000</span><span class="token punctuation">,</span> <span class="token symbol">:reverse_transfer</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token keyword">true</span><span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="python">
+  <pre class=" numbered language-python"><code class=" language-python"><span class="token comment" spellcheck="true"># Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true"># See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">stripe.api_key</span> <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span>
+
+ch <span class="token operator">=</span> <span class="token constant">stripe.Charge.</span><span class="token function">retrieve</span><span class="token punctuation">(</span>CHARGE_ID<span class="token punctuation">)</span>
+ch<span class="token punctuation">.</span><span class="token variable">refunds</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token parameter">amount</span><span class="token operator">=</span><span class="token number">1000</span><span class="token punctuation">,</span> reverse_transfer<span class="token operator">=</span>true<span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="php">
+  <pre class=" numbered language-php"><code class=" language-php"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token namespace">\Stripe</span><span class="token namespace">\Stripe</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">setApiKey</span><span class="token punctuation">(</span><span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token variable">$ch</span> <span class="token operator">=</span> <span class="token namespace">\Stripe</span><span class="token namespace">\Charge</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">retrieve</span><span class="token punctuation">(</span><span class="token constant">CHARGE_ID</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$ch</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token property">refunds</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token keyword">array</span><span class="token punctuation">(</span><span class="token string">'amount'</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token number">1000</span><span class="token punctuation">,</span> <span class="token string">'reverse_transfer'</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="java">
+  <pre class=" numbered language-java"><code class=" language-java"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">Stripe</span><span class="token punctuation">.</span>apiKey <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">;</span>
+
+<span class="token constant">Charge</span> ch <span class="token operator">=</span> <span class="token constant">Charge</span><span class="token punctuation">.</span><span class="token function">retrieve</span><span class="token punctuation">(</span><span class="token constant">CHARGE_ID</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token constant">Map&lt;String, Object&gt;</span> refundParams <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constant">HashMap&lt;String, Object&gt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+refundParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"amount"</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+refundParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"reverse_transfer"</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ch<span class="token punctuation">.</span><span class="token function">refund</span><span class="token punctuation">(</span>refundParams<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="node">
+  <pre class=" numbered language-javascript"><code class=" language-javascript"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token keyword">var</span> stripe <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"stripe"</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+stripe<span class="token punctuation">.</span><span class="token property">charges</span><span class="token punctuation">.</span><span class="token property"></span><span class="token function">createRefund</span><span class="token punctuation">(</span>
+  CHARGE_ID<span class="token punctuation">,</span>
+  <span class="token punctuation">{</span><span class="token symbol">amount<span class="token punctuation">:</span></span> <span class="token number">1000</span><span class="token punctuation">,</span> <span class="token symbol">reverse_transfer<span class="token punctuation">:</span></span> <span class="token boolean">true</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token keyword">function</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> refund<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+    </div>
+  </div>
+
+<p>With a partial refund and <code>reverse_parameter</code> set to true, a proportional amount of the transfer is reversed to cover the refund.</p>
+
+<p>If the <code>refund_application_fee</code> parameter is also set to true:</p>
+
+<ul>
+  <li>If the refund results in the entire charge being refunded, your application fees will also be refunded</li>
+  <li>Otherwise, a proportional amount of the application fee will be refunded to the Connected account</li>
+</ul>
+
+<p>If you want to charge a variable fee that is unknown at the time of the charge, collect the largest amount upfront and
+then refund the difference using <a href="https://stripe.com/docs/api#create_fee_refund">application fee refunds</a>. You can access the application
+fee ID and object via the <code>application_fee</code> parameter returned as part of the charge object.</p>
+
+<h4 id="stripe-fees-amprefunds">Stripe Fees &amp;Refunds<a class="anchor" href="https://stripe.com/docs/connect/migrating#stripe-fees-amprefunds"></a></h4>
+
+<p>As with Recipients, Stripe fees are charged against your platform account. Be sure to set your application fee with this in mind. To have your connected accounts pay the Stripe processing fees, you can calculate Stripe’s fee and add it to your application fee when creating a charge.</p>
+</section>
+
+<section>
+<h2 id="migrating-existing-recipients">Migrating existing recipients<a class="anchor" href="https://stripe.com/docs/connect/migrating#migrating-existing-recipients"></a></h2>
+
+<p>Stripe provides a new endpoint for turning any recipient into an account. Stripe will copy over the identity details, verification state, and bank account or debit card information, although we will not migrate historical transfer data. <strong>This migration will also put the recipient
+in read-only mode.</strong> Any Recipient object that has been migrated to an Account object can no longer be used for updates or transfers: you must use the new account instead.</p>
+
+<p>To migrate a recipient to an account, make a POST request to <code>/v1/accounts</code>, passing the existing recipient ID:</p>
+  <div class="tabs tabs-code animated">
+    <nav class="nav-languages">
+        <a data-language="curl" class="selected">curl</a>
+        <a data-language="ruby">Ruby</a>
+        <a data-language="python">Python</a>
+        <a data-language="php">PHP</a>
+        <a data-language="java">Java</a>
+        <a data-language="node">Node</a>
+        <a data-language="go">Go</a>
+    </nav>
+    <div class="tabs-content">
+      <div class="code selected" data-language="curl">
+  <pre class=" numbered language-curl"><code class=" language-curl"><span class="token curl">curl</span> <span class="token url">https://api.stripe.com/v1/accounts</span> \
+<span class="token option">   -u</span> <span class="token value">{PLATFORM_SECRET_KEY}</span>: \
+<span class="token option">   -d</span> <span class="token parameter">from_recipient</span>=<span class="token value"></span><span class="token value">"{RECIPIENT_ID}"</span>
+</code><span class="line-numbers"><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="ruby">
+  <pre class=" numbered language-ruby"><code class=" language-ruby"><span class="token comment" spellcheck="true"># Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true"># See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">Stripe</span><span class="token punctuation">.</span><span class="token function">api_key</span> <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span>
+
+<span class="token comment" spellcheck="true"># Caution! This makes the Recipient object read-only and disables</span>
+<span class="token comment" spellcheck="true"># transfers to the recipient.</span>
+account <span class="token operator">=</span> <span class="token constant">Stripe</span><span class="token punctuation">:</span><span class="token symbol">:Account</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  from_recipient<span class="token punctuation">:</span> <span class="token string">'rp_198249abl281izck'</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="python">
+  <pre class=" numbered language-python"><code class=" language-python"><span class="token comment" spellcheck="true"># Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true"># See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">stripe.api_key</span> <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span>
+
+<span class="token comment" spellcheck="true"># Caution! This makes the Recipient object read-only and disables</span>
+<span class="token comment" spellcheck="true"># transfers to the recipient.</span>
+account <span class="token operator">=</span> <span class="token constant">stripe.Account.</span><span class="token function">create</span><span class="token punctuation">(</span>
+  from_recipient<span class="token operator">=</span><span class="token string">'rp_198249abl281izck'</span>
+<span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="php">
+  <pre class=" numbered language-php"><code class=" language-php"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token namespace">\Stripe</span><span class="token namespace">\Stripe</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">setApiKey</span><span class="token punctuation">(</span><span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// Caution! This makes the Recipient object read-only and disables</span>
+<span class="token comment" spellcheck="true">// transfers to the recipient.</span>
+<span class="token variable">$account</span> <span class="token operator">=</span> <span class="token namespace">\Stripe</span><span class="token namespace">\Account</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token keyword">array</span><span class="token punctuation">(</span>
+  <span class="token string">"from_recipient"</span> <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token string">"rp_198249abl281izck"</span>
+<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="java">
+  <pre class=" numbered language-java"><code class=" language-java"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token constant">Stripe</span><span class="token punctuation">.</span>apiKey <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// Caution! This makes the Recipient object read-only and disables</span>
+<span class="token comment" spellcheck="true">// transfers to the recipient.</span>
+<span class="token constant">Map&lt;String, Object&gt;</span> accountParams <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constant">HashMap&lt;String, Object&gt;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+accountParams<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"from_recipient"</span><span class="token punctuation">,</span> <span class="token string">"rp_198249abl281izck"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token constant">Account</span> account <span class="token operator">=</span> <span class="token constant">Account</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>accountParams<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="node">
+  <pre class=" numbered language-javascript"><code class=" language-javascript">    <span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+<span class="token keyword">var</span> stripe <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"stripe"</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// Caution! This makes the Recipient object read-only and disables</span>
+<span class="token comment" spellcheck="true">// transfers to the recipient.</span>
+stripe<span class="token punctuation">.</span><span class="token property">accounts</span><span class="token punctuation">.</span><span class="token property"></span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  <span class="token symbol">from_recipient<span class="token punctuation">:</span></span> <span class="token string">"rp_198249abl281izck"</span>
+<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> account<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// asynchronously called</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+<div class="code" data-language="go">
+  <pre class=" numbered language-go"><code class=" language-go"><span class="token comment" spellcheck="true">// Set your secret key: remember to change this to your live secret key in production</span>
+<span class="token comment" spellcheck="true">// See your keys here: https://dashboard.stripe.com/account/apikeys</span>
+stripe<span class="token punctuation">.</span>Key <span class="token operator">=</span> <span class="token string secret-key" style="pointer-events: none;">"sk_test_BQokikJOvBiI2HlWgH4olfQ2"</span>
+
+<span class="token comment" spellcheck="true">// Caution! This makes the Recipient object read-only and disables</span>
+<span class="token comment" spellcheck="true">// transfers to the recipient.</span>
+acc<span class="token punctuation">,</span> err <span class="token operator">:=</span> account<span class="token punctuation">.</span><span class="token function">New</span><span class="token punctuation">(</span><span class="token constant">&amp;stripe.AccountParams</span><span class="token punctuation">{</span>
+  <span class="token symbol">FromRecipient:</span> <span class="token string">"rp_198249abl281izck"</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+    </div>
+  </div>
+
+<p>The request returns an Account object <a href="https://stripe.com/docs/api#account_object">as described here</a>. <strong>The Recipient object
+will now be read-only</strong>, and will contain a reference to the newly created account:</p>
+<div class="code" data-language="curl">
+  <pre class=" numbered language-curl"><code class=" language-curl"><span class="token curl">curl</span> <span class="token url">https://api.stripe.com/v1/recipients/{RECIPIENT_ID}</span> \
+<span class="token option">   -u</span> <span class="token value">{PLATFORM_SECRET_KEY}</span>:
+</code><span class="line-numbers"><span></span><span></span></span></pre>
+</div>
+
+<div class="code" data-language="json">
+  <pre class=" numbered language-javascript"><code class=" language-javascript"><span class="token punctuation">{</span>
+  <span class="token string">"id"</span><span class="token punctuation">:</span> <span class="token string">"{RECIPIENT_ID}"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">.</span><span class="token property"></span><span class="token punctuation">.</span><span class="token property"></span>
+  <span class="token string">"migrated_to"</span><span class="token punctuation">:</span> <span class="token string">"{STRIPE_ACCOUNT_ID}"</span>
+<span class="token punctuation">}</span></code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+<h2 id="verification-for-migrated-recipients">Verification for Migrated Recipients<a class="anchor" href="https://stripe.com/docs/connect/migrating#verification-for-migrated-recipients"></a></h2>
+
+<p>Before migrating any Recipients, be sure you’ve read and understood <a href="https://stripe.com/docs/connect/identity-verification">Custom account Verification</a>. We designed the migration process to allow you to create a Custom account from a Verified Recipient without needing to collect information. However, in some cases you will need to collect information at the time of migration — these are detailed below.</p>
+
+<p>Stripe will let you know what information is required in the <a href="https://stripe.com/docs/api/#account_object-verification-fields_needed">fields_needed</a> property of the Custom account.  When this information is required, Stripe will send an <a href="https://stripe.com/docs/api/#event_types-account.updated"><code>account.updated</code> event</a> with details on what information you need to collect, and when the information is due by. It may take Stripe a few minutes to verify the identity information you submit via the <a href="https://stripe.com/docs/api/#update_account">update account</a> endpoint, so it is best to rely on your Connect webhook to know about changes to your Custom account’s verification status.</p>
+
+<h3 id="verified-recipient-individual">Verified Recipient, Individual<a class="anchor" href="https://stripe.com/docs/connect/migrating#verified-recipient-individual"></a></h3>
+
+<p>When you migrate a <strong>Verified Recipient for an individual (not a business)</strong> (that is, a <a href="https://stripe.com/docs/api/#recipient_object">Recipient</a> whose <code>verified</code> property is <code>true</code>, and <code>type</code> is <code>individual</code>) to a Custom account, the account will be immediately active for charges and transfers to the associated bank account. At some point, when you have paid this account approximately $4-7k in volume, Stripe will require you to collect the following information:</p>
+
+<ul>
+  <li>Home Address</li>
+</ul>
+
+<p>In a minority of cases, Stripe may also ask for the Custom account owner’s tax ID (SSN or EIN in the United States) and date of birth.</p>
+
+<h3 id="verified-recipient-business">Verified Recipient, Business<a class="anchor" href="https://stripe.com/docs/connect/migrating#verified-recipient-business"></a></h3>
+
+<p>When you migrate a <strong>Verified Recipient for a business</strong> to a Custom account, the account will be immediately active for charges and transfers to the associated bank account. At some point, when this account has been paid $4-7k in volume, Stripe will require you to collect the following information:</p>
+
+<ul>
+  <li>The name, date of birth, and address of a representative of the business.</li>
+</ul>
+
+<h3 id="unverified-recipient-individual">Unverified Recipient (Individual)<a class="anchor" href="https://stripe.com/docs/connect/migrating#unverified-recipient-individual"></a></h3>
+
+<p>When you migrate an <strong>Unverified Recipient (individual)</strong> to a Custom account, the account will be active for charges and transfers to the associated bank account. At some point, when you have paid this account approximately $4-7k in volume, Stripe will require you to collect the following information about the individual:</p>
+
+<ul>
+  <li>Home address</li>
+  <li>Date of birth</li>
+  <li>Last 4 digits of their Social Security Number (SSN)</li>
+</ul>
+
+<p>If Stripe is unable to verify the individual based on that information, we may ask that you provide the individual’s full SSN or a copy of a government-issued photo ID.</p>
+
+<h3 id="unverified-recipient-business">Unverified Recipient (Business)<a class="anchor" href="https://stripe.com/docs/connect/migrating#unverified-recipient-business"></a></h3>
+
+<p>When you migrate an <strong>Unverified Recipient (business)</strong> to a Custom account, the account will be active for charges, however, transfers will be disabled to the associated bank account. To enable transfers, you will need to provide the name of the business representative.</p>
+
+<p>At some point, when you have paid this account approximately $4-7k in volume, Stripe will require you to collect the following information about the individual:</p>
+
+<ul>
+  <li>The date of birth, and address of a representative of the business.</li>
+  <li>The business’s Employer Identification Number (EIN)</li>
+</ul></section>
+
+<section>
+<h3 id="creating-a-new-account">Creating a new account<a class="anchor" href="https://stripe.com/docs/connect/migrating#creating-a-new-account"></a></h3>
+
+<p>To create a new account (as opposed to creating a recipient), use the same <code>/v1/accounts</code> endpoint, but provide more information than you would when creating a recipient:</p>
+<div class="code" data-language="curl">
+  <pre class=" numbered language-curl"><code class=" language-curl"><span class="token curl">curl</span> <span class="token url">https://api.stripe.com/v1/accounts</span> \
+<span class="token option">   -u</span> <span class="token value secret-key" style="pointer-events: none;">sk_test_BQokikJOvBiI2HlWgH4olfQ2</span>: \
+<span class="token option">   -u</span> <span class="token value">{PLATFORM_SECRET_KEY}</span>: \
+<span class="token option">   -d</span> <span class="token parameter">country</span>=<span class="token value">US</span> \
+<span class="token option">   -d</span> <span class="token parameter">managed</span>=<span class="token value">true</span> \
+<span class="token option">   -d</span> <span class="token parameter">legal_entity[type]</span>=<span class="token value">individual</span> \
+<span class="token option">   -d</span> <span class="token parameter">legal_entity[first_name]</span>=<span class="token value">Bob</span> \
+<span class="token option">   -d</span> <span class="token parameter">legal_entity[last_name]</span>=<span class="token value">Smith</span> \
+<span class="token option">   -d</span> <span class="token parameter">legal_entity[dob][day]</span>=<span class="token value">20</span> \
+<span class="token option">   -d</span> <span class="token parameter">legal_entity[dob][month]</span>=<span class="token value">7</span> \
+<span class="token option">   -d</span> <span class="token parameter">legal_entity[dob][year]</span>=<span class="token value">1969</span> \
+<span class="token option">   -d</span> <span class="token parameter">external_account</span>=<span class="token value">EXTERNAL_ACCOUNT_TOKEN</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+<p>Note the <code>managed=true</code> parameter, which is necessary to indicate that the account will not be able to log in to the Stripe Dashboard. Bear in mind that <code>country</code> is a required parameter and <strong>cannot be changed after account creation</strong>.  All parameters after this are optional and may be provided at later dates. The <code>external_account</code> parameter can be either a hash of bank account details, a bank account token obtained from <a href="https://stripe.com/docs/stripe-js/reference#collecting-bank-account-details">Stripe.js</a>, or a debit card token obtained using <a href="https://stripe.com/docs/stripe-js/reference#stripe-create-token">Stripe.js and Elements</a>.</p>
+
+<p>To enable transfers, you must provide at least the name and date of birth. (<a href="https://stripe.com/docs/connect/custom-accounts">Learn more about Custom accounts.</a>)</p>
+
+<h3 id="transferring-funds">Transferring Funds<a class="anchor" href="https://stripe.com/docs/connect/migrating#transferring-funds"></a></h3>
+
+<p>With Connect, you must specify who will receive the funds <strong>at charge</strong> time, as discussed above under <a href="https://stripe.com/docs/connect/migrating#payment-flow-changes">Payment Flow Changes</a>.</p>
+
+<p>By default, Stripe will pay out available funds to the third-party’s bank account on a rolling basis as funds become
+available, usually 2 days for accounts in the U.S. (<a href="https://stripe.com/docs/connect/charges">Learn more about processing charges.</a>)</p>
+
+<p>If you need to pay out additional funds, for example as a bonus for reaching certain goals, you may do so via the
+Transfers API. For example:</p>
+<div class="code" data-language="curl">
+  <pre class=" numbered language-curl"><code class=" language-curl"><span class="token curl">curl</span> <span class="token url">https://api.stripe.com/v1/transfers</span> \
+<span class="token option">   -u</span> <span class="token value">{PLATFORM_SECRET_KEY}</span>: \
+<span class="token option">   -d</span> <span class="token parameter">amount</span>=<span class="token value">1000</span> \
+<span class="token option">   -d</span> <span class="token parameter">currency</span>=<span class="token value">usd</span> \
+<span class="token option">   -d</span> <span class="token parameter">destination</span>=<span class="token value"></span><span class="token value">"{CONNECTED_STRIPE_ACCOUNT_ID}"</span>
+</code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+<p>However, you should mainly rely on application fees and “destination” charges as a means of moving money between your platform and your connected accounts.</p>
+
+<p>Again, with this new design, it should be fairly uncommon to need to transfer funds directly from your Stripe account to another. (<a href="https://stripe.com/docs/connect/charges-transfers">Learn more about sending transfers.</a>)</p>
+
+<h3 id="updating-an-account">Updating an account<a class="anchor" href="https://stripe.com/docs/connect/migrating#updating-an-account"></a></h3>
+
+<p>In order to keep an account in good standing, Stripe may ask for additional information. It is your
+obligation to collect this information from the user, and provide it to Stripe. To do this, you should listen for
+the <code>account.updated</code> event via <a href="https://dashboard.stripe.com/account/webhooks">Connect webhooks</a>. When you receive an <code>account.updated</code> event, you’ll want to check the received data for three relevant fields:</p>
+<div class="code" data-language="json">
+  <pre class=" numbered language-javascript"><code class=" language-javascript"><span class="token punctuation">{</span>
+  <span class="token string">"verification"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token string">"fields_needed"</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>
+      <span class="token string">"legal_entity.address.line1"</span><span class="token punctuation">,</span>
+      <span class="token string">"legal_entity.address.city"</span><span class="token punctuation">,</span>
+      <span class="token string">"legal_entity.address.state"</span><span class="token punctuation">,</span>
+      <span class="token string">"legal_entity.address.postal_code"</span><span class="token punctuation">,</span>
+      <span class="token string">"legal_entity.ssn_last_4"</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token string">"due_by"</span><span class="token punctuation">:</span> <span class="token number">1511103600</span><span class="token punctuation">,</span>
+    <span class="token string">"contacted"</span><span class="token punctuation">:</span> <span class="token boolean">false</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+
+<p>In this example, Stripe is requesting the address and last four digits (last 4) of the Social Security number, and informing you that you have three days to provide it—with the usual consequence that Stripe will pause transfers for the account if the information is not received in time. See the <a href="https://stripe.com/docs/connect/identity-verification">Custom account guide</a> for more details on these fields.</p>
+
+<p>In the United States, the name, date of birth, address, and last four digits of the Social Security number is usually, but not always, sufficient to fully verify an identity.</p>
+
+<p>When implementing this flow, it may be helpful to refer to the <a href="https://stripe.com/docs/recipes/identity-verification-notifications-for-custom-accounts">Handling Identity Verification Notifications for Custom accounts</a> recipe. This recipe demonstrates emailing your providers in response to Stripe <code>account.updated</code> notifications.</p></section>
+
+<section>
+<h2 id="accounting-amp-reporting">Accounting &amp; Reporting<a class="anchor" href="https://stripe.com/docs/connect/migrating#accounting-amp-reporting"></a></h2>
+
+<p>Following the recommended flow in <a href="https://stripe.com/docs/connect/migrating#payment-flow-changes">Payment Flow Changes</a> eliminates the need to manage a “pool” or “float” of balances in your platform account. Instead, for each charge, Stripe automatically transfers funds to your provider’s Stripe account balance. Rather than managing a pool of balances in your own software, you can track your connected account balances through the Stripe API. Just like your platform account, accounting entries are exposed to your application through Balance Transaction objects and the <a href="https://stripe.com/docs/api#balance_history">Balance History API</a>.</p>
+
+<p>A common task here is to create a view for Custom accounts in your app which replicates what Stripe shows in the “Transfers” section of the Dashboard, showing charges, refunds, fees, and other transactions associated with a transfer. This is possible by passing the <a href="https://stripe.com/docs/api/#balance_history-transfer">transfer property</a> to the <a href="https://stripe.com/docs/api#balance_history">list balance history</a> API endpoint.</p>
+
+<p>For more on this, see: <a href="https://support.stripe.com/questions/how-can-i-find-the-charges-and-other-transactions-associated-with-each-transfer">How can I find the charges and other transactions associated with each transfer?</a></p>
+</section>
+<section>
+  <h2 id="now-that-youre-migrated">Now that you're migrated<a class="anchor" href="https://stripe.com/docs/connect/migrating#now-that-youre-migrated"></a></h2>
+  <p>Read more about what you can do with your connected accounts.</p>
+<ul class="next-steps">
+    <li><a href="https://stripe.com/docs/connect/custom-accounts"><span>Custom Accounts</span></a></li>
+    <li><a href="https://stripe.com/docs/connect/updating-accounts"><span>Updating Accounts</span></a></li>
+    <li><a href="https://stripe.com/docs/connect/charges"><span>Creating Charges</span></a></li>
+</ul>
+
+</section>
+<footer>
+  <h2 data-no-anchor="">Questions?</h2>
+  <p>We're always happy to help with code or other questions you might have! <a href="https://stripe.com/docs/connect/migrating#" class="search-link">Search</a> our documentation, <a href="https://support.stripe.com/email">contact support</a>, or <a href="https://stripe.com/contact/sales">connect with our sales team</a>. You can also chat live with other developers in <a href="irc://irc.freenode.net/stripe">#stripe</a> on freenode.</p>
+</footer>
+</article>
+      </div>
+    </div>
+
+    <div id="loading-bar" class="hidden" style="width: 0%;"></div>
+
+    <script src="./Recipient to Account Migrations_files/jquery.min-356cfe6f83a29dcc6fd2cd9ac777637e.js"></script>
+    <script src="./Recipient to Account Migrations_files/prism-d97c2fbc02243c145440b270c43ec26b.js"></script>
+    <script src="./Recipient to Account Migrations_files/dynamics.min-f8b2e1648525e57b196b53792a19cda3.js"></script>
+    <script src="./Recipient to Account Migrations_files/jquery.cookie-368e8ec1948575a79f6830f8d13db348.js"></script>
+    <script src="./Recipient to Account Migrations_files/documentation-9d21cec0f3371635162f9c978350719d.js"></script>
+      <script src="./Recipient to Account Migrations_files/algoliasearch-ccb98f296c1e54994357b8d396b3ce13.js"></script>
+      <script src="./Recipient to Account Migrations_files/documentation-search-76a887ea03340dcf4d184728b1daad3d.js"></script>
+    <script>
+      parseKey("sk_test_BQokikJOvBiI2HlWgH4olfQ2", "secret-key", null);
+      parseKey("pk_test_6pRNASCoBOKtIshFeQd4XMUh", "publishable-key", null);
+    </script>
+      <script type="text/javascript" src="./Recipient to Account Migrations_files/saved_resource"></script>
+  <script type="text/javascript" src="./Recipient to Account Migrations_files/saved_resource(1)"></script>
+
+    
+    
+
+<script type="application/json" id="site-analytics-config">{"generalAnalyticsConfig":{"mixpanel":{"identifier":"eb71b6171a4f7ed97de9b7a0395b7ca5"},"ga":{},"trackpage":true,"flags":{"site.experiments.home_page_cta":true,"site.experiments.nav_login_cta":false,"site.experiments.get_started_copy":false,"site.experiments.request_demo_copy":false,"site.experiments.contact_sales_content":false},"locale":"en"},"siteSpecificAnalyticsConfig":{"trackPageViewed":false}}</script>
+
+
+<!-- Google Tag Manager (noscript) -->
+<noscript>&lt;iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K8JKCBR"
+height="0" width="0" style="display:none;visibility:hidden"&gt;&lt;/iframe&gt;</noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+<script defer="" src="./Recipient to Account Migrations_files/analytics.min.js"></script>
+<script defer="" src="./Recipient to Account Migrations_files/stripe-m-preview.js"></script>
+ 
+    <script src="./Recipient to Account Migrations_files/documentation-analytics-7e4ac19718751588692cdd0955dba883.js"></script>
+  
+
+<div id="MultiLookup" style="opacity: 0.8" class="black"></div><div id="dict" class="card-panel grey lighten-4"><div id="dict-inner"></div><img id="toktogi-lock" class="toktogi-icon" src="chrome-extension://domfinmkohodhgghgedfdcmonefafolm/images/unlock.png"></div><div id="toktogi-notification" class="card-panel grey lighten-4">Toktogi is on</div><iframe frameborder="0" allowtransparency="true" scrolling="no" name="__privateStripeMetricsController0" allowpaymentrequest="true" src="./Recipient to Account Migrations_files/outer.html" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important;"></iframe><script>
+$(function() {
+  if (location.search.match(/[?&]code=/)) {
+    var el = $("h3#express-account-creation > a");
+    if (el.length > 0) el[0].click();
+  }
+});
+</script>
+</body><div></div></html>

@@ -1,0 +1,4992 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)https://stripe.com/docs/connect/required-verification-information -->
+<html lang="en" data-ember-extension="1"><script type="text/javascript" async="" src="./Required Verification Information_files/mixpanel-2.2.min.js"></script><script async="" src="./Required Verification Information_files/analytics.js"></script><script async="" src="./Required Verification Information_files/gtm.js"></script><script src="./Required Verification Information_files/742650679237989" async=""></script><script async="" src="./Required Verification Information_files/fbevents.js"></script><script type="text/javascript">window["_gaUserPrefs"] = { ioo : function() { return true; } }</script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    
+    <meta name="google-site-verification" content="f0LCrdI6z4Fo8zld4sHCgo5SiUE4EYYRUa6KVeX3Mw8">
+    <meta name="csrf-token" content="ACmByp9VS-5dgI-ZXH4IDjQKupcbFRMLHUfMREA8ebLWGyvN9zdYqelEZg-tdQCE2ww411MvMRPNy_WDfbOyUg==">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Required Verification Information</title>
+
+    <meta name="description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+
+
+    <link rel="shortcut icon" href="https://stripe.com/favicon.ico">
+
+    <link rel="apple-touch-icon-precomposed" href="https://stripe.com/img/apple-touch-icon/180x180.png">
+    <link rel="icon" href="https://stripe.com/img/apple-touch-icon/180x180.png">
+
+
+    <link rel="image_src" type="image/png" href="https://stripe.com/img/v3/home/social.png">
+
+
+        <link rel="canonical" href="https://stripe.com/docs/connect/authentication">
+
+    <meta property="og:title" content="Authentication with Connect">
+    <meta property="og:url" content="https://stripe.com/docs/connect/authentication">
+    <meta property="og:description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+    <meta property="og:image" content="https://stripe.com/img/v3/home/social.png">
+
+      <meta name="twitter:card" content="summary">
+      <meta name="twitter:image" content="https://stripe.com/img/v3/home/twitter.png">
+    <meta name="twitter:site" content="@stripe">
+    <meta name="twitter:title" content="Authentication with Connect">
+    <meta name="twitter:description" content="Stripe is a suite of APIs that powers commerce for businesses of all sizes.">
+
+
+    <script type="application/json" id="strut_files">{&quot;v3/shared/navigation_ie10.css&quot;:&quot;/assets/v3/shared/navigation_ie10-fad8432db8a0ef02ccfc88df4a0b8535.css&quot;}</script>
+
+    
+
+    
+
+    <link rel="stylesheet" href="./Required Verification Information_files/default-6388c486f7388db1252f0d7c85db5e15.css">
+    <link rel="stylesheet" href="./Required Verification Information_files/common-966a7c7414d89c40541b15f2adfa6a26.css">
+    <link rel="stylesheet" href="./Required Verification Information_files/base-3cdaeb306a5f322afd95a5e0122a3388.css">
+    <link rel="stylesheet" href="./Required Verification Information_files/prism_light-6e629a34ce1570d4f33f7e2ee8bebbc2.css">
+    
+    
+    <meta name="viewport" content="width=1060">
+    <meta name="robots" content="noarchive">
+    <link rel="stylesheet" href="./Required Verification Information_files/connect_button-9fd48f5cd30c2680d9e4a099d67cd9b1.css">
+<style>
+.testing-overview {
+  column-count: 2;
+  list-style: none;
+}
+
+.testing-overview li {
+  padding-left: 0;
+  margin: 0;
+}
+
+.testing-overview li:before {
+  display: none;
+}
+</style>
+  <link rel="stylesheet" href="./Required Verification Information_files/connect_button-9fd48f5cd30c2680d9e4a099d67cd9b1.css">
+  <link rel="stylesheet" href="./Required Verification Information_files/connect_button-9fd48f5cd30c2680d9e4a099d67cd9b1.css">
+  <link rel="stylesheet" href="./Required Verification Information_files/connect_button-9fd48f5cd30c2680d9e4a099d67cd9b1.css">
+</head>
+  <body class="">
+    
+    <div id="docs">
+      <div id="sidebar" class="">
+        <div class="logo">
+          <a class="site" href="https://stripe.com/" title="Stripe"></a>
+          <a class="extension" href="https://stripe.com/docs">docs</a>
+        </div>
+        <div class="nav-border"></div>
+        <nav>
+          <h1 class="home"><a href="https://stripe.com/docs">Home</a></h1>
+          <h1 class="payments"><a class="toggle-content" data-trigger-id="0">Payments</a></h1>
+<ul class="hidden" data-hidden="true" data-height="889" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/quickstart">Quickstart</a>
+    </li>
+    <li class="category">Collecting payment details
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/checkout/tutorial" data-trigger-id="9">Checkout</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/checkout">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js" data-trigger-id="10">Stripe.js &amp; Elements</a>
+      <ul class="hidden" data-hidden="true" data-height="112" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/quickstart">Quickstart</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/payment-request-button">Payment Request Button</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/elements/migrating">Migration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/stripe-js/reference">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios" data-trigger-id="11">iOS</a>
+      <ul class="hidden" data-hidden="true" data-height="112" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/standard">Standard Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/custom">Custom Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/apple-pay/apps">Apple Pay in Apps</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/ios/sources">Using Sources</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android" data-trigger-id="12">Android</a>
+      <ul class="hidden" data-hidden="true" data-height="168" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/standard">Standard Integration</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/pay-with-google">Pay with Google</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/alipay-android">Working with Alipay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/android-pay">Android Pay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/customer-information">Customer Information</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/mobile/android/sources">Using Sources</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/saving-cards">Saving Cards</a>
+    </li>
+    <li class="category">Charges
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/charges">Creating Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/declines" data-trigger-id="13">Declines &amp; Failed Payments</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/declines/codes">Decline Codes</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/disputes" data-trigger-id="14">Disputes &amp; Fraud</a>
+      <ul class="hidden" data-hidden="true" data-height="56" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/disputes/categories">Dispute Categories</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/disputes/prevention">Prevention</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/refunds">Refunds</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/payouts">Receiving Payouts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/currencies" data-trigger-id="15">Supported Currencies</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/currencies/conversions">Currency Conversions</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="category">Sources
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources" data-trigger-id="16">Payment Methods</a>
+      <ul class="hidden" data-hidden="true" data-height="308" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/sources/cards">Cards</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/three-d-secure">3D Secure</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/alipay">Alipay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/ach-credit-transfer">ACH Credit Transfer</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/bancontact">Bancontact</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/bitcoin">Bitcoin</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/giropay">Giropay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/ideal">iDEAL</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/p24">P24</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/sepa-debit">SEPA Direct Debit</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/sofort">SOFORT</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/best-practices">Best Practices</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/customers">Sources &amp; Customers</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sources/connect">Connect Platforms</a>
+    </li>
+    <li class="category">Other Payment Methods
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/ach">ACH</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/amex-express-checkout">Amex Express Checkout</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/apple-pay">Apple Pay</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/pay-with-google">Pay with Google</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/payment-request-api">Payment Request API</a>
+    </li>
+    <li class="category">Products &amp; Orders
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders" data-trigger-id="17">Orders</a>
+      <ul class="hidden" data-hidden="true" data-height="28" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/orders/guide">Guide</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders/tax-integration">Tax Integrations</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/orders/shipping-integration">Shipping Integrations</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="subscriptions"><a class="toggle-content" data-trigger-id="1">Subscriptions</a></h1>
+<ul class="hidden" data-hidden="true" data-height="528" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/quickstart">Quickstart</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/creating" data-trigger-id="18">Creating Subscriptions</a>
+      <ul data-collapsable="false" data-height="168">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/multiplan">Using Multiple Plans</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/discounts">Applying Discounts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/trials">Using Trial Periods</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/quantities">Setting Quantities</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/taxes">Adding Taxes</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/multiple">Multiple Subscriptions</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/lifecycle">Lifecycle &amp; Events</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/webhooks">Using Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/changing" data-trigger-id="19">Changing Subscriptions</a>
+      <ul data-collapsable="false" data-height="84">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/upgrading-downgrading">Upgrading &amp; Downgrading</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/billing-cycle">Billing Cycle</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/canceling-pausing">Canceling &amp; Pausing</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/invoices" data-trigger-id="20">Working with Invoices</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/ach-credit">ACH Credit Transfers</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/subscriptions/plans">Managing Plans</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/subscriptions/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="connect"><a class="toggle-content" data-trigger-id="2">Connect</a></h1>
+<ul class="" data-height="566" style="opacity: 1; height: 650px;">
+    <li>
+      <a href="https://stripe.com/docs/connect" class="">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/quickstart" class="">Quickstart</a>
+    </li>
+    <li class="category">Account Types
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/accounts" class="">Accounts Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/standard-accounts" class="">Standard</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/express-accounts" class="">Express</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/custom-accounts" data-trigger-id="21" class="">Custom</a>
+      <ul class="" data-height="84" style="opacity: 1; height: 84px;">
+    <li>
+      <a href="https://stripe.com/docs/connect/updating-accounts" class="">Updating Accounts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/identity-verification" class="">Identity Verification</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/required-verification-information" class="selected">Required Info</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="category">Processing Payments
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/charges" data-trigger-id="22" class="">Creating Charges</a>
+      <ul class="hidden" data-height="104" style="opacity: 0; height: 0px;" data-hidden="true">
+    <li>
+      <a href="https://stripe.com/docs/connect/direct-charges" class="">Direct Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/destination-charges" class="">Destination Charges</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/charges-transfers" class="">Separate Charges and Transfers</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/account-debits" class="">Account Debits</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/subscriptions" class="">Using Subscriptions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/currencies">Multiple Currencies</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/account-balances" class="">Account Balances</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/payouts" class="">Bank Payouts</a>
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/connect/best-practices" class="">Best Practices</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/migrating" class="">Migrating</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/reference" class="">OAuth Reference</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/webhooks" class="">Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/connect/testing" class="">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="sigma"><a class="toggle-content" data-trigger-id="3">Sigma</a></h1>
+<ul class="hidden" data-hidden="true" data-height="150" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/sigma">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/transactions">Transactions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/subscriptions">Subscriptions</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/connect">Connect</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/sigma/scheduled-queries">Scheduled Queries</a>
+    </li>
+</ul>
+
+          <h1 class="radar"><a class="toggle-content" data-trigger-id="4">Radar</a></h1>
+<ul class="hidden" data-hidden="true" data-height="248" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/radar">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/risk-evaluation">Risk Evaluation</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/blocklist">Blocklist</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/review" data-trigger-id="23">Review</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/radar/review/auth-and-capture">Uncaptured Payments</a>
+    </li>
+</ul>
+
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/radar/rules" data-trigger-id="24">Rules</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/radar/rules/reference">Reference</a>
+    </li>
+</ul>
+
+    </li>
+    <li class="separator">
+      <a href="https://stripe.com/docs/radar/testing">Testing</a>
+    </li>
+</ul>
+
+          <h1 class="relay"><a class="toggle-content" data-trigger-id="5">Relay</a></h1>
+<ul class="hidden" data-hidden="true" data-height="94" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/relay">Selling in Other Apps</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/relay/apps-guide" data-trigger-id="25">Accepting Orders in Your App</a>
+      <ul data-collapsable="false" data-height="28">
+    <li>
+      <a href="https://stripe.com/docs/relay/apps-error-guide">Error Handling</a>
+    </li>
+</ul>
+
+    </li>
+</ul>
+
+          <h1 class="account"><a class="toggle-content" data-trigger-id="6">Account</a></h1>
+<ul class="hidden" data-hidden="true" data-height="150" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/dashboard">Your Account</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/dashboard/receipts">Email Receipts</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/checklist">Going Live Checklist</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/reporting">Reporting</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/dashboard/search">Search</a>
+    </li>
+</ul>
+
+          <h1 class="api"><a class="toggle-content" data-trigger-id="7">Development</a></h1>
+<ul class="hidden" data-hidden="true" data-height="206" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/libraries">API Libraries</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/upgrades">API Upgrades</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/webhooks">Webhooks</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/building-integrations">Building Integrations</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/building-plugins">Building Plugins &amp; Libraries</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/recipes">Recipes</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/security">Security</a>
+    </li>
+</ul>
+
+          <h1 class="atlas"><a class="toggle-content" data-trigger-id="8">Atlas</a></h1>
+<ul class="hidden" data-hidden="true" data-height="122" style="opacity: 0; height: 0px;">
+    <li>
+      <a href="https://stripe.com/docs/atlas">Overview</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/application">Application</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/account-progress">Account Progress</a>
+    </li>
+    <li>
+      <a href="https://stripe.com/docs/atlas/next">What's Next</a>
+    </li>
+</ul>
+
+          <h1 class="references"><a href="https://stripe.com/docs/api" class="external" target="_blank">API Reference</a></h1>
+        </nav>
+      </div>
+      <div id="content-wrapper" tabindex="0">
+        <div class="overlay"></div>
+          <div class="search-results">
+            <ul class="results"></ul>
+          </div>
+          <form class="search">
+            <input type="search" placeholder="Search documentation...">
+            <div class="search-after">
+              <span class="search-text"></span>
+              <span class="search-after-text--no-results">— No Results</span>
+            </div>
+          </form>
+        <header id="main-header">
+          <nav>
+            <ul class="external">
+              <li><a href="https://support.stripe.com/">Support</a></li>
+
+              <li class="button">
+                <a data-adroll-segment="submit_two" href="https://dashboard.stripe.com/login">Sign in</a>
+              </li>
+            </ul>
+          </nav>
+        </header>
+        <article id="content"><header>
+  <h1>Required Verification Information</h1>
+  <p>Learn what required verification information needs to be provided, by country, when using <a href="https://stripe.com/connect">Connect</a>.</p>
+</header>
+
+<section>
+  <p>When building a Connect platform using Custom accounts, you'll need to collect the required verification information for each of your accounts, which varies by the Custom account's country. This information—listed below—is also available programmatically through the <a href="https://stripe.com/docs/api#country_specs">Country Specs API</a>.</p>
+
+  <p>As an added convenience, most parameters in the tables below are followed by a localized version, suitable as a label in your user interface.</p>
+
+  <p>You can also download the requirements for every country we support as a <a href="https://stripe.com/files/connect/Stripe_Connect_Custom_Identity_Verification.csv">CSV file</a>, which you can then open in a spreadsheet.</p>
+
+<div class="tabs tabs-regular animated">
+  <nav class="nav-tabs">
+    Viewing requirements for:
+      <select>
+          <option>Austria (AT)</option>
+          <option>Australia (AU)</option>
+          <option>Belgium (BE)</option>
+          <option>Canada (CA)</option>
+          <option>Switzerland (CH)</option>
+          <option>Germany (DE)</option>
+          <option>Denmark (DK)</option>
+          <option>Spain (ES)</option>
+          <option>Finland (FI)</option>
+          <option>France (FR)</option>
+          <option>United Kingdom (GB)</option>
+          <option>Hong Kong (HK)</option>
+          <option>Ireland (IE)</option>
+          <option>Italy (IT)</option>
+          <option>Japan (JP)</option>
+          <option>Luxembourg (LU)</option>
+          <option>Netherlands (NL)</option>
+          <option>Norway (NO)</option>
+          <option>New Zealand (NZ)</option>
+          <option>Portugal (PT)</option>
+          <option>Sweden (SE)</option>
+          <option>Singapore (SG)</option>
+          <option selected="">United States (US)</option>
+      </select>
+  </nav>
+  <div class="tabs-content">
+    <div class="tabs-tab" id="AT">    <h3 id="minimum-verification-requirements-for-austria" data-no-anchor="">Minimum verification requirements for: Austria<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-austria"></a></h3>
+      <p>
+        All accounts in this country eventually require all of
+        the following fields if they process enough volume.
+      </p>
+      <table>
+        <thead>
+          <tr><th>Individual</th>
+          <th>Company</th>
+        </tr></thead>
+          <tbody><tr>
+            <td>
+                <code>external_account</code>
+            </td>
+            <td>
+                <code>external_account</code>
+            </td>
+          </tr>
+          <tr>
+            <td>
+            </td>
+            <td>
+                <code>legal_entity.additional_owners</code>
+            </td>
+          </tr>
+          <tr>
+            <td>
+                <code>legal_entity.address.city</code>
+                <br>Stadt
+            </td>
+            <td>
+                <code>legal_entity.address.city</code>
+                <br>Stadt
+            </td>
+          </tr>
+          <tr>
+            <td>
+                <code>legal_entity.address.line1</code>
+                <br>Adresse des Unternehmens
+            </td>
+            <td>
+                <code>legal_entity.address.line1</code>
+                <br>Adresse des Unternehmens
+            </td>
+          </tr>
+          <tr>
+            <td>
+                <code>legal_entity.address.postal_code</code>
+                <br>Postleitzahl
+            </td>
+            <td>
+                <code>legal_entity.address.postal_code</code>
+                <br>Postleitzahl
+            </td>
+          </tr>
+          <tr>
+            <td>
+            </td>
+            <td>
+                <code>legal_entity.business_name</code>
+                <br>Unternehmensname
+            </td>
+          </tr>
+          <tr>
+            <td>
+            </td>
+            <td>
+                <code>legal_entity.business_tax_id</code>
+                <br>Firmenbuchnummer (FN)
+            </td>
+          </tr>
+          <tr>
+            <td>
+                <code>legal_entity.dob.day</code>
+            </td>
+            <td>
+                <code>legal_entity.dob.day</code>
+            </td>
+          </tr>
+          <tr>
+            <td>
+                <code>legal_entity.dob.month</code>
+            </td>
+            <td>
+                <code>legal_entity.dob.month</code>
+            </td>
+          </tr>
+          <tr>
+            <td>
+                <code>legal_entity.dob.year</code>
+            </td>
+            <td>
+                <code>legal_entity.dob.year</code>
+            </td>
+          </tr>
+          <tr>
+            <td>
+                <code>legal_entity.first_name</code>
+                <br>Vorname
+            </td>
+            <td>
+                <code>legal_entity.first_name</code>
+                <br>Vorname
+            </td>
+          </tr>
+          <tr>
+            <td>
+                <code>legal_entity.last_name</code>
+                <br>Nachname
+            </td>
+            <td>
+                <code>legal_entity.last_name</code>
+                <br>Nachname
+            </td>
+          </tr>
+          <tr>
+            <td>
+            </td>
+            <td>
+                <code>legal_entity.personal_address.city</code>
+                <br>Stadt
+            </td>
+          </tr>
+          <tr>
+            <td>
+            </td>
+            <td>
+                <code>legal_entity.personal_address.line1</code>
+                <br>Adresse
+            </td>
+          </tr>
+          <tr>
+            <td>
+            </td>
+            <td>
+                <code>legal_entity.personal_address.postal_code</code>
+                <br>Postleitzahl
+            </td>
+          </tr>
+          <tr>
+            <td>
+                <code>legal_entity.type</code>
+            </td>
+            <td>
+                <code>legal_entity.type</code>
+            </td>
+          </tr>
+          <tr>
+            <td>
+                <code>tos_acceptance.date</code>
+            </td>
+            <td>
+                <code>tos_acceptance.date</code>
+            </td>
+          </tr>
+          <tr>
+            <td>
+                <code>tos_acceptance.ip</code>
+            </td>
+            <td>
+                <code>tos_acceptance.ip</code>
+            </td>
+          </tr>
+      </tbody></table>
+      <h3 id="additional-verification-requirements-for-austria" data-no-anchor="">Additional verification requirements for: Austria<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-austria"></a></h3>
+      <p>
+        Some merchants in this country may be required to provide the following additional fields depending on
+        our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+      </p>
+      <table>
+        <thead>
+          <tr><th>Individual</th>
+          <th>Company</th>
+        </tr></thead>
+          <tbody><tr>
+            <td>
+                <code>legal_entity.verification.document</code>
+            </td>
+            <td>
+                <code>legal_entity.verification.document</code>
+            </td>
+          </tr>
+      </tbody></table>
+    </div><!-- AT -->
+<div class="tabs-tab" id="AU"><h3 id="minimum-verification-requirements-for-australia" data-no-anchor="">Minimum verification requirements for: Australia<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-australia"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.city</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.city</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.line1</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.line1</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.state</code>
+                  <br>State/Territory
+              </td>
+              <td>
+                  <code>legal_entity.address.state</code>
+                  <br>State/Territory
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+                  <br>Company ACN/ABN - TFN
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name</code>
+              </td>
+              <td>
+                  <code>legal_entity.first_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name</code>
+              </td>
+              <td>
+                  <code>legal_entity.last_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-australia" data-no-anchor="">Additional verification requirements for: Australia<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-australia"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+    </div><!-- AU -->
+<div class="tabs-tab" id="BE">    <h3 id="minimum-verification-requirements-for-belgium" data-no-anchor="">Minimum verification requirements for: Belgium<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-belgium"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.additional_owners</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Ville (FR) or Plaats (NL)
+              </td>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Ville (FR) or Plaats (NL)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Adresse (FR) or Adress (NL)
+              </td>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Adresse (FR) or Adress (NL)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Code Postal (FR) or Postcode (NL)
+              </td>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Code Postal (FR) or Postcode (NL)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+                  <br>Nom de l'entreprise (FR) or Bedrijfsnaam (NL)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+                  <br>TVA/BTW/CBE
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Prénom (FR) or Voornaam (NL)
+              </td>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Prénom (FR) or Voornaam (NL)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Nom (FR) or Achternaam (NL)
+              </td>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Nom (FR) or Achternaam (NL)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.city</code>
+                  <br>Ville (FR) or Plaats (NL)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.line1</code>
+                  <br>Adresse (FR) or Adress (NL)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.postal_code</code>
+                  <br>Code Postal (FR) or Postcode (NL)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-belgium" data-no-anchor="">Additional verification requirements for: Belgium<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-belgium"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+    </div><!-- BE -->
+<div class="tabs-tab" id="CA">
+<h3 id="minimum-verification-requirements-for-canada" data-no-anchor="">Minimum verification requirements for: Canada<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-canada"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.city</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.city</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.line1</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.line1</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.state</code>
+                  <br>Province
+              </td>
+              <td>
+                  <code>legal_entity.address.state</code>
+                  <br>Province
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+                  <br>Business Number (Tax ID)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name</code>
+              </td>
+              <td>
+                  <code>legal_entity.first_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name</code>
+              </td>
+              <td>
+                  <code>legal_entity.last_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.personal_id_number</code>
+                  <br>Social Insurance Number
+              </td>
+              <td>
+                  <code>legal_entity.personal_id_number</code>
+                  <br>Social Insurance Number
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-canada" data-no-anchor="">Additional verification requirements for: Canada<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-canada"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+    </div><!-- CA -->
+<div class="tabs-tab" id="CH"><h3 id="minimum-verification-requirements-for-switzerland" data-no-anchor="">Minimum verification requirements for: Switzerland<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-switzerland"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.additional_owners</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Ville (FR) or Stadt (DE)
+              </td>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Ville (FR) or Stadt (DE)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Adresse (FR and DE)
+              </td>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Adresse (FR and DE)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Code Postal (FR) or Postleitzahl (DE)
+              </td>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Code Postal (FR) or Postleitzahl (DE)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+                  <br>Nom de l'entreprise (FR) or Unternehmensname (DE)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+                  <br>VAT number UID/MWST/TVA/IVA (FR) or Umsatzsteuer-Identifikationsnummer UID/MWST/TVA/IVA (DE)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Prénom (FR) or Vorname (DE)
+              </td>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Prénom (FR) or Vorname (DE)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Nom (FR) or Nachname (DE)
+              </td>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Nom (FR) or Nachname (DE)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.city</code>
+                  <br>Ville (FR) or Stadt (DE)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.line1</code>
+                  <br>Adresse (FR and DE)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.postal_code</code>
+                  <br>Code Postal (FR) or Postleitzahl (DE)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-switzerland" data-no-anchor="">Additional verification requirements for: Switzerland<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-switzerland"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+    </div><!-- CH -->
+<div class="tabs-tab" id="De"><h3 id="minimum-verification-requirements-for-germany" data-no-anchor="">Minimum verification requirements for: Germany<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-germany"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.additional_owners</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Stadt
+              </td>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Stadt
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Adresse des Unternehmens
+              </td>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Adresse des Unternehmens
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Postleitzahl
+              </td>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Postleitzahl
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+                  <br>Unternehmensname
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+                  <br>Handelsregisternummer (HRB)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Vorname
+              </td>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Vorname
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Nachname
+              </td>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Nachname
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.city</code>
+                  <br>Stadt
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.line1</code>
+                  <br>Adresse des Unternehmens
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.postal_code</code>
+                  <br>Postleitzahl
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-germany" data-no-anchor="">Additional verification requirements for: Germany<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-germany"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+    </div><!-- DE -->
+<div class="tabs-tab" id="DK"><h3 id="minimum-verification-requirements-for-denmark" data-no-anchor="">Minimum verification requirements for: Denmark<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-denmark"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.additional_owners</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>By
+              </td>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>By
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Adresse
+              </td>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Adresse
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Postnummer
+              </td>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Postnummer
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+                  <br>Firmanavn
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+                  <br>Momsregistreringsnummer (CVR)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Fornavn
+              </td>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Fornavn
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Efternavn
+              </td>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Efternavn
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.city</code>
+                  <br>By
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.line1</code>
+                  <br>Adresse
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.postal_code</code>
+                  <br>Postnummer
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-denmark" data-no-anchor="">Additional verification requirements for: Denmark<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-denmark"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+    </div><!-- DK -->
+<div class="tabs-tab" id="ES">
+<h3 id="minimum-verification-requirements-for-spain" data-no-anchor="">Minimum verification requirements for: Spain<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-spain"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.additional_owners</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Ciudad
+              </td>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Ciudad
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Dirección de empresa
+              </td>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Dirección de empresa
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Código postal
+              </td>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Código postal
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+                  <br>Razón social
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+                  <br>Número de Identificación Fiscal (NIF)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Nombre
+              </td>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Nombre
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Apellido
+              </td>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Apellido
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.city</code>
+                  <br>Ciudad
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.line1</code>
+                  <br>Dirección personal
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.postal_code</code>
+                  <br>Código postal
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-spain" data-no-anchor="">Additional verification requirements for: Spain<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-spain"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+    </div><!-- ES -->
+<div class="tabs-tab" id="FI"><h3 id="minimum-verification-requirements-for-finland" data-no-anchor="">Minimum verification requirements for: Finland<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-finland"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.additional_owners</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Paikkakunta
+              </td>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Paikkakunta
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Osoite
+              </td>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Osoite
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Postinumero
+              </td>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Postinumero
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+                  <br>Yrityksen nimi
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+                  <br>Y-tunnus
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Etunimi
+              </td>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Etunimi
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Sukunimi
+              </td>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Sukunimi
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.city</code>
+                  <br>Paikkakunta
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.line1</code>
+                  <br>Osoite
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.postal_code</code>
+                  <br>Postinumero
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-finland" data-no-anchor="">Additional verification requirements for: Finland<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-finland"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+    </div><!-- FI -->
+<div class="tabs-tab" id="FR">      <h3 id="minimum-verification-requirements-for-france" data-no-anchor="">Minimum verification requirements for: France<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-france"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.additional_owners</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Ville
+              </td>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Ville
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Adresse
+              </td>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Adresse
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Code Postal
+              </td>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Code Postal
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+                  <br>Raison Sociale
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+                  <br>Numéro SIREN
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Prénom
+              </td>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Prénom
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Nom de famille
+              </td>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Nom de famille
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.city</code>
+                  <br>Ville
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.line1</code>
+                  <br>Adresse
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.postal_code</code>
+                  <br>Code Postal
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-france" data-no-anchor="">Additional verification requirements for: France<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-france"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+    </div><!-- FR -->
+<div class="tabs-tab" id="GB"><h3 id="minimum-verification-requirements-for-united-kingdom" data-no-anchor="">Minimum verification requirements for: United Kingdom<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-united-kingdom"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.additional_owners</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.city</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.city</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.line1</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.line1</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+                  <br>CRN (Chambers of Commerce) Number
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name</code>
+              </td>
+              <td>
+                  <code>legal_entity.first_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name</code>
+              </td>
+              <td>
+                  <code>legal_entity.last_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.city</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.line1</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.postal_code</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-united-kingdom" data-no-anchor="">Additional verification requirements for: United Kingdom<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-united-kingdom"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+    </div><!-- GB -->
+<div class="tabs-tab" id="HK">
+<h3 id="minimum-verification-requirements-for-hong-kong" data-no-anchor="">Minimum verification requirements for: Hong Kong<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-hong-kong"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.city</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.city</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.line1</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.line1</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+                  <br>Registration Number
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name</code>
+              </td>
+              <td>
+                  <code>legal_entity.first_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name</code>
+              </td>
+              <td>
+                  <code>legal_entity.last_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.city</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.line1</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.personal_id_number</code>
+                  <br>Hong Kong Identity Card Number (HKID)
+              </td>
+              <td>
+                  <code>legal_entity.personal_id_number</code>
+                  <br>Hong Kong Identity Card Number (HKID)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-hong-kong" data-no-anchor="">Additional verification requirements for: Hong Kong<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-hong-kong"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+    </div><!-- HK -->
+<div class="tabs-tab" id="IE"><h3 id="minimum-verification-requirements-for-ireland" data-no-anchor="">Minimum verification requirements for: Ireland<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-ireland"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.additional_owners</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.city</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.city</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.line1</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.line1</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.state</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.state</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+                  <br>Company Number
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name</code>
+              </td>
+              <td>
+                  <code>legal_entity.first_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name</code>
+              </td>
+              <td>
+                  <code>legal_entity.last_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.city</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.line1</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.state</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-ireland" data-no-anchor="">Additional verification requirements for: Ireland<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-ireland"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+
+    </div><!-- IE -->
+<div class="tabs-tab" id="IT">
+ <h3 id="minimum-verification-requirements-for-italy" data-no-anchor="">Minimum verification requirements for: Italy<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-italy"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.additional_owners</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Città
+              </td>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Città
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Indirizzo
+              </td>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Indirizzo
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>CAP
+              </td>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>CAP
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+                  <br>Nome della società
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+                  <br>Numero RI/ REA
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Nome
+              </td>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Nome
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Cognome
+              </td>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Cognome
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.city</code>
+                  <br>Città
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.line1</code>
+                  <br>Indirizzo
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.postal_code</code>
+                  <br>CAP
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-italy" data-no-anchor="">Additional verification requirements for: Italy<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-italy"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+    </div><!-- IT -->
+<div class="tabs-tab" id="JP"><h3 id="minimum-verification-requirements-for-japan" data-no-anchor="">Minimum verification requirements for: Japan<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-japan"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address_kana.city</code>
+                  <br>市区町村 (かな)
+              </td>
+              <td>
+                  <code>legal_entity.address_kana.city</code>
+                  <br>市区町村 (かな)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address_kana.line1</code>
+                  <br>会社住所 (かな)
+              </td>
+              <td>
+                  <code>legal_entity.address_kana.line1</code>
+                  <br>会社住所 (かな)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address_kana.postal_code</code>
+                  <br>郵便番号
+              </td>
+              <td>
+                  <code>legal_entity.address_kana.postal_code</code>
+                  <br>郵便番号
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address_kana.state</code>
+                  <br>都道府県 (かな)
+              </td>
+              <td>
+                  <code>legal_entity.address_kana.state</code>
+                  <br>都道府県 (かな)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address_kana.town</code>
+                  <br>市区町村 (かな)
+              </td>
+              <td>
+                  <code>legal_entity.address_kana.town</code>
+                  <br>市区町村 (かな)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address_kanji.city</code>
+                  <br>市区町村 (漢字)
+              </td>
+              <td>
+                  <code>legal_entity.address_kanji.city</code>
+                  <br>市区町村 (漢字)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address_kanji.line1</code>
+                  <br>会社住所 (漢字)
+              </td>
+              <td>
+                  <code>legal_entity.address_kanji.line1</code>
+                  <br>会社住所 (漢字)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address_kanji.postal_code</code>
+                  <br>郵便番号
+              </td>
+              <td>
+                  <code>legal_entity.address_kanji.postal_code</code>
+                  <br>郵便番号
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address_kanji.state</code>
+                  <br>都道府県 (漢字)
+              </td>
+              <td>
+                  <code>legal_entity.address_kanji.state</code>
+                  <br>都道府県 (漢字)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address_kanji.town</code>
+                  <br>市区町村 (漢字)
+              </td>
+              <td>
+                  <code>legal_entity.address_kanji.town</code>
+                  <br>市区町村 (漢字)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+                  <br>会社名 (ローマ字)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name_kana</code>
+                  <br>会社名 (かな)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name_kanji</code>
+                  <br>会社名 (漢字)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+                  <br>登記番号 (会社法人等番号) (EIN)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name_kana</code>
+                  <br>代表者氏名 (名・かな)
+              </td>
+              <td>
+                  <code>legal_entity.first_name_kana</code>
+                  <br>代表者氏名 (名・かな)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name_kanji</code>
+                  <br>代表者氏名 (名・漢字)
+              </td>
+              <td>
+                  <code>legal_entity.first_name_kanji</code>
+                  <br>代表者氏名 (名・漢字)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.gender</code>
+                  <br>性別
+              </td>
+              <td>
+                  <code>legal_entity.gender</code>
+                  <br>性別
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name_kana</code>
+                  <br>代表者氏名 (姓・かな)
+              </td>
+              <td>
+                  <code>legal_entity.last_name_kana</code>
+                  <br>代表者氏名 (姓・かな)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name_kanji</code>
+                  <br>代表者氏名 (姓・漢字)
+              </td>
+              <td>
+                  <code>legal_entity.last_name_kanji</code>
+                  <br>代表者氏名 (姓・漢字)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address_kana.city</code>
+                  <br>市区町村 (かな)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address_kana.line1</code>
+                  <br>自宅住所 (かな)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address_kana.postal_code</code>
+                  <br>郵便番号
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address_kana.state</code>
+                  <br>都道府県 (かな)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address_kana.town</code>
+                  <br>市区町村 (かな)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address_kanji.city</code>
+                  <br>市区町村 (漢字)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address_kanji.line1</code>
+                  <br>自宅住所 (漢字)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address_kanji.postal_code</code>
+                  <br>郵便番号
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address_kanji.state</code>
+                  <br>都道府県 (漢字)
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address_kanji.town</code>
+                  <br>市区町村 (漢字)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.phone_number</code>
+                  <br>電話番号
+              </td>
+              <td>
+                  <code>legal_entity.phone_number</code>
+                  <br>電話番号
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-japan" data-no-anchor="">Additional verification requirements for: Japan<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-japan"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+          <p>
+            Identity verification documents must have been issued in Japan and show the individual's residency status.
+          </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+          <h3 id="additional-suggestions-for-japan" data-no-anchor="">Additional suggestions for: Japan<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-suggestions-for-japan"></a></h3>
+          <p>
+            Submitting account information for Japanese accounts is unique in
+            that Stripe requires both <code>kana</code> and <code>kanji</code>
+            name variations for a number of fields:
+          </p>
+          <ul>
+            <li><code>first_name_kana</code></li>
+            <li><code>first_name_kanji</code></li>
+            <li><code>last_name_kana</code></li>
+            <li><code>last_name_kanji</code></li>
+            <li><code>business_name_kana</code></li>
+            <li><code>business_name_kanji</code></li>
+            <li><code>address_kana</code></li>
+            <li><code>address_kanji</code></li>
+            <li><code>personal_address_kana</code></li>
+            <li><code>personal_address_kanji</code></li>
+          </ul>
+          <p>
+            You need to submit information for these attributes instead of their non-variation counterparts (i.e., in lieu of <code>first_name</code>, <code>last_name</code>, etc.).
+            It may seem counterintuitive to provide two fields that represent the same single attribute, but Stripe can't verify a Japanese account until we've received information for <em>both</em> variations. These variations may be composed of full or half-width hiragana, katakana, or Latin characters, with <code>kanji</code> attributes also allowing for kanji characters.
+          </p>
+          <h4 id="addresses-in-japan" data-no-anchor="">Addresses in Japan<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#addresses-in-japan"></a></h4>
+          <p>
+            The <code>kana</code> and <code>kanji</code> requirements extend to Japanese addresses as well.
+          </p>
+          <p>
+            <code>postal_code</code> is always required when providing a Japanese address of either variation.
+            Stripe validates submitted addresses, and for a valid <code>postal_code</code>, we attempt to automatically fill attributes for matching <code>state</code>, <code>city</code>, and <code>town</code> for <em>both</em> <code>address_kana</code> and <code>address_kanji</code>.
+            Requests with address details that are incompatible with the provided <code>postal_code</code> fail.
+          </p>
+          <p>
+            Here's an example representation of the following Japanese address, with explanations for how each part maps to its corresponding Stripe API attribute:
+          </p>
+
+<div class="code" data-language="json">
+  <pre class=" numbered language-javascript"><code class=" language-javascript"><span class="token comment" spellcheck="true">// 〒150-0001 東京都渋谷区神宮前3-27-15 FLAG 3A</span>
+<span class="token punctuation">{</span>
+  <span class="token string">"country"</span><span class="token punctuation">:</span> <span class="token string">"JP"</span><span class="token punctuation">,</span>
+  <span class="token string">"legal_entity"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token string">"address_kana"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      <span class="token string">"country"</span><span class="token punctuation">:</span> <span class="token string">"JP"</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 2-letter country code</span>
+      <span class="token string">"postal_code"</span><span class="token punctuation">:</span> <span class="token string">"1500001"</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// Zip/Postal Code</span>
+      <span class="token string">"state"</span><span class="token punctuation">:</span> <span class="token string">"ﾄｳｷﾖｳﾄ"</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// Prefecture</span>
+      <span class="token string">"city"</span><span class="token punctuation">:</span> <span class="token string">"ｼﾌﾞﾔ"</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// City/Ward</span>
+      <span class="token string">"town"</span><span class="token punctuation">:</span> <span class="token string">"ｼﾞﾝｸﾞｳﾏｴ 3-"</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// Town/cho-me</span>
+      <span class="token string">"line1"</span><span class="token punctuation">:</span> <span class="token string">"27-15"</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// Block/Building number</span>
+      <span class="token string">"line2"</span><span class="token punctuation">:</span> <span class="token string">"FLAG 3A"</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// Building details</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token string">"address_kanji"</span><span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      <span class="token string">"country"</span><span class="token punctuation">:</span> <span class="token string">"JP"</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// 2-letter country code</span>
+      <span class="token string">"postal_code"</span><span class="token punctuation">:</span> <span class="token string">"１５００００１"</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// Zip/Postal Code</span>
+      <span class="token string">"state"</span><span class="token punctuation">:</span> <span class="token string">"東京都"</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// Prefecture</span>
+      <span class="token string">"city"</span><span class="token punctuation">:</span> <span class="token string">"渋谷区"</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// City/Ward</span>
+      <span class="token string">"town"</span><span class="token punctuation">:</span> <span class="token string">"神宮前　３丁目"</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// Town/cho-me</span>
+      <span class="token string">"line1"</span><span class="token punctuation">:</span> <span class="token string">"２７－１５"</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// Block/Building number</span>
+      <span class="token string">"line2"</span><span class="token punctuation">:</span> <span class="token string">"ＦＬＡＧ　３Ａ"</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">// Building details</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code><span class="line-numbers"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></pre>
+</div>
+    </div><!-- JP -->
+<div class="tabs-tab" id="LU"><h3 id="minimum-verification-requirements-for-luxembourg" data-no-anchor="">Minimum verification requirements for: Luxembourg<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-luxembourg"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.additional_owners</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Ville
+              </td>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Ville
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Adresse
+              </td>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Adresse
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Code Postal
+              </td>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Code Postal
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+                  <br>Nom de l'entreprise
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+                  <br>Company/RCS number
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Prénom
+              </td>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Prénom
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Nom
+              </td>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Nom
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.city</code>
+                  <br>Ville
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.line1</code>
+                  <br>Adresse
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.postal_code</code>
+                  <br>Code Postal
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-luxembourg" data-no-anchor="">Additional verification requirements for: Luxembourg<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-luxembourg"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+            </div><!-- LU -->
+<div class="tabs-tab" id="NL">    <h3 id="minimum-verification-requirements-for-netherlands" data-no-anchor="">Minimum verification requirements for: Netherlands<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-netherlands"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.additional_owners</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Plaats
+              </td>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Plaats
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Adres
+              </td>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Adres
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Postcode
+              </td>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Postcode
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+                  <br>Bedrijfsnaam
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+                  <br>KVK number
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Voornaam
+              </td>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Voornaam
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Achternaam
+              </td>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Achternaam
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.city</code>
+                  <br>Plaats
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.line1</code>
+                  <br>Adres
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.postal_code</code>
+                  <br>Postcode
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-netherlands" data-no-anchor="">Additional verification requirements for: Netherlands<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-netherlands"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+    </div><!-- NL -->
+<div class="tabs-tab" id="NO">    <h3 id="minimum-verification-requirements-for-norway" data-no-anchor="">Minimum verification requirements for: Norway<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-norway"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.additional_owners</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>By/Sted
+              </td>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>By/Sted
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Adresse
+              </td>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Adresse
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Postnummer
+              </td>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Postnummer
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+                  <br>Firmanavn
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+                  <br>Organisasjonsnummer (Orgnr)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Fornavn
+              </td>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Fornavn
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Etternavn
+              </td>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Etternavn
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.city</code>
+                  <br>By/Sted
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.line1</code>
+                  <br>Adres
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.postal_code</code>
+                  <br>Postnummer
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-norway" data-no-anchor="">Additional verification requirements for: Norway<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-norway"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+    </div><!-- NO -->
+<div class="tabs-tab" id="NZ">    <h3 id="minimum-verification-requirements-for-new-zealand" data-no-anchor="">Minimum verification requirements for: New Zealand<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-new-zealand"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.city</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.city</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.line1</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.line1</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Postcode
+              </td>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Postcode
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+                  <br>NZBN
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name</code>
+              </td>
+              <td>
+                  <code>legal_entity.first_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name</code>
+              </td>
+              <td>
+                  <code>legal_entity.last_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-new-zealand" data-no-anchor="">Additional verification requirements for: New Zealand<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-new-zealand"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+    </div><!-- NZ -->
+<div class="tabs-tab" id="PT">        <h3 id="minimum-verification-requirements-for-portugal" data-no-anchor="">Minimum verification requirements for: Portugal<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-portugal"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.additional_owners</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Cidade
+              </td>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Cidade
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Morada
+              </td>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Morada
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Código Postal
+              </td>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Código Postal
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+                  <br>Empresa
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+                  <br>N.º Contribuinte
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Nome
+              </td>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Nome
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Apelido
+              </td>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Apelido
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.city</code>
+                  <br>Cidade
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.line1</code>
+                  <br>Morada
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.postal_code</code>
+                  <br>Código Postal
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-portugal" data-no-anchor="">Additional verification requirements for: Portugal<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-portugal"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+      </div><!-- PT -->
+<div class="tabs-tab" id="SE">      <h3 id="minimum-verification-requirements-for-sweden" data-no-anchor="">Minimum verification requirements for: Sweden<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-sweden"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.additional_owners</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Ort
+              </td>
+              <td>
+                  <code>legal_entity.address.city</code>
+                  <br>Ort
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Adress
+              </td>
+              <td>
+                  <code>legal_entity.address.line1</code>
+                  <br>Adress
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Postnummer
+              </td>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+                  <br>Postnummer
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+                  <br>Företagsnamn
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+                  <br>Organisationsnummer
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Förnamn
+              </td>
+              <td>
+                  <code>legal_entity.first_name</code>
+                  <br>Förnamn
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Efternamn
+              </td>
+              <td>
+                  <code>legal_entity.last_name</code>
+                  <br>Efternamn
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.city</code>
+                  <br>Ort
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.line1</code>
+                  <br>Adress
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.postal_code</code>
+                  <br>Postnummer
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-sweden" data-no-anchor="">Additional verification requirements for: Sweden<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-sweden"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+    </div><!-- SE -->
+<div class="tabs-tab" id="SG">      <h3 id="minimum-verification-requirements-for-singapore" data-no-anchor="">Minimum verification requirements for: Singapore<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-singapore"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.additional_owners</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.line1</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.line1</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+                  <br>Unique Entity Number (UEN)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name</code>
+              </td>
+              <td>
+                  <code>legal_entity.first_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name</code>
+              </td>
+              <td>
+                  <code>legal_entity.last_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.line1</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.personal_address.postal_code</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.personal_id_number</code>
+                  <br>National Registration Identity Card (NRIC) or Foreign Identification Number (FIN)
+              </td>
+              <td>
+                  <code>legal_entity.personal_id_number</code>
+                  <br>National Registration Identity Card (NRIC) or Foreign Identification Number (FIN)
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-singapore" data-no-anchor="">Additional verification requirements for: Singapore<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-singapore"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+    </div><!-- SG -->
+<div class="tabs-tab selected" id="US">        <h3 id="minimum-verification-requirements-for-united-states" data-no-anchor="">Minimum verification requirements for: United States<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#minimum-verification-requirements-for-united-states"></a></h3>
+        <p>
+          All accounts in this country eventually require all of
+          the following fields if they process enough volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>external_account</code>
+              </td>
+              <td>
+                  <code>external_account</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.city</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.city</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.line1</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.line1</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.postal_code</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.address.state</code>
+              </td>
+              <td>
+                  <code>legal_entity.address.state</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+              </td>
+              <td>
+                  <code>legal_entity.business_tax_id</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.day</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.month</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+              <td>
+                  <code>legal_entity.dob.year</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.first_name</code>
+              </td>
+              <td>
+                  <code>legal_entity.first_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.last_name</code>
+              </td>
+              <td>
+                  <code>legal_entity.last_name</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.ssn_last_4</code>
+              </td>
+              <td>
+                  <code>legal_entity.ssn_last_4</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+              <td>
+                  <code>legal_entity.type</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.date</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+              <td>
+                  <code>tos_acceptance.ip</code>
+              </td>
+            </tr>
+        </tbody></table>
+        <h3 id="additional-verification-requirements-for-united-states" data-no-anchor="">Additional verification requirements for: United States<a class="anchor" href="https://stripe.com/docs/connect/required-verification-information#additional-verification-requirements-for-united-states"></a></h3>
+        <p>
+          Some merchants in this country may be required to provide the following additional fields depending on
+          our ability to verify their identity. Some merchants are never asked for this information, even after processing considerable volume.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Individual</th>
+            <th>Company</th>
+          </tr></thead>
+            <tbody><tr>
+              <td>
+                  <code>legal_entity.personal_id_number</code>
+              </td>
+              <td>
+                  <code>legal_entity.personal_id_number</code>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+              <td>
+                  <code>legal_entity.verification.document</code>
+              </td>
+            </tr>
+        </tbody></table>
+    </div><!-- US -->
+
+  </div>
+</div>
+
+</section>
+<footer>
+  <h2 data-no-anchor="">Questions?</h2>
+  <p>We're always happy to help with code or other questions you might have! <a href="https://stripe.com/docs/connect/required-verification-information#" class="search-link">Search</a> our documentation, <a href="https://support.stripe.com/email">contact support</a>, or <a href="https://stripe.com/contact/sales">connect with our sales team</a>. You can also chat live with other developers in <a href="irc://irc.freenode.net/stripe">#stripe</a> on freenode.</p>
+</footer>
+</article>
+      </div>
+    </div>
+
+    <div id="loading-bar" class="hidden" style="width: 0%;"></div>
+
+    <script src="./Required Verification Information_files/jquery.min-356cfe6f83a29dcc6fd2cd9ac777637e.js"></script>
+    <script src="./Required Verification Information_files/prism-d97c2fbc02243c145440b270c43ec26b.js"></script>
+    <script src="./Required Verification Information_files/dynamics.min-f8b2e1648525e57b196b53792a19cda3.js"></script>
+    <script src="./Required Verification Information_files/jquery.cookie-368e8ec1948575a79f6830f8d13db348.js"></script>
+    <script src="./Required Verification Information_files/documentation-9d21cec0f3371635162f9c978350719d.js"></script>
+      <script src="./Required Verification Information_files/algoliasearch-ccb98f296c1e54994357b8d396b3ce13.js"></script>
+      <script src="./Required Verification Information_files/documentation-search-76a887ea03340dcf4d184728b1daad3d.js"></script>
+    <script>
+      parseKey("sk_test_BQokikJOvBiI2HlWgH4olfQ2", "secret-key", null);
+      parseKey("pk_test_6pRNASCoBOKtIshFeQd4XMUh", "publishable-key", null);
+    </script>
+      <script type="text/javascript" src="./Required Verification Information_files/saved_resource"></script>
+  <script type="text/javascript" src="./Required Verification Information_files/saved_resource(1)"></script>
+
+    
+    
+
+<script type="application/json" id="site-analytics-config">{"generalAnalyticsConfig":{"mixpanel":{"identifier":"eb71b6171a4f7ed97de9b7a0395b7ca5"},"ga":{},"trackpage":true,"flags":{"site.experiments.home_page_cta":true,"site.experiments.nav_login_cta":false,"site.experiments.get_started_copy":false,"site.experiments.request_demo_copy":false,"site.experiments.contact_sales_content":false},"locale":"en"},"siteSpecificAnalyticsConfig":{"trackPageViewed":false}}</script>
+
+
+<!-- Google Tag Manager (noscript) -->
+<noscript>&lt;iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K8JKCBR"
+height="0" width="0" style="display:none;visibility:hidden"&gt;&lt;/iframe&gt;</noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+<script defer="" src="./Required Verification Information_files/analytics.min.js"></script>
+<script defer="" src="./Required Verification Information_files/stripe-m-preview.js"></script>
+ 
+    <script src="./Required Verification Information_files/documentation-analytics-7e4ac19718751588692cdd0955dba883.js"></script>
+  
+
+<div id="MultiLookup" style="opacity: 0.8" class="black"></div><div id="dict" class="card-panel grey lighten-4"><div id="dict-inner"></div><img id="toktogi-lock" class="toktogi-icon" src="chrome-extension://domfinmkohodhgghgedfdcmonefafolm/images/unlock.png"></div><div id="toktogi-notification" class="card-panel grey lighten-4">Toktogi is on</div><iframe frameborder="0" allowtransparency="true" scrolling="no" name="__privateStripeMetricsController0" allowpaymentrequest="true" src="./Required Verification Information_files/outer.html" aria-hidden="true" tabindex="-1" style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; visibility: hidden !important; position: fixed !important; height: 1px !important; pointer-events: none !important;"></iframe><script>
+$(function() {
+  if (location.search.match(/[?&]code=/)) {
+    var el = $("h3#express-account-creation > a");
+    if (el.length > 0) el[0].click();
+  }
+});
+</script>
+<script>
+$(function() {
+  if (location.search.match(/[?&]code=/)) {
+    var el = $("h3#express-account-creation > a");
+    if (el.length > 0) el[0].click();
+  }
+});
+</script>
+</body><div></div></html>
