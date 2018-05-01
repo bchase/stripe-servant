@@ -1,11 +1,12 @@
-{-# LANGUAGE DataKinds             #-}
-{-# LANGUAGE DeriveGeneric         #-}
-{-# LANGUAGE DuplicateRecordFields #-}
-{-# LANGUAGE NamedFieldPuns        #-}
-{-# LANGUAGE OverloadedLists       #-}
-{-# LANGUAGE OverloadedStrings     #-}
-{-# LANGUAGE TemplateHaskell       #-}
-{-# LANGUAGE TypeOperators         #-}
+{-# LANGUAGE DataKinds                  #-}
+{-# LANGUAGE DeriveGeneric              #-}
+{-# LANGUAGE DuplicateRecordFields      #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE NamedFieldPuns             #-}
+{-# LANGUAGE OverloadedLists            #-}
+{-# LANGUAGE OverloadedStrings          #-}
+{-# LANGUAGE TemplateHaskell            #-}
+{-# LANGUAGE TypeOperators              #-}
 
 module Stripe
   ( module Stripe
@@ -25,7 +26,8 @@ import           GHC.Generics                (Generic)
 
 import           Data.Aeson                  as J
 import           Data.Aeson.Casing           (snakeCase)
-import           Web.Internal.FormUrlEncoded as F
+import           Web.Internal.FormUrlEncoded (toForm, unForm)
+import qualified Web.Internal.FormUrlEncoded as F
 import           Servant.API
 import           Servant.Client              (client)
 
@@ -458,7 +460,7 @@ data BankAccountCreate = BankAccountCreate
   { bankAccountCreateSource :: Token
   } deriving (Generic)
 instance F.ToForm BankAccountCreate where
-  toForm = (\n -> F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop (length . reverse . takeWhile (/= '.') . reverse . show $ n) }) ''BankAccountCreate -- TODO TH deriveToForm
+  toForm = (\n -> F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop (length . reverse . takeWhile (/= '.') . reverse . show $ n) }) ''BankAccountCreate -- TODO DUP1 TH deriveToForm
 minBankAccountCreateReq :: Token -> BankAccountCreate
 minBankAccountCreateReq token = BankAccountCreate token
 
@@ -546,6 +548,98 @@ emptyPlanUpdateReq :: PlanUpdateReq
 emptyPlanUpdateReq = PlanUpdateReq Nothing Nothing Nothing
 
 
+data Payer
+  = PCustomer     CustomerId
+  | PCustomerCard CustomerId CardId
+  | PToken        Token
+  deriving (Show, Generic)
+
+-- TODO check okay GeneralizedNewtypeDeriving -- ToHttpApiData -- WARNING: Do not derive this using DeriveAnyClass as the generated instance will loop indefinitely.
+newtype ConnectApplicationFee = ConnectApplicationFee { unFeeInCents :: Int } deriving (Show, Generic, ToHttpApiData) -- TODO mv
+feeInCents :: Int -> ConnectApplicationFee
+feeInCents = ConnectApplicationFee
+
+data SourceId
+  = SourceToken Token
+  | SourceCard  CardId
+  | SourceBank  BankAccountId
+  deriving (Show, Generic)
+
+instance ToHttpApiData SourceId where
+  toQueryParam (SourceToken tok)  = unToken tok
+  toQueryParam (SourceCard  card) = unCardId card
+  toQueryParam (SourceBank  ba)   = unBankAccountId ba
+
+data ChargeCreateReq = ChargeCreateReq
+  { chargeCreateAmount              :: Int
+  , chargeCreateCurrency            :: CurrencyCode
+  , chargeCreateCustomer            :: Maybe CustomerId -- NOTE: ONE OF THESE IS REQUIRED (enforced by `chargeCreateReq`)
+  , chargeCreateSource              :: Maybe SourceId   -- NOTE: ONE OF THESE IS REQUIRED (enforced by `chargeCreateReq`)
+  , chargeCreateApplicationFee      :: Maybe ConnectApplicationFee
+  , chargeCreateCapture             :: Maybe Bool -- immediately capture the charge, default true
+  , chargeCreateDescription         :: Maybe String
+  , chargeCreateReceiptEmail        :: Maybe String
+  , chargeCreateStatementDescriptor :: Maybe String -- up to 22 chars TODO DUP2 enforce?
+  , chargeCreateMetadata            :: Maybe Metadata
+  -- , destination    -- CONNECT ONLY -- handled w/ header
+  -- , transfer_group -- CONNECT ONLY
+  -- , on_behalf_of   -- CONNECT ONLY
+  -- , shipping       -- dictionary
+  } deriving (Show, Generic)
+instance F.ToForm ChargeCreateReq where
+  toForm req@ChargeCreateReq{chargeCreateMetadata} =
+    let toForm' = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 12 }
+     in addMetadataToForm chargeCreateMetadata . toForm' $ req
+
+type Amount = Int -- TODO rm
+chargeCreateReq :: Amount -> CurrencyCode -> Payer -> ChargeCreateReq
+chargeCreateReq amount curr payer =
+  case payer of
+    PCustomer cust          -> (req amount curr) { chargeCreateCustomer = Just cust }
+    PCustomerCard cust card -> (req amount curr) { chargeCreateCustomer = Just cust, chargeCreateSource = Just $ SourceCard card }
+    PToken tok              -> (req amount curr) { chargeCreateSource = Just $ SourceToken tok }
+  where
+    req amount curr = ChargeCreateReq
+      { chargeCreateAmount              = amount
+      , chargeCreateCurrency            = curr
+      , chargeCreateCustomer            = Nothing
+      , chargeCreateSource              = Nothing
+      , chargeCreateApplicationFee      = Nothing
+      , chargeCreateCapture             = Nothing
+      , chargeCreateDescription         = Nothing
+      , chargeCreateReceiptEmail        = Nothing
+      , chargeCreateStatementDescriptor = Nothing
+      , chargeCreateMetadata            = Nothing
+      }
+
+data ChargeUpdateReq = ChargeUpdateReq
+  { chargeUpdateDescription  :: Maybe String
+  , chargeUpdateReceiptEmail :: Maybe String
+  , chargeUpdateMetadata     :: Maybe Metadata
+  -- , fraud_details  :: Maybe {...}
+  -- , shipping       :: Maybe {...}
+  -- , transfer_group :: Maybe ... -- Connect only
+  } deriving (Show, Generic)
+instance F.ToForm ChargeUpdateReq where
+  toForm req@ChargeUpdateReq{chargeUpdateMetadata} =
+    let toForm' = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 12 }
+     in addMetadataToForm chargeUpdateMetadata . toForm' $ req
+emptyChargeUpdateReq :: ChargeUpdateReq
+emptyChargeUpdateReq = ChargeUpdateReq Nothing Nothing Nothing
+
+-- data ChargeCaptureReq = ChargeCaptureReq
+--   { chargeCaptureAmount              :: Maybe Int -- currency change disallowed
+--   , chargeCaptureReceiptEmail        :: Maybe String
+--   , chargeCaptureStatementDescriptor :: Maybe String -- 22 chars -- TODO DUP2
+--   -- , chargeCaptureApplicationFee      :: Maybe ConnectApplicationFee
+--   -- , chargeCaptureDestination         :: Maybe { amount :: Int }
+--   } deriving (Show, Generic)
+-- instance F.ToForm ChargeCaptureReq where
+--   toForm = (\n -> F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop (length . reverse . takeWhile (/= '.') . reverse . show $ n) }) ''BankAccountCreate -- TODO DUP1
+-- emptyChargeCaptureReq :: ChargeCaptureReq
+-- emptyChargeCaptureReq = ChargeCaptureReq Nothing Nothing Nothing
+
+
 ---- STRIPE API TYPE ----
 
 type CustomerAPI = CustomerCreate :<|> CustomerRead :<|> CustomerUpdate :<|> CustomerDestroy :<|> CustomerList
@@ -553,20 +647,14 @@ type CustomerCardAPI = CustomerCardCreate :<|> CustomerCardRead :<|> CustomerCar
 type CustomerBankAccountAPI = CustomerBankAccountCreate :<|> CustomerBankAccountRead :<|> CustomerBankAccountUpdate :<|> CustomerBankAccountDestroy :<|> CustomerBankAccountList :<|> CustomerBankAccountVerify
 type PlanAPI = PlanCreate :<|> PlanRead :<|> PlanUpdate :<|> PlanDestroy :<|> PlanList
 
-type ChargeAPI =
-  --      ChargeCreate
-  -- :<|> ChargeRead
-  -- :<|> ChargeUpdate
-  -- :<|> ChargeDestroy
-  -- :<|> ChargeList
-       ChargeList
+type ChargeAPI = ChargeCreate :<|> ChargeRead :<|> ChargeUpdate :<|> ChargeList -- :<|> ChargeCapture -- TODO
 
 
--- type ChargeCreate  = "v1" :> "charges" :> RBody ChargeCreateReq :> StripeHeaders (PostS Charge)
--- type ChargeRead    = "v1" :> "charges" :> CapId ChargeId :> StripeHeaders (GetShowS Charge)
--- type ChargeUpdate  = "v1" :> "charges" :> CapId ChargeId :> RBody ChargeUpdateReq :> StripeHeaders (PostS Charge)
--- type ChargeDestroy = "v1" :> "charges" :> CapId ChargeId :> StripeHeaders (DeleteS ChargeId)
+type ChargeCreate  = "v1" :> "charges" :> RBody ChargeCreateReq :> StripeHeaders (PostS Charge)
+type ChargeRead    = "v1" :> "charges" :> CapId ChargeId :> StripeHeaders (GetShowS Charge)
+type ChargeUpdate  = "v1" :> "charges" :> CapId ChargeId :> RBody ChargeUpdateReq :> StripeHeaders (PostS Charge)
 type ChargeList    = "v1" :> "charges" :> StripePaginationQueryParams (StripeHeaders (GetListS [Charge]))
+-- type ChargeCapture = "v1" :> "charges" :> CapId ChargeId :> RBody ChargeCaptureReq :> "capture" :> StripeHeaders (PostS Charge)
 
 type CustomerCreate  = "v1" :> "customers" :> RBody CustomerCreateReq :> StripeHeaders (PostS Customer)
 type CustomerRead    = "v1" :> "customers" :> CapId CustomerId :> StripeHeaders (GetShowS Customer)
@@ -630,12 +718,12 @@ listPlans :: ListS [Plan]
 createPlan :<|> readPlan :<|> updatePlan :<|> destroyPlan :<|> listPlans =
   client (Proxy :: Proxy PlanAPI)
 
--- createCharge :: CreateS ChargeCreateReq Charge
--- readCharge :: ReadS ChargeId Charge
--- updateCharge :: UpdateS ChargeId ChargeUpdateReq Charge
+createCharge :: CreateS ChargeCreateReq Charge
+readCharge :: ReadS ChargeId Charge
+updateCharge :: UpdateS ChargeId ChargeUpdateReq Charge
 -- destroyCharge :: DestroyS ChargeId
 listCharges :: ListS [Charge]
-listCharges =
+createCharge :<|> readCharge :<|> updateCharge :<|> listCharges =
   client (Proxy :: Proxy ChargeAPI)
 
 
