@@ -73,10 +73,10 @@ main = do
 
 
   -- [CHARGE] CREATE
-  let createChargeReq = chargeCreateReq 10000 USD (PToken $ Token "tok_visa")
+  let createChargeReq = (chargeCreateReq 10000 USD (PToken $ Token "tok_visa")) { chargeCreateCapture = Just False }
   (Right createChargeResp) <- stripeScalar WithoutConnect $ createCharge createChargeReq
+  putStrLn . ((++) "[CREATE CHARGE] `captured`: ") . show . chargeCaptured . stripeScalarData $ createChargeResp
   let chargeId' = chargeId . stripeScalarData $ createChargeResp
-  putStrLn . ((++) "[CREATE CHARGE] `chargeId`: ") . show . unChargeId $ chargeId'
   -- [CHARGE] READ
   (Right readChargeResp) <- stripeScalar WithoutConnect $ readCharge chargeId'
   putStrLn . ((++) "[READ CHARGE] `chargeDescription`: ") . show . chargeDescription . stripeScalarData $ readChargeResp
@@ -85,9 +85,11 @@ main = do
   (Right updateChargeResp) <- stripeScalar WithoutConnect $ updateCharge chargeId' updateChargeReq
   putStrLn . ((++) "[UPDATE CHARGE] `chargeDescription`: ") . show . chargeDescription . stripeScalarData $ updateChargeResp
   -- [CHARGE] LIST
-  (Right listChargesResp') <- stripeList WithoutConnect [] $ listCharges
-  putStrLn . ((++) "[LIST CHARGES] amounts: ") . show . map (\c ->  (show $ chargeCurrency c) ++ (show $ chargeAmount c)) . stripeListData $ listChargesResp'
-  -- -- [CHARGE] CAPTURE -- TODO
+  (Right listChargesResp) <- stripeList WithoutConnect [] $ listCharges
+  putStrLn . ((++) "[LIST CHARGES] amounts: ") . show . map (\c ->  (show $ chargeCurrency c) ++ (show $ chargeAmount c)) . stripeListData $ listChargesResp
+  -- [CHARGE] CAPTURE
+  (Right captureChargeResp) <- stripeScalar WithoutConnect $ captureCharge chargeId' chargeCaptureReq
+  putStrLn . ((++) "[CAPTURE CHARGE] `captured`: ") . show . chargeCaptured . stripeScalarData $ captureChargeResp
 
 
   -- [CARD] CREATE

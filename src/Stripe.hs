@@ -331,13 +331,15 @@ data ChargeOutcomeNetworkStatus
   | DeclinedByNetwork
   | NotSentToNetwork
   | ReversedAfterApproval
+  | UnrecognizedChargeOutcomeNetworkStatus T.Text
   deriving (Show, Generic)
 instance J.FromJSON ChargeOutcomeNetworkStatus where
   parseJSON (J.String "approved_by_network")     = return ApprovedByNetwork
   parseJSON (J.String "declined_by_network")     = return DeclinedByNetwork
   parseJSON (J.String "not_sent_to_network")     = return NotSentToNetwork
   parseJSON (J.String "reversed_after_approval") = return ReversedAfterApproval
-  parseJSON _ = mempty
+  parseJSON (J.String str)                       = return $ UnrecognizedChargeOutcomeNetworkStatus str
+  parseJSON _                                    = return $ UnrecognizedChargeOutcomeNetworkStatus ""
 data ChargeOutcomeRiskLevel
   = Normal
   | Elevated
@@ -576,7 +578,7 @@ data ChargeCreateReq = ChargeCreateReq
   , chargeCreateCustomer            :: Maybe CustomerId -- NOTE: ONE OF THESE IS REQUIRED (enforced by `chargeCreateReq`)
   , chargeCreateSource              :: Maybe SourceId   -- NOTE: ONE OF THESE IS REQUIRED (enforced by `chargeCreateReq`)
   , chargeCreateApplicationFee      :: Maybe ConnectApplicationFee
-  , chargeCreateCapture             :: Maybe Bool -- immediately capture the charge, default true
+  , chargeCreateCapture             :: Maybe Bool -- TODO Bool w/ default? "immediately capture the charge, default true"
   , chargeCreateDescription         :: Maybe String
   , chargeCreateReceiptEmail        :: Maybe String
   , chargeCreateStatementDescriptor :: Maybe String -- up to 22 chars TODO DUP2 enforce?
@@ -627,17 +629,17 @@ instance F.ToForm ChargeUpdateReq where
 emptyChargeUpdateReq :: ChargeUpdateReq
 emptyChargeUpdateReq = ChargeUpdateReq Nothing Nothing Nothing
 
--- data ChargeCaptureReq = ChargeCaptureReq
---   { chargeCaptureAmount              :: Maybe Int -- currency change disallowed
---   , chargeCaptureReceiptEmail        :: Maybe String
---   , chargeCaptureStatementDescriptor :: Maybe String -- 22 chars -- TODO DUP2
---   -- , chargeCaptureApplicationFee      :: Maybe ConnectApplicationFee
---   -- , chargeCaptureDestination         :: Maybe { amount :: Int }
---   } deriving (Show, Generic)
--- instance F.ToForm ChargeCaptureReq where
---   toForm = (\n -> F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop (length . reverse . takeWhile (/= '.') . reverse . show $ n) }) ''BankAccountCreate -- TODO DUP1
--- emptyChargeCaptureReq :: ChargeCaptureReq
--- emptyChargeCaptureReq = ChargeCaptureReq Nothing Nothing Nothing
+data ChargeCaptureReq = ChargeCaptureReq
+  { chargeCaptureAmount              :: Maybe Int
+  , chargeCaptureReceiptEmail        :: Maybe String
+  , chargeCaptureStatementDescriptor :: Maybe String -- 22 chars -- TODO DUP2
+  -- , chargeCaptureApplicationFee      :: Maybe ConnectApplicationFee
+  -- , chargeCaptureDestination         :: Maybe { amount :: Int }
+  } deriving (Show, Generic)
+instance F.ToForm ChargeCaptureReq where
+  toForm = (\n -> F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop (length . reverse . takeWhile (/= '.') . reverse . show $ n) }) ''BankAccountCreate -- TODO DUP1
+chargeCaptureReq :: ChargeCaptureReq
+chargeCaptureReq = ChargeCaptureReq Nothing Nothing Nothing
 
 
 ---- STRIPE API TYPE ----
@@ -647,14 +649,14 @@ type CustomerCardAPI = CustomerCardCreate :<|> CustomerCardRead :<|> CustomerCar
 type CustomerBankAccountAPI = CustomerBankAccountCreate :<|> CustomerBankAccountRead :<|> CustomerBankAccountUpdate :<|> CustomerBankAccountDestroy :<|> CustomerBankAccountList :<|> CustomerBankAccountVerify
 type PlanAPI = PlanCreate :<|> PlanRead :<|> PlanUpdate :<|> PlanDestroy :<|> PlanList
 
-type ChargeAPI = ChargeCreate :<|> ChargeRead :<|> ChargeUpdate :<|> ChargeList -- :<|> ChargeCapture -- TODO
+type ChargeAPI = ChargeCreate :<|> ChargeRead :<|> ChargeUpdate :<|> ChargeList :<|> ChargeCapture
 
 
 type ChargeCreate  = "v1" :> "charges" :> RBody ChargeCreateReq :> StripeHeaders (PostS Charge)
 type ChargeRead    = "v1" :> "charges" :> CapId ChargeId :> StripeHeaders (GetShowS Charge)
 type ChargeUpdate  = "v1" :> "charges" :> CapId ChargeId :> RBody ChargeUpdateReq :> StripeHeaders (PostS Charge)
 type ChargeList    = "v1" :> "charges" :> StripePaginationQueryParams (StripeHeaders (GetListS [Charge]))
--- type ChargeCapture = "v1" :> "charges" :> CapId ChargeId :> RBody ChargeCaptureReq :> "capture" :> StripeHeaders (PostS Charge)
+type ChargeCapture = "v1" :> "charges" :> CapId ChargeId :> "capture" :> RBody ChargeCaptureReq :> StripeHeaders (PostS Charge)
 
 type CustomerCreate  = "v1" :> "customers" :> RBody CustomerCreateReq :> StripeHeaders (PostS Customer)
 type CustomerRead    = "v1" :> "customers" :> CapId CustomerId :> StripeHeaders (GetShowS Customer)
@@ -721,9 +723,9 @@ createPlan :<|> readPlan :<|> updatePlan :<|> destroyPlan :<|> listPlans =
 createCharge :: CreateS ChargeCreateReq Charge
 readCharge :: ReadS ChargeId Charge
 updateCharge :: UpdateS ChargeId ChargeUpdateReq Charge
--- destroyCharge :: DestroyS ChargeId
 listCharges :: ListS [Charge]
-createCharge :<|> readCharge :<|> updateCharge :<|> listCharges =
+captureCharge :: ChargeId -> CreateS ChargeCaptureReq Charge
+createCharge :<|> readCharge :<|> updateCharge :<|> listCharges :<|> captureCharge =
   client (Proxy :: Proxy ChargeAPI)
 
 
