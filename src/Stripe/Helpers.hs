@@ -83,7 +83,7 @@ stripeRunner respToData secretKey connect clientM =
       let url = BaseUrl Https "api.stripe.com" 443 ""
       return $ ClientEnv manager url
 
-    connectToMaybe s =
+    connectToMaybe s = -- TODO case in func param
       case s of
         WithoutConnect  -> Nothing
         WithConnect id' -> Just id'

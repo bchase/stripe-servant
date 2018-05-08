@@ -36,45 +36,6 @@ import           Stripe.Helpers
 import           Stripe.Util                 (fromJsonString)
 
 
--- TODO
---   GENERAL STRIPE
---   \ * errors -- better Either (status codes; decode fail is currently a `Failure`)
---   \ * metadata
---   . * ADTs for e.g. `status`
---     * events (webhooks)
---     * test Connect
---     * Connect fees
---     * expanding
---     ? `Unrecognized* jsonStr` constructor for all ADTs (FromJSON)?
---     ? idempotency
---     ! flesh out data types (Charge/Customer/Card/BankAccount)
---     - sharing Customers (Connect, via Tokens)
---     - resources
---       * Refunds
---       * Events
---       * Subscriptions
---         - Subscriptions
---         - Invoices
---         - Invoice Items
---         - Coupons
---         - Discounts (needed?)
---         - Subscription Items (needed?)
---         - Tokens (needed?)
---       * Connect
---         - Account
---         - Application Fees
---         - Application Fee Refund
---   CLEANUP
---     - mv resource types & their instances to own files
---     - TH `deriveToForm` (grep below)
---     - TH `*Id` types & instances
---     - mv things to e.g. Resource/Customer.hs, Request/Customer.hs
---     - mv StripeTime/Interval/CurrencyCode
---     - test/live key checks
---     - mv most of this to `Stripe.API` and just reexport public API via this module
---     ? rename `StripeErrorCode` to `CardErrorCode`
---     ? change `String` to `Text`
-
 data CountryCode -- TODO add more
   = US
   | UnrecognizedCountryCode T.Text
@@ -133,7 +94,7 @@ metadata = Metadata . HM.fromList
 instance J.FromJSON Metadata where
   parseJSON (J.Object obj) = return . Metadata . HM.map valToText $ obj
     where
-      valToText v =
+      valToText v = -- TODO case here
         case v of
           J.String txt -> txt
           _ -> "" -- TODO shouldnt ever be anything but Text
@@ -164,6 +125,7 @@ newtype CustomerId    = CustomerId    { unCustomerId    :: T.Text } deriving (Eq
 newtype InvoiceId     = InvoiceId     { unInvoiceId     :: T.Text } deriving (Eq, Show, Generic)
 newtype PlanId        = PlanId        { unPlanId        :: T.Text } deriving (Eq, Show, Generic)
 
+-- TODO rename StripeToken
 newtype Token = Token { unToken :: T.Text } deriving (Show, Generic)
 
 instance J.FromJSON AccountId where
@@ -550,7 +512,7 @@ emptyPlanUpdateReq :: PlanUpdateReq
 emptyPlanUpdateReq = PlanUpdateReq Nothing Nothing Nothing
 
 
-data Payer
+data Payer -- TODO rename `StripeSource`?
   = PCustomer     CustomerId
   | PCustomerCard CustomerId CardId
   | PToken        Token
