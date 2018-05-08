@@ -31,6 +31,7 @@ library
                      , http-client
                      , http-client-tls
                      , http-types
+                     , mtl >= 2.2.1 && < 2.3
                      , servant >= 0.12 && < 0.13
                      , servant-server >= 0.12 && < 0.13
                      , servant-client >= 0.12 && < 0.13
@@ -49,6 +50,7 @@ executable stripe-client-exe
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
                      , text
+                     , mtl
                      , stripe-client
                      , time
                      , unordered-containers

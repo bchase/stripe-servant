@@ -1,5 +1,6 @@
 {-# LANGUAGE DataKinds         #-}
 {-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE DeriveFunctor     #-}
 {-# LANGUAGE DeriveAnyClass    #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
@@ -174,60 +175,34 @@ type StripeScalarResp   a = Headers '[Header "Request-Id" String]               
 type StripeListResp     a = Headers '[Header "Request-Id" String] (StripeListJSON    a)
 type StripeDestroyResp id = Headers '[Header "Request-Id" String] (StripeDeleteJSON id)
 
-data StripeObject
-  = StripeScalar'
-  | StripeList'    { stripeHasMore :: Bool }
-  | StripeDestroy' { stripeDeleted :: Bool }
-  deriving ( Show, Generic )
-
-data Stripe' a = Stripe'
-  { stripeRequestId :: RequestId
-  , stripeObject    :: StripeObject
-  , stripeData      :: a
-  } deriving ( Show, Generic )
-
-stripeS :: StripeScalar a -> Stripe' a
-stripeS StripeScalar{..} =
-  Stripe' stripeScalarRequestId StripeScalar' stripeScalarData
-
-stripeL :: StripeList a -> Stripe' a
-stripeL StripeList{..} =
-  let meta = StripeList' stripeListHasMore
-   in Stripe' stripeListRequestId meta stripeListData
-
-stripeD :: StripeDestroy id -> Stripe' id
-stripeD StripeDestroy{..} =
-  let meta = StripeDestroy' stripeDestroyDeleted -- TODO `throwError` instead of Bool?
-   in Stripe' stripeDestroyRequestId meta stripeDestroyId
-
 data StripeScalar a = StripeScalar
   { stripeScalarRequestId :: RequestId
   , stripeScalarData      :: a
-  } deriving (Show, Generic)
+  } deriving ( Show, Generic, Functor )
 
 data StripeList a = StripeList
   { stripeListRequestId :: RequestId
   , stripeListHasMore   :: Bool
   , stripeListData      :: a
-  } deriving (Show, Generic)
+  } deriving ( Show, Generic, Functor )
 
 data StripeDestroy id = StripeDestroy
   { stripeDestroyRequestId :: RequestId
   , stripeDestroyId        :: id
   , stripeDestroyDeleted   :: Bool
-  } deriving (Show, Generic)
+  } deriving ( Show, Generic, Functor )
 
 data StripeListJSON a = StripeListJSON
   { stripeListJsonObject  :: String
   , stripeListJsonUrl     :: String
   , stripeListJsonHasMore :: Bool
   , stripeListJsonData    :: a
-  } deriving (Show, Generic)
+  } deriving ( Show, Generic, Functor )
 
 data StripeDeleteJSON id = StripeDeleteJSON
   { stripeDeleteJsonId      :: id
   , stripeDeleteJsonDeleted :: Bool
-  } deriving (Show, Generic)
+  } deriving ( Show, Generic, Functor )
 
 $(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 14 } ''StripeListJSON)
 
