@@ -2,6 +2,7 @@
 {-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE DeriveAnyClass    #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards   #-}
 {-# LANGUAGE TemplateHaskell   #-}
 {-# LANGUAGE TypeOperators     #-}
 
@@ -172,6 +173,32 @@ type StripeD id = Stripe (StripeDestroy id)
 type StripeScalarResp   a = Headers '[Header "Request-Id" String]                    a
 type StripeListResp     a = Headers '[Header "Request-Id" String] (StripeListJSON    a)
 type StripeDestroyResp id = Headers '[Header "Request-Id" String] (StripeDeleteJSON id)
+
+data StripeObject
+  = StripeScalar'
+  | StripeList'    { stripeHasMore :: Bool }
+  | StripeDestroy' { stripeDeleted :: Bool }
+  deriving ( Show, Generic )
+
+data Stripe' a = Stripe'
+  { stripeRequestId :: RequestId
+  , stripeObject    :: StripeObject
+  , stripeData      :: a
+  } deriving ( Show, Generic )
+
+stripeS :: StripeScalar a -> Stripe' a
+stripeS StripeScalar{..} =
+  Stripe' stripeScalarRequestId StripeScalar' stripeScalarData
+
+stripeL :: StripeList a -> Stripe' a
+stripeL StripeList{..} =
+  let meta = StripeList' stripeListHasMore
+   in Stripe' stripeListRequestId meta stripeListData
+
+stripeD :: StripeDestroy id -> Stripe' id
+stripeD StripeDestroy{..} =
+  let meta = StripeDestroy' stripeDestroyDeleted -- TODO `throwError` instead of Bool?
+   in Stripe' stripeDestroyRequestId meta stripeDestroyId
 
 data StripeScalar a = StripeScalar
   { stripeScalarRequestId :: RequestId
