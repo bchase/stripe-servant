@@ -30,12 +30,17 @@ main = do
 createAndChargeAndDeleteCustomer :: S (Customer, Charge, [Charge], Bool)
 createAndChargeAndDeleteCustomer = do
   let stripe' = stripe WithoutConnect
-  cust   <- fmap stripeData . scalar . stripe' . createCustomer $ custReq
-  charge <- fmap stripeData . scalar . stripe' . createCharge   $ chargeReq cust
+      stripeS = scalar    . stripe'
+      stripeL = list      . stripe'
+      stripeD = destroyed . stripe'
+      -- sData   = fmap stripeData
 
-  charges <- fmap stripeData . list . stripe' . paginate [ By 10 ] $ listCharges
+  cust   <- stripeData <$> (stripeS . createCustomer $ custReq)
+  charge <- stripeData <$> (stripeS . createCharge   $ chargeReq cust)
 
-  deleted <- fmap stripeDestroyDeleted . destroyed . stripe' . destroyCustomer $ customerId cust
+  charges <- stripeData <$> (list . stripe' . paginate [ By 10 ] $ listCharges)
+
+  deleted <- stripeDestroyDeleted <$> (stripeD . destroyCustomer $ customerId cust)
 
   return (cust, charge, charges, deleted)
 
