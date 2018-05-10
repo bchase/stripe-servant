@@ -5,6 +5,7 @@
 {-# LANGUAGE NamedFieldPuns             #-}
 {-# LANGUAGE OverloadedLists            #-}
 {-# LANGUAGE OverloadedStrings          #-}
+{-# LANGUAGE RecordWildCards            #-}
 {-# LANGUAGE TemplateHaskell            #-}
 {-# LANGUAGE TypeOperators              #-}
 
@@ -36,30 +37,6 @@ import           Stripe.Helpers
 import           Stripe.Util                 (fromJsonString)
 
 
-data CountryCode -- TODO add more
-  = US
-  | UnrecognizedCountryCode T.Text
-  deriving (Show, Generic)
-instance J.FromJSON CountryCode where
-  parseJSON (J.String "US") = return US
-  parseJSON (J.String str)  = return . UnrecognizedCountryCode $ str
-  parseJSON _ = mempty
-instance ToHttpApiData CountryCode where
-  toQueryParam = T.pack . show
-  -- toQueryParam (UnrecognizedCountryCode code) = code -- TODO
-
--- ISO4217
-data CurrencyCode -- TODO add more
-  = USD
-  | UnrecognizedCurrencyCode T.Text
-  deriving (Show, Generic)
-instance J.FromJSON CurrencyCode where
-  parseJSON (J.String "usd") = return USD
-  parseJSON (J.String str)   = return . UnrecognizedCurrencyCode $ str
-  parseJSON _ = mempty
-instance ToHttpApiData CurrencyCode where
-  toQueryParam = T.pack . map toLower . show
-  -- toQueryParam (UnrecognizedCurrencyCode code) = code -- TODO
 
 data Interval
   = Day
@@ -396,6 +373,9 @@ $(deriveFromJSON' ''Charge)
   -- , chargeSourceTransfer :: Null,
   -- , chargeTransferGroup :: Null
 
+chargePrice :: Charge -> Price
+chargePrice Charge{..} = Price chargeCurrency chargeAmount
+
 data Customer = Customer
   { customerId          :: CustomerId
   , customerDescription :: Maybe String
@@ -417,6 +397,9 @@ data Plan = Plan
   , planTrialPeriodDays     :: Maybe Int
   } deriving (Show, Generic)
 $(deriveFromJSON' ''Plan)
+
+planPrice :: Plan -> Price
+planPrice Plan{..} = Price planCurrency planAmount
 
 -- Requests
 
@@ -499,6 +482,19 @@ instance F.ToForm PlanCreateReq where
     let toForm' = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 10 }
      in addMetadataToForm planCreateMetadata . toForm' $ req
 
+planCreateReq :: PlanId -> String -> Price -> Interval -> PlanCreateReq
+planCreateReq pid name (Price curr amount) intv = PlanCreateReq
+  { planCreateId                  = pid
+  , planCreateName                = name
+  , planCreateAmount              = amount
+  , planCreateCurrency            = curr
+  , planCreateInterval            = intv
+  , planCreateIntervalCount       = Nothing
+  , planCreateStatementDescriptor = Nothing
+  , planCreateTrialPeriodDays     = Nothing
+  , planCreateMetadata            = Nothing
+  }
+
 data PlanUpdateReq = PlanUpdateReq
   { planUpdateName                :: Maybe String
   , planUpdateStatementDescriptor :: Maybe String
@@ -555,9 +551,8 @@ instance F.ToForm ChargeCreateReq where
     let toForm' = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 12 }
      in addMetadataToForm chargeCreateMetadata . toForm' $ req
 
-type Amount = Int -- TODO rm
-chargeCreateReq :: Amount -> CurrencyCode -> Payer -> ChargeCreateReq
-chargeCreateReq amount curr payer =
+chargeCreateReq :: Price -> Payer -> ChargeCreateReq
+chargeCreateReq (Price curr amount) payer =
   case payer of
     PCustomer cust          -> (req amount curr) { chargeCreateCustomer = Just cust }
     PCustomerCard cust card -> (req amount curr) { chargeCreateCustomer = Just cust, chargeCreateSource = Just $ SourceCard card }

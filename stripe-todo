@@ -6,6 +6,8 @@
     - add detail to `StripeFailure` to track the source of failure
     - something other than `type` synonym for e.g. `StripeClient`?
     - use `deriveFromJSON'` more universally
+    - normalize e.g. `min...Req`, `empty...Req`
+    - means of pinpointing errors within chained `Stripe`?
 
     GENERAL STRIPE
     \ * errors -- better Either (status codes; decode fail is currently a `Failure`)

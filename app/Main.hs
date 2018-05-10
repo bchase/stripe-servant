@@ -31,8 +31,9 @@ createAndChargeAndDeleteCustomer = do
 
   deleted <- stripeDestroyDeleted <$> (stripeD' WithoutConnect . destroyCustomer $ customerId cust)
 
-  return (cust, charge, charges, deleted)
+  return (cust, charge, charges, True)
 
   where
     custReq = (customerCreateReq (Token "tok_visa")) { customerCreateEmail = Just "test@example.com" }
-    chargeReq Customer{customerId} = chargeCreateReq 10000 USD (PCustomer customerId)
+
+    chargeReq Customer{customerId} = chargeCreateReq (Price USD 10000) (PCustomer customerId)

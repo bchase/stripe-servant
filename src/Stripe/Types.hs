@@ -10,6 +10,7 @@
 module Stripe.Types where
 
 import qualified Data.Text          as T
+import           Data.Char          (toLower)
 import           GHC.Generics       (Generic)
 
 import qualified Data.Aeson         as J
@@ -19,13 +20,13 @@ import           Servant.API
 import           Servant.Client     (ClientM, Response (..))
 
 
+
+-- -- GENERIC IDS -- --
+
 type RequestId = String
 
-data StripeConnect
-  = WithoutConnect
-  | WithConnect StripeAccountId
-
 newtype ResourceId = ResourceId T.Text deriving (Show, Generic, J.FromJSON)
+
 
 
 -- -- PAGINATION -- --
@@ -53,6 +54,7 @@ instance ToHttpApiData PaginationEndingBefore where
   toUrlPiece (EndingBefore' (ResourceId id')) = T.pack . show $ id'
 
 
+
 -- -- HEADER TYPES -- --
 
 newtype StripeSecretKey = StripeSecretKey { unStripeSecretKey :: T.Text }
@@ -65,6 +67,7 @@ instance ToHttpApiData StripeAccountId where
   toUrlPiece = unStripeAccountId
 instance ToHttpApiData StripeVersion where
   toUrlPiece StripeVersion'2017'08'15 = "2017-08-15"
+
 
 
 -- -- ERRORS -- --
@@ -163,6 +166,7 @@ data StripeFailure
   deriving (Show)
 
 
+
 -- -- RESPONSES -- --
 
 type StripeScalarResp   a = Headers '[Header "Request-Id" String]                    a
@@ -221,6 +225,10 @@ instance StripeData StripeDestroy where
 
 -- -- CLIENTS -- --
 
+data StripeConnect
+  = WithoutConnect
+  | WithConnect StripeAccountId
+
 type RunnableStripeClient a = ClientM a
 
 type StripeClient resp =
@@ -234,6 +242,7 @@ type StripeClientPaginated resp =
   -> Maybe PaginationStartingAfter
   -> Maybe PaginationEndingBefore
   -> StripeClient resp
+
 
 
 -- -- API TYPE / FUNC HELPERS -- --
@@ -264,3 +273,49 @@ type CreateS     req resp =       req -> StripeClient          (StripeScalarResp
 type UpdateS  id req resp = id -> req -> StripeClient          (StripeScalarResp  resp)
 type ReadS    id     resp = id ->        StripeClient          (StripeScalarResp  resp)
 type DestroyS id          = id ->        StripeClient          (StripeDestroyResp   id)
+
+
+
+-- -- CODES (e.g. COUNTRY, CURRENCY) -- --
+
+data CountryCode -- TODO add more
+  = US
+  | UnrecognizedCountryCode T.Text
+  deriving (Show, Generic)
+instance J.FromJSON CountryCode where
+  parseJSON (J.String "US") = return US
+  parseJSON (J.String str)  = return . UnrecognizedCountryCode $ str
+  parseJSON _ = mempty
+instance ToHttpApiData CountryCode where
+  toQueryParam = T.pack . show
+  -- toQueryParam (UnrecognizedCountryCode code) = code -- TODO
+
+-- ISO4217
+data CurrencyCode -- TODO add more
+  = USD
+  | JPY
+  | UnrecognizedCurrencyCode T.Text
+  deriving (Show, Generic)
+instance J.FromJSON CurrencyCode where
+  parseJSON (J.String "usd") = return USD
+  parseJSON (J.String "jpy") = return JPY
+  parseJSON (J.String str)   = return . UnrecognizedCurrencyCode $ str
+  parseJSON _ = mempty
+instance ToHttpApiData CurrencyCode where
+  toQueryParam = T.pack . map toLower . show
+  -- toQueryParam (UnrecognizedCurrencyCode code) = code -- TODO
+
+
+
+-- -- PRICES -- --
+
+data Price = Price
+  { stripeCurrency :: CurrencyCode
+  , stripeAmount   :: Int
+  }
+
+instance Show Price where
+  show (Price (UnrecognizedCurrencyCode curr) amount) =
+    "$" ++ show amount ++ " (" ++ T.unpack curr ++ ")"
+  show (Price USD amount) = "$" ++ show amount
+  show (Price JPY amount) = "¥" ++ show amount
