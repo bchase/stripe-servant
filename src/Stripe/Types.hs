@@ -25,19 +25,19 @@ data StripeConnect
   = WithoutConnect
   | WithConnect StripeAccountId
 
-newtype ResourceId = ResourceId String deriving (Show, Generic, J.FromJSON)
+newtype ResourceId = ResourceId T.Text deriving (Show, Generic, J.FromJSON)
 
 
 -- -- PAGINATION -- --
 
 data PaginationOpt
-  = PaginateBy Int
-  | PaginateStartingAfter ResourceId
-  | PaginateEndingBefore ResourceId
+  = By            Int
+  | StartingAfter ResourceId
+  | EndingBefore  ResourceId
 
-newtype PaginationLimit         = PaginateBy'            Int        deriving (Generic)
-newtype PaginationStartingAfter = PaginateStartingAfter' ResourceId deriving (Generic)
-newtype PaginationEndingBefore  = PaginateEndingBefore'  ResourceId deriving (Generic)
+newtype PaginationLimit         = By'            Int        deriving (Generic)
+newtype PaginationStartingAfter = StartingAfter' ResourceId deriving (Generic)
+newtype PaginationEndingBefore  = EndingBefore'  ResourceId deriving (Generic)
 
 data PaginationOpts = PaginationOpts
   { paginateBy            :: Maybe PaginationLimit
@@ -46,11 +46,11 @@ data PaginationOpts = PaginationOpts
   }
 
 instance ToHttpApiData PaginationLimit where
-  toUrlPiece (PaginateBy' num) = T.pack . show $ num
+  toUrlPiece (By' num) = T.pack . show $ num
 instance ToHttpApiData PaginationStartingAfter where
-  toUrlPiece (PaginateStartingAfter' (ResourceId id')) = T.pack . show $ id'
+  toUrlPiece (StartingAfter' (ResourceId id')) = T.pack . show $ id'
 instance ToHttpApiData PaginationEndingBefore where
-  toUrlPiece (PaginateEndingBefore' (ResourceId id')) = T.pack . show $ id'
+  toUrlPiece (EndingBefore' (ResourceId id')) = T.pack . show $ id'
 
 
 -- -- HEADER TYPES -- --

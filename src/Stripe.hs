@@ -471,8 +471,8 @@ data CustomerCreateReq = CustomerCreateReq
   } deriving (Generic)
 instance F.ToForm CustomerCreateReq where
   toForm = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 14 }
-minCustomerCreateReq :: Token -> CustomerCreateReq
-minCustomerCreateReq token = CustomerCreateReq token Nothing Nothing
+customerCreateReq :: Token -> CustomerCreateReq
+customerCreateReq token = CustomerCreateReq token Nothing Nothing
 
 data CustomerUpdateReq = CustomerUpdateReq
   { customerUpdateEmail       :: Maybe String
@@ -644,7 +644,6 @@ type PlanRead    = "v1" :> "plans" :> CapId PlanId :> StripeHeaders (GetShowS Pl
 type PlanUpdate  = "v1" :> "plans" :> CapId PlanId :> RBody PlanUpdateReq :> StripeHeaders (PostS Plan)
 type PlanDestroy = "v1" :> "plans" :> CapId PlanId :> StripeHeaders (DeleteS PlanId)
 type PlanList    = "v1" :> "plans" :> StripePaginationQueryParams (StripeHeaders (GetListS [Plan]))
-
 
 
 ---- STRIPE ENDPOINT FUNCS ----

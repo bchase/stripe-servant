@@ -4,50 +4,49 @@
 
 module Main where
 
-import qualified Data.Text             as T
-import           Data.Time.Clock       as Time
-import           Data.Time.Clock.POSIX as Time
+import qualified Data.Text              as T
+import           Data.Time.Clock        as Time
+import           Data.Time.Clock.POSIX  as Time
+import           Control.Monad.IO.Class (liftIO)
 
 import           Stripe
 
 
 
-type Email = String
-createCustomer' :: StripeConnect -> Token -> Email -> S (StripeScalar Customer)
-createCustomer' connect tok email = do
-  let custReq = CustomerCreateReq tok (Just email) Nothing
-
-  scalar connect $ createCustomer custReq
-
--- createCustomerAndCharge :: StripeConnect -> StripeToken -> Email -> Stripe'' (Customer, Charge)
--- createCustomerAndCharge connect tok email = do
---   -- create customer --
---   let custReq = customerCreateReq tok (Just email) Nothing
---   cust <- createCustomer connect custReq
---
---   -- create charge --
---   let source    = PCustomer . customerId . stripeData $ cust
---       chargeReq = (chargeCreateReq 10000 USD source) { chargeCreateCapture = False }
---   charge <- createCharge connect chargeReq
---
---   return (cust, charge)
-
-
 main :: IO ()
 main = do
-  let config  = StripeConfig StripeVersion'2017'08'15 (StripeSecretKey "1234abcd")
-  --     connect = WithConnect $ StripeAccountId "acct_..."
-  --     token   = PToken $ Token "tok_visa"
-  --     email   = "customer@example.com"
+  let ver    = StripeVersion'2017'08'15
+      key    = StripeSecretKey "sk_test_BQokikJOvBiI2HlWgH4olfQ2"
+      config = StripeConfig ver key
 
-  -- stripeIO config scalar
-  return ()
-  --
-  -- eStripe <- stripeIO config $ createCustomerAndCharge connect token email
-  --
-  -- case eStripe of
-  --   Right (_, charge) -> putStrLn . stripeChargeId . stripeData $ charge
-  --   Left  failure     -> handleFailure failure
+  eResp <- stripeIO config createAndChargeAndDeleteCustomer
+
+  case eResp of
+    Right (cust, charge, charges, d) -> print charge >> print d
+    Left  (StripeErrorResponse err)  -> print err
+    Left  _                          -> putStrLn "decode error or connection error"
+
+
+createAndChargeAndDeleteCustomer :: S (Customer, Charge, [Charge], Bool)
+createAndChargeAndDeleteCustomer = do
+  let stripe' = stripe WithoutConnect
+  cust   <- fmap stripeData . scalar . stripe' . createCustomer $ custReq
+  charge <- fmap stripeData . scalar . stripe' . createCharge   $ chargeReq cust
+
+  charges <- fmap stripeData . list . stripe' . paginate [ By 10 ] $ listCharges
+
+  deleted <- fmap stripeDestroyDeleted . destroyed . stripe' . destroyCustomer $ customerId cust
+
+  return (cust, charge, charges, deleted)
+
+  where
+    custReq =
+      (customerCreateReq (Token "tok_visa")) { customerCreateEmail = Just "test@example.com" }
+
+    chargeReq Customer{customerId} =
+      (chargeCreateReq 10000 USD (PCustomer customerId)) { chargeCreateCapture = Just False}
+
+
 
 
 -- main :: IO ()
