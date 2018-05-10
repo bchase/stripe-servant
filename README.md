@@ -10,23 +10,16 @@ You're almost certainly looking for [dmjio/stripe](https://github.com/dmjio/stri
 1. thorough Stripe Connect support
 2. ACH
 
-And because I decided I wanted to explore the use of `servant-client` in the process of implementing those.
+I also wanted to explore the use of [`servant-client`](https://hackage.haskell.org/package/servant-client) in the process of implementing those, so here we are.
 
-Also, the project I was building this for was eventually canceled, and so it should be noted that this logic has not been used in anger in production.
+The project I was building this for was eventually canceled though, so it should also be noted that this logic has never been used in anger.
 
 Consider yourself disclaimed!
 
 
 ## Usage
 
-There aren't currently any tests, but running `app/Main.hs` should show that things generally work as intended. It can be compiled and run with:
-
-```
-$ stack build && stack exec stripe-client-exe
-```
-
-
-At the time of writing, `app/Main.hs` contains:
+`app/Main.hs` contains some example usage:
 
 ```haskell
 createAndChargeAndDeleteCustomer :: Stripe (Customer, Charge, [Charge], Bool)
@@ -61,13 +54,21 @@ main = do
     Right (cust, charge, charges, gone) -> print charge
 ```
 
+It can be run with:
+
+```
+$ stack build && stack exec stripe-client-exe
+```
+
+
+### Usage Explanation
+
 Let's take a look at some of these functions step-by-step.
 
 First, we generate `createCharge` with, essentially:
 
 ```haskell
--- the Stripe API endpoint -- POST /v1/charges
-type ChargeCreate' =
+type ChargeCreate = -- POST https://api.stripe.com/v1/charges
   "v1" :> "charges"
     :> ReqBody '[FormUrlEncoded] ChargeCreateReq
     :> Header "Stripe-Account" StripeAccountId
@@ -83,10 +84,10 @@ createCharge = Servant.Client.client (Proxy :: Proxy ChargeCreate)
 But in the actual source, the above collapses to:
 
 ```haskell
-type ChargeCreate  = "v1" :> "charges" :> RBody ChargeCreateReq :> StripeHeaders (PostS Charge)
+type ChargeCreate = "v1" :> "charges" :> RBody ChargeCreateReq :> StripeHeaders (PostS Charge)
 
-createCharge' :: CreateS ChargeCreateReq Charge
-createCharge' = Servant.Client.client (Proxy :: Proxy ChargeCreate)
+createCharge :: CreateS ChargeCreateReq Charge
+createCharge = Servant.Client.client (Proxy :: Proxy ChargeCreate)
 
 
 -- using the `type` synonyms...
@@ -106,7 +107,7 @@ type CreateS req resp = req -> StripeClient (StripeScalarResp  resp)
 ```
 
 
-So above we see that using `Servant.Client.client`, we can generate functions that provide us with a `StripeClient resp`.
+So above we see that using [`Servant.Client.client`](https://hackage.haskell.org/package/servant-client-0.13.0.1/docs/Servant-Client.html#v:client), we can generate functions that provide us with a `StripeClient resp`.
 
 Next, we'll want to go from these `StripeClient`s to the `Stripe` monad:
 
