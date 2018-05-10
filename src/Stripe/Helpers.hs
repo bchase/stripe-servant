@@ -21,6 +21,9 @@ module Stripe.Helpers
   , scalar
   , list
   , destroyed
+  , stripeS
+  , stripeL
+  , stripeD
   ) where
 
 import qualified Data.Text                   as T
@@ -92,6 +95,13 @@ data StripeConfig = StripeConfig
 
 stripeIO :: StripeConfig -> S a -> IO (Either StripeFailure a)
 stripeIO cfg = runExceptT . flip runReaderT cfg . runStripe
+
+stripeS :: StripeConnect -> StripeClient (StripeScalarResp a) -> S (StripeScalar a)
+stripeS connect = scalar . stripe connect
+stripeL :: StripeConnect -> StripeClient (StripeListResp a) -> S (StripeList a)
+stripeL connect = list . stripe connect
+stripeD :: StripeConnect -> StripeClient (StripeDestroyResp a) -> S (StripeDestroy a)
+stripeD connect = destroyed . stripe connect
 
 stripe :: StripeConnect -> StripeClient a -> S a
 stripe connect client = do

@@ -22,34 +22,26 @@ main = do
   eResp <- stripeIO config createAndChargeAndDeleteCustomer
 
   case eResp of
-    Right (cust, charge, charges, d) -> print charge >> print d
-    Left  (StripeErrorResponse err)  -> print err
-    Left  _                          -> putStrLn "decode error or connection error"
+    Right (cust, charge, charges, gone) -> print charge >> print gone
+    Left  (StripeErrorResponse   err  ) -> putStrLn "Stripe Error:"     >> print err
+    Left  (StripeDecodeFailure   err _) -> putStrLn "Decode Failure:"   >> print err
+    Left  (StripeConnectionError err  ) -> putStrLn "Connection Error:" >> print err
 
 
 createAndChargeAndDeleteCustomer :: S (Customer, Charge, [Charge], Bool)
 createAndChargeAndDeleteCustomer = do
-  let stripe' = stripe WithoutConnect
-      stripeS = scalar    . stripe'
-      stripeL = list      . stripe'
-      stripeD = destroyed . stripe'
-      -- sData   = fmap stripeData
+  cust   <- stripeData <$> (stripeS WithoutConnect . createCustomer $ custReq)
+  charge <- stripeData <$> (stripeS WithoutConnect . createCharge   $ chargeReq cust)
 
-  cust   <- stripeData <$> (stripeS . createCustomer $ custReq)
-  charge <- stripeData <$> (stripeS . createCharge   $ chargeReq cust)
+  charges <- stripeData <$> (stripeL WithoutConnect . paginate [ By 10 ] $ listCharges)
 
-  charges <- stripeData <$> (list . stripe' . paginate [ By 10 ] $ listCharges)
-
-  deleted <- stripeDestroyDeleted <$> (stripeD . destroyCustomer $ customerId cust)
+  deleted <- stripeDestroyDeleted <$> (stripeD WithoutConnect . destroyCustomer $ customerId cust)
 
   return (cust, charge, charges, deleted)
 
   where
-    custReq =
-      (customerCreateReq (Token "tok_visa")) { customerCreateEmail = Just "test@example.com" }
-
-    chargeReq Customer{customerId} =
-      (chargeCreateReq 10000 USD (PCustomer customerId)) { chargeCreateCapture = Just False}
+    custReq = (customerCreateReq (Token "tok_visa")) { customerCreateEmail = Just "test@example.com" }
+    chargeReq Customer{customerId} = chargeCreateReq 10000 USD (PCustomer customerId)
 
 
 
