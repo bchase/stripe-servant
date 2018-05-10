@@ -1,12 +1,7 @@
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE NamedFieldPuns             #-}
-{-# LANGUAGE OverloadedStrings          #-}
+{-# LANGUAGE NamedFieldPuns    #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module Main where
-
-import qualified Data.Text              as T
-import           Data.Time.Clock        as Time
-import           Data.Time.Clock.POSIX  as Time
 
 import           Stripe
 
