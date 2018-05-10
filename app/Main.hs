@@ -30,12 +30,12 @@ main = do
 
 createAndChargeAndDeleteCustomer :: S (Customer, Charge, [Charge], Bool)
 createAndChargeAndDeleteCustomer = do
-  cust   <- stripeData <$> (stripeS WithoutConnect . createCustomer $ custReq)
-  charge <- stripeData <$> (stripeS WithoutConnect . createCharge   $ chargeReq cust)
+  cust   <- stripeS WithoutConnect . createCustomer $ custReq
+  charge <- stripeS WithoutConnect . createCharge   $ chargeReq cust
 
-  charges <- stripeData <$> (stripeL WithoutConnect . paginate [ By 10 ] $ listCharges)
+  charges <- stripeL WithoutConnect . paginate [ By 10 ] $ listCharges
 
-  deleted <- stripeDestroyDeleted <$> (stripeD WithoutConnect . destroyCustomer $ customerId cust)
+  deleted <- stripeDestroyDeleted <$> (stripeD' WithoutConnect . destroyCustomer $ customerId cust)
 
   return (cust, charge, charges, deleted)
 

@@ -10,20 +10,18 @@
 {-# LANGUAGE TypeFamilies               #-}
 
 module Stripe.Helpers
-  ( deriveFromJSON'
-  , paginate
-  , unpaginated
-  , StripeData (stripeReqId, stripeData)
-  , S
+  ( S
   , StripeConfig (..)
   , stripeIO
-  , stripe
-  , scalar
-  , list
-  , destroyed
   , stripeS
   , stripeL
   , stripeD
+  , stripeS'
+  , stripeL'
+  , stripeD'
+  , paginate
+  , unpaginated
+  , deriveFromJSON'
   ) where
 
 import qualified Data.Text                   as T
@@ -47,11 +45,40 @@ import           Stripe.Error                (stripeError)
 
 
 
-deriveFromJSON' :: TH.Name -> TH.Q [TH.Dec]
-deriveFromJSON' n = deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop (moduleNameLength n) } n where
-  moduleNameLength = length . takeWhile (/= '.') . reverse . show
+---- Stripe MONAD ----
+
+data StripeConfig = StripeConfig
+  { stripeVersion   :: StripeVersion
+  , stripeSecretKey :: StripeSecretKey
+  }
+
+newtype S a = S { runStripe :: ReaderT StripeConfig ( ExceptT StripeFailure IO ) a }
+  deriving ( Functor, Applicative, Monad, MonadReader StripeConfig, MonadError StripeFailure, MonadIO )
+
+stripeIO :: StripeConfig -> S a -> IO (Either StripeFailure a)
+stripeIO cfg = runExceptT . flip runReaderT cfg . runStripe
 
 
+
+---- StripeClient RUNNERS ----
+
+stripeS :: StripeConnect -> StripeClient (StripeScalarResp a) -> S a
+stripeS connect = fmap stripeData . stripeS' connect
+stripeL :: StripeConnect -> StripeClient (StripeListResp a) -> S a
+stripeL connect = fmap stripeData . stripeL' connect
+stripeD :: StripeConnect -> StripeClient (StripeDestroyResp a) -> S a
+stripeD connect = fmap stripeData . stripeD' connect
+
+stripeS' :: StripeConnect -> StripeClient (StripeScalarResp a) -> S (StripeScalar a)
+stripeS' connect = scalar . stripe connect
+stripeL' :: StripeConnect -> StripeClient (StripeListResp a) -> S (StripeList a)
+stripeL' connect = list . stripe connect
+stripeD' :: StripeConnect -> StripeClient (StripeDestroyResp a) -> S (StripeDestroy a)
+stripeD' connect = destroyed . stripe connect
+
+
+
+---- PAGINATION HELPERS ----
 
 unpaginated :: StripeClientPaginated (StripeListResp a) -> StripeClient (StripeListResp a)
 unpaginated = paginate []
@@ -69,39 +96,16 @@ paginate pagination clientM =
     set p (EndingBefore  id') = p { paginateEndingBefore  = Just . EndingBefore'  $ id' }
 
 
-class StripeData s where
-  stripeReqId :: s a -> RequestId
-  stripeData  :: s a -> a
 
-instance StripeData StripeScalar where
-  stripeReqId = stripeScalarRequestId
-  stripeData  = stripeScalarData
-instance StripeData StripeList where
-  stripeReqId = stripeListRequestId
-  stripeData  = stripeListData
-instance StripeData StripeDestroy where
-  stripeReqId = stripeDestroyRequestId
-  stripeData  = stripeDestroyId
+---- JSON HELPERS ----
+
+deriveFromJSON' :: TH.Name -> TH.Q [TH.Dec]
+deriveFromJSON' n = deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop (moduleNameLength n) } n where
+  moduleNameLength = length . takeWhile (/= '.') . reverse . show
 
 
 
-newtype S a = S { runStripe :: ReaderT StripeConfig ( ExceptT StripeFailure IO ) a }
-  deriving ( Functor, Applicative, Monad, MonadReader StripeConfig, MonadError StripeFailure, MonadIO )
-
-data StripeConfig = StripeConfig
-  { stripeVersion   :: StripeVersion
-  , stripeSecretKey :: StripeSecretKey
-  }
-
-stripeIO :: StripeConfig -> S a -> IO (Either StripeFailure a)
-stripeIO cfg = runExceptT . flip runReaderT cfg . runStripe
-
-stripeS :: StripeConnect -> StripeClient (StripeScalarResp a) -> S (StripeScalar a)
-stripeS connect = scalar . stripe connect
-stripeL :: StripeConnect -> StripeClient (StripeListResp a) -> S (StripeList a)
-stripeL connect = list . stripe connect
-stripeD :: StripeConnect -> StripeClient (StripeDestroyResp a) -> S (StripeDestroy a)
-stripeD connect = destroyed . stripe connect
+---- PRIVATE ----
 
 stripe :: StripeConnect -> StripeClient a -> S a
 stripe connect client = do
@@ -130,7 +134,6 @@ list = fmap (\(Headers StripeListJSON{..} hs) -> StripeList (getReqId hs) stripe
 
 destroyed :: S (StripeDestroyResp id) -> S (StripeDestroy id)
 destroyed = fmap (\(Headers StripeDeleteJSON{..} hs) -> StripeDestroy (getReqId hs) stripeDeleteJsonId stripeDeleteJsonDeleted)
-
 
 
 getReqId :: HList '[Header "Request-Id" String] -> String

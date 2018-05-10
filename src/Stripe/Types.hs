@@ -209,6 +209,22 @@ $(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 14 } ''S
 $(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 16 } ''StripeDeleteJSON)
 
 
+class StripeData s where
+  stripeReqId :: s a -> RequestId
+  stripeData  :: s a -> a
+
+instance StripeData StripeScalar where
+  stripeReqId = stripeScalarRequestId
+  stripeData  = stripeScalarData
+instance StripeData StripeList where
+  stripeReqId = stripeListRequestId
+  stripeData  = stripeListData
+instance StripeData StripeDestroy where
+  stripeReqId = stripeDestroyRequestId
+  stripeData  = stripeDestroyId
+
+
+
 -- -- CLIENTS -- --
 
 type RunnableStripeClient a = ClientM a
