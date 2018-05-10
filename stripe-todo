@@ -1,8 +1,11 @@
 
   TODO
+    - clean up test/
     - get rid of leading `stripe*` and `Stripe*`?
     - ADT for Strip(Scalar/List/Destroy)? (also, `stripeRunner` et al)
     - add detail to `StripeFailure` to track the source of failure
+    - something other than `type` synonym for e.g. `StripeClient`?
+    - use `deriveFromJSON'` more universally
 
     GENERAL STRIPE
     \ * errors -- better Either (status codes; decode fail is currently a `Failure`)
