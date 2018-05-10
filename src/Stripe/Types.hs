@@ -1,17 +1,21 @@
-{-# LANGUAGE DataKinds         #-}
-{-# LANGUAGE DeriveGeneric     #-}
-{-# LANGUAGE DeriveFunctor     #-}
-{-# LANGUAGE DeriveAnyClass    #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RecordWildCards   #-}
-{-# LANGUAGE TemplateHaskell   #-}
-{-# LANGUAGE TypeOperators     #-}
+{-# LANGUAGE DataKinds                  #-}
+{-# LANGUAGE DeriveGeneric              #-}
+{-# LANGUAGE DeriveFunctor              #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE OverloadedStrings          #-}
+{-# LANGUAGE RecordWildCards            #-}
+{-# LANGUAGE TemplateHaskell            #-}
+{-# LANGUAGE TypeOperators              #-}
 
 module Stripe.Types where
 
-import qualified Data.Text          as T
-import           Data.Char          (toLower)
-import           GHC.Generics       (Generic)
+import qualified Data.Text            as T
+import           Data.Char            (toLower)
+import           Control.Monad.Reader (MonadReader, ReaderT, runReaderT, asks,
+                                       MonadIO, liftIO)
+import           Control.Monad.Except (MonadError, throwError,
+                                       ExceptT, runExceptT)
+import           GHC.Generics         (Generic)
 
 import qualified Data.Aeson         as J
 import           Data.Aeson.Casing  (snakeCase)
@@ -164,6 +168,21 @@ data StripeFailure
   | StripeDecodeFailure T.Text Response
   | StripeConnectionError T.Text
   deriving (Show)
+
+
+
+-- -- `Stripe` MONAD -- --
+
+data StripeConfig = StripeConfig
+  { stripeVersion   :: StripeVersion
+  , stripeSecretKey :: StripeSecretKey
+  }
+
+newtype Stripe a = Stripe { runStripe :: ReaderT StripeConfig ( ExceptT StripeFailure IO ) a }
+  deriving ( Functor, Applicative, Monad, MonadReader StripeConfig, MonadError StripeFailure, MonadIO )
+
+stripeIO :: StripeConfig -> Stripe a -> IO (Either StripeFailure a)
+stripeIO cfg = runExceptT . flip runReaderT cfg . runStripe
 
 
 

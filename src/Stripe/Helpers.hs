@@ -10,9 +10,7 @@
 {-# LANGUAGE TypeFamilies               #-}
 
 module Stripe.Helpers
-  ( Stripe
-  , StripeConfig (..)
-  , stripeIO
+  ( stripeIO
   , stripeS
   , stripeL
   , stripeD
@@ -28,8 +26,7 @@ import qualified Data.Text                   as T
 import           Data.Either                 (either)
 import           Control.Monad.Except        (MonadError, throwError,
                                               ExceptT, runExceptT)
-import           Control.Monad.Reader        (MonadReader, ReaderT, runReaderT, asks,
-                                              MonadIO, liftIO)
+import           Control.Monad.Reader        (asks, liftIO)
 import           GHC.Generics                (Generic)
 import           Language.Haskell.TH.Syntax  as TH
 
@@ -42,21 +39,6 @@ import           Network.HTTP.Client.TLS     (newTlsManagerWith, tlsManagerSetti
 
 import           Stripe.Types
 import           Stripe.Error                (stripeError)
-
-
-
----- Stripe MONAD ----
-
-data StripeConfig = StripeConfig
-  { stripeVersion   :: StripeVersion
-  , stripeSecretKey :: StripeSecretKey
-  }
-
-newtype Stripe a = Stripe { runStripe :: ReaderT StripeConfig ( ExceptT StripeFailure IO ) a }
-  deriving ( Functor, Applicative, Monad, MonadReader StripeConfig, MonadError StripeFailure, MonadIO )
-
-stripeIO :: StripeConfig -> Stripe a -> IO (Either StripeFailure a)
-stripeIO cfg = runExceptT . flip runReaderT cfg . runStripe
 
 
 
