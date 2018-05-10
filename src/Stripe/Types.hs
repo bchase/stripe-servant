@@ -165,12 +165,6 @@ data StripeFailure
 
 -- -- RESPONSES -- --
 
-type Stripe a = Either StripeFailure a
-
-type StripeS a  = Stripe (StripeScalar   a)
-type StripeL a  = Stripe (StripeList     a)
-type StripeD id = Stripe (StripeDestroy id)
-
 type StripeScalarResp   a = Headers '[Header "Request-Id" String]                    a
 type StripeListResp     a = Headers '[Header "Request-Id" String] (StripeListJSON    a)
 type StripeDestroyResp id = Headers '[Header "Request-Id" String] (StripeDeleteJSON id)

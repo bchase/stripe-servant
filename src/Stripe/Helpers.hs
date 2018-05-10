@@ -10,7 +10,7 @@
 {-# LANGUAGE TypeFamilies               #-}
 
 module Stripe.Helpers
-  ( S
+  ( Stripe
   , StripeConfig (..)
   , stripeIO
   , stripeS
@@ -52,28 +52,28 @@ data StripeConfig = StripeConfig
   , stripeSecretKey :: StripeSecretKey
   }
 
-newtype S a = S { runStripe :: ReaderT StripeConfig ( ExceptT StripeFailure IO ) a }
+newtype Stripe a = Stripe { runStripe :: ReaderT StripeConfig ( ExceptT StripeFailure IO ) a }
   deriving ( Functor, Applicative, Monad, MonadReader StripeConfig, MonadError StripeFailure, MonadIO )
 
-stripeIO :: StripeConfig -> S a -> IO (Either StripeFailure a)
+stripeIO :: StripeConfig -> Stripe a -> IO (Either StripeFailure a)
 stripeIO cfg = runExceptT . flip runReaderT cfg . runStripe
 
 
 
 ---- StripeClient RUNNERS ----
 
-stripeS :: StripeConnect -> StripeClient (StripeScalarResp a) -> S a
+stripeS :: StripeConnect -> StripeClient (StripeScalarResp a) -> Stripe a
 stripeS connect = fmap stripeData . stripeS' connect
-stripeL :: StripeConnect -> StripeClient (StripeListResp a) -> S a
+stripeL :: StripeConnect -> StripeClient (StripeListResp a) -> Stripe a
 stripeL connect = fmap stripeData . stripeL' connect
-stripeD :: StripeConnect -> StripeClient (StripeDestroyResp a) -> S a
+stripeD :: StripeConnect -> StripeClient (StripeDestroyResp a) -> Stripe a
 stripeD connect = fmap stripeData . stripeD' connect
 
-stripeS' :: StripeConnect -> StripeClient (StripeScalarResp a) -> S (StripeScalar a)
+stripeS' :: StripeConnect -> StripeClient (StripeScalarResp a) -> Stripe (StripeScalar a)
 stripeS' connect = scalar . stripe connect
-stripeL' :: StripeConnect -> StripeClient (StripeListResp a) -> S (StripeList a)
+stripeL' :: StripeConnect -> StripeClient (StripeListResp a) -> Stripe (StripeList a)
 stripeL' connect = list . stripe connect
-stripeD' :: StripeConnect -> StripeClient (StripeDestroyResp a) -> S (StripeDestroy a)
+stripeD' :: StripeConnect -> StripeClient (StripeDestroyResp a) -> Stripe (StripeDestroy a)
 stripeD' connect = destroyed . stripe connect
 
 
@@ -107,7 +107,7 @@ deriveFromJSON' n = deriveFromJSON defaultOptions { fieldLabelModifier = snakeCa
 
 ---- PRIVATE ----
 
-stripe :: StripeConnect -> StripeClient a -> S a
+stripe :: StripeConnect -> StripeClient a -> Stripe a
 stripe connect client = do
   (ver, key) <- asks $ (,) <$> stripeVersion <*> stripeSecretKey
 
@@ -126,13 +126,13 @@ stripe connect client = do
       return $ ClientEnv manager url
 
 
-scalar :: S (StripeScalarResp a) -> S (StripeScalar a)
+scalar :: Stripe (StripeScalarResp a) -> Stripe (StripeScalar a)
 scalar = fmap (\(Headers x hs) -> StripeScalar (getReqId hs) x)
 
-list :: S (StripeListResp a) -> S (StripeList a)
+list :: Stripe (StripeListResp a) -> Stripe (StripeList a)
 list = fmap (\(Headers StripeListJSON{..} hs) -> StripeList (getReqId hs) stripeListJsonHasMore stripeListJsonData)
 
-destroyed :: S (StripeDestroyResp id) -> S (StripeDestroy id)
+destroyed :: Stripe (StripeDestroyResp id) -> Stripe (StripeDestroy id)
 destroyed = fmap (\(Headers StripeDeleteJSON{..} hs) -> StripeDestroy (getReqId hs) stripeDeleteJsonId stripeDeleteJsonDeleted)
 
 

@@ -7,7 +7,6 @@ module Main where
 import qualified Data.Text              as T
 import           Data.Time.Clock        as Time
 import           Data.Time.Clock.POSIX  as Time
-import           Control.Monad.IO.Class (liftIO)
 
 import           Stripe
 
@@ -28,7 +27,7 @@ main = do
     Left  (StripeConnectionError err  ) -> putStrLn "Connection Error:" >> print err
 
 
-createAndChargeAndDeleteCustomer :: S (Customer, Charge, [Charge], Bool)
+createAndChargeAndDeleteCustomer :: Stripe (Customer, Charge, [Charge], Bool)
 createAndChargeAndDeleteCustomer = do
   cust   <- stripeS WithoutConnect . createCustomer $ custReq
   charge <- stripeS WithoutConnect . createCharge   $ chargeReq cust
