@@ -61,10 +61,10 @@ main = do
     Right (cust, charge, charges, gone) -> print charge
 ```
 
-It can be run with:
+This can be compiled and run with [Stack](https://docs.haskellstack.org/en/stable/README/):
 
 ```
-$ stack build && stack exec stripe-client-exe
+$ stack build && stack exec stripe-servant-exe
 ```
 
 
