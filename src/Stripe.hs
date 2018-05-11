@@ -12,23 +12,19 @@
 module Stripe
   ( module Stripe
   , module Stripe.Types
-  , module Stripe.Error -- TODO in collect in `Types`?
+  , module Stripe.Error
   , module Stripe.Helpers
+  , module Stripe.Data.Id
+  , module Stripe.Data.Charge
   ) where
 
 import           Prelude                     hiding (ReadS)
-import qualified Data.HashMap.Strict         as HM
-import           Data.Char                   (toLower)
-import qualified Data.Text                   as T
 import           Data.Proxy                  (Proxy (Proxy))
-import           Data.Scientific             (Scientific, coefficient)
-import qualified Data.Time.Clock             as Time
-import qualified Data.Time.Clock.POSIX       as Time
 import           GHC.Generics                (Generic)
 
 import           Data.Aeson                  as J
 import           Data.Aeson.Casing           (snakeCase)
-import           Web.Internal.FormUrlEncoded (toForm, unForm)
+import           Web.Internal.FormUrlEncoded (toForm)
 import qualified Web.Internal.FormUrlEncoded as F
 import           Servant.API
 import           Servant.Client              (client)
@@ -36,127 +32,33 @@ import           Servant.Client              (client)
 import           Stripe.Types
 import           Stripe.Error
 import           Stripe.Helpers
-import           Stripe.Util                 (fromJsonString)
+import           Stripe.Data.Id
+import           Stripe.Data.Card
+import           Stripe.Data.Charge
 
 
 
-data Interval
-  = Day
-  | Week
-  | Month
-  | Year
-  deriving (Show, Generic)
-instance J.FromJSON Interval where
-  parseJSON (J.String "day")   = return Day
-  parseJSON (J.String "week")  = return Week
-  parseJSON (J.String "month") = return Month
-  parseJSON (J.String "year")  = return Year
-  parseJSON _ = mempty
-instance ToHttpApiData Interval where
-  toQueryParam = T.pack . map toLower . show
-
-data StripeTime = StripeTime
-  { getPOSIXTime :: Int
-  , getUTCTime :: Time.UTCTime
-  } deriving (Eq, Show, Generic)
-instance J.FromJSON StripeTime where
-  parseJSON (J.Number sci) =
-    return $ StripeTime (int sci) (Time.posixSecondsToUTCTime . int $ sci)
-    where
-      int :: (Num a) => Scientific -> a
-      int = fromInteger . coefficient
-  parseJSON _ = mempty
-
-newtype Metadata = Metadata { unMetadata :: HM.HashMap T.Text T.Text } deriving (Show, Generic)
-
-metadata :: [(T.Text, T.Text)] -> Metadata
-metadata = Metadata . HM.fromList
-
-instance J.FromJSON Metadata where
-  parseJSON (J.Object obj) = return . Metadata . HM.map valToText $ obj
-    where
-      valToText (J.String txt) = txt
-      valToText _              = ""
-  parseJSON _ = mempty
-
-instance ToHttpApiData Metadata where
-  toQueryParam _ = "" -- TODO ... handling via `addMetadataToForm`
-
-addMetadataToForm :: Maybe Metadata -> F.Form -> F.Form
-addMetadataToForm mMetadata form =
-  let hm = HM.delete "metadata" . unForm $ form
-   in case mMetadata of
-        Just md -> F.Form . HM.union (keysToMetadataScopedKeys . unMetadata $ md) $ hm
-        Nothing -> F.Form hm
-  where
-    keysToMetadataScopedKeys =
-      HM.fromList . map (\(k, v) -> (T.concat ["metadata[", k, "]"], [v])) . HM.toList
-
-
-
-newtype StatementDescriptor = StatementDescriptor { unStatementDescriptor :: T.Text } deriving (Show, Generic)
-
-statementDescriptor :: String -> Maybe StatementDescriptor
-statementDescriptor str =
-  if length str <= 22
-     then Just . StatementDescriptor . T.pack $ str
-     else Nothing
-
-instance ToHttpApiData StatementDescriptor where
-  toQueryParam = unStatementDescriptor
-
-instance J.FromJSON StatementDescriptor where
-  parseJSON = fromJsonString StatementDescriptor
+-- Stripe.API           -- API type & funcs
+-- Stripe.API.Request   -- Headers, QSP, etc.
+-- Stripe.API.Response  -- Headers / JSON
+-- Stripe.Types         -- common types, a leaf dep
+--
+-- -- Resources
+-- [ ] Stripe.BankAccount
+-- [X] Stripe.Card
+-- [ ] Stripe.Customer
+-- [X] Stripe.Charge
+-- [ ] Stripe.Plan
+--
+-- -- mv?
+-- Stripe.Error   -- `Stripe.Data.Error` instead?
+-- Stripe.Helpers
+-- Stripe.Util
 
 
 
 ---- STRIPE API DATA TYPES ----
 
--- Resources
-
-newtype AccountId     = AccountId     { unAccountId     :: T.Text } deriving (Eq, Show, Generic)
-newtype BankAccountId = BankAccountId { unBankAccountId :: T.Text } deriving (Eq, Show, Generic)
-newtype CardId        = CardId        { unCardId        :: T.Text } deriving (Eq, Show, Generic)
-newtype ChargeId      = ChargeId      { unChargeId      :: T.Text } deriving (Eq, Show, Generic)
-newtype CustomerId    = CustomerId    { unCustomerId    :: T.Text } deriving (Eq, Show, Generic)
-newtype InvoiceId     = InvoiceId     { unInvoiceId     :: T.Text } deriving (Eq, Show, Generic)
-newtype PlanId        = PlanId        { unPlanId        :: T.Text } deriving (Eq, Show, Generic)
-
-newtype Token = Token { unToken :: T.Text } deriving (Show, Generic)
-
-instance J.FromJSON AccountId where
-  parseJSON = fromJsonString AccountId
-instance J.FromJSON BankAccountId where
-  parseJSON = fromJsonString BankAccountId
-instance J.FromJSON CardId where
-  parseJSON = fromJsonString CardId
-instance J.FromJSON ChargeId where
-  parseJSON = fromJsonString ChargeId
-instance J.FromJSON CustomerId where
-  parseJSON = fromJsonString CustomerId
-instance J.FromJSON InvoiceId where
-  parseJSON = fromJsonString InvoiceId
-instance J.FromJSON PlanId where
-  parseJSON = fromJsonString PlanId
-instance J.FromJSON Token where
-  parseJSON = fromJsonString Token
-
-instance ToHttpApiData AccountId where
-  toQueryParam = unAccountId
-instance ToHttpApiData BankAccountId where
-  toQueryParam = unBankAccountId
-instance ToHttpApiData CardId where
-  toQueryParam = unCardId
-instance ToHttpApiData ChargeId where
-  toQueryParam = unChargeId
-instance ToHttpApiData CustomerId where
-  toQueryParam = unCustomerId
-instance ToHttpApiData InvoiceId where
-  toQueryParam = unInvoiceId
-instance ToHttpApiData PlanId where
-  toQueryParam = unPlanId
-instance ToHttpApiData Token where
-  toUrlPiece = unToken
 
 data BankAccountStatus
   = New
@@ -197,202 +99,7 @@ data BankAccount = BankAccount
   } deriving (Show, Generic)
 $(deriveFromJSON' ''BankAccount)
 
-data CardBrand
-  = AmericanExpress
-  | DinersClub
-  | Discover
-  | JCB
-  | MasterCard
-  | Visa
-  | UnknownCardBrand
-  deriving (Show, Generic)
-instance J.FromJSON CardBrand where
-  parseJSON (J.String "Visa")             = return Visa
-  parseJSON (J.String "American Express") = return AmericanExpress
-  parseJSON (J.String "MasterCard")       = return MasterCard
-  parseJSON (J.String "Discover")         = return Discover
-  parseJSON (J.String "JCB")              = return JCB
-  parseJSON (J.String "Diners Club")      = return DinersClub
-  parseJSON (J.String "Unknown")          = return UnknownCardBrand
-  parseJSON _ = mempty
-data CardFundingType
-  = Credit
-  | Debit
-  | Prepaid
-  | UnknownCardFundingType
-  deriving (Show, Generic)
-instance J.FromJSON CardFundingType where
-  parseJSON (J.String "credit")  = return Credit
-  parseJSON (J.String "debit")   = return Debit
-  parseJSON (J.String "prepaid") = return Prepaid
-  parseJSON (J.String "unknown") = return UnknownCardFundingType
-  parseJSON _ = mempty
-data TokenizationMethod
-  = ApplePay
-  | AndroidPay
-  deriving (Show, Generic)
-instance J.FromJSON TokenizationMethod where
-  parseJSON (J.String "apply_pay")   = return ApplePay
-  parseJSON (J.String "android_pay") = return AndroidPay
-  parseJSON _ = mempty
-data Check
-  = Pass
-  | Fail
-  | Unavailable
-  | Unchecked
-  deriving (Show, Generic)
-instance J.FromJSON Check where
-  parseJSON (J.String "pass")        = return Pass
-  parseJSON (J.String "fail")        = return Fail
-  parseJSON (J.String "unavailable") = return Unavailable
-  parseJSON (J.String "unchecked")   = return Unchecked
-  parseJSON _ = mempty
-data Card = Card
-  { cardId                 :: CardId
-  , cardAddressCity        :: Maybe String
-  , cardAddressCountry     :: Maybe String
-  , cardAddressLine1       :: Maybe String
-  , cardAddressLine1Check  :: Maybe Check
-  , cardAddressLine2       :: Maybe String
-  , cardAddressState       :: Maybe String
-  , cardAddressZip         :: Maybe String
-  , cardAddressZipCheck    :: Maybe Check
-  , cardBrand              :: CardBrand
-  , cardCountry            :: CountryCode
-  , cardCustomer           :: CustomerId
-  , cardCvcCheck           :: Maybe Check
-  , cardDynamicLast4       :: Maybe String
-  , cardExpMonth           :: Int
-  , cardExpYear            :: Int
-  , cardFingerprint        :: String
-  , cardFunding            :: CardFundingType
-  , cardLast4              :: String
-  , cardMetadata           :: Metadata
-  , cardName               :: Maybe String
-  , cardTokenizationMethod :: Maybe TokenizationMethod
-  } deriving (Show, Generic)
-$(deriveFromJSON' ''Card)
 
-
-data ChargeStatus
-  = Succeeded
-  | Pending
-  | Failed
-  deriving (Show, Generic)
-instance J.FromJSON ChargeStatus where
-  parseJSON (J.String "succeeded") = return Succeeded
-  parseJSON (J.String "pending")   = return Pending
-  parseJSON (J.String "failed")    = return Failed
-  parseJSON _ = mempty
-data ChargeOutcomeNetworkStatus
-  = ApprovedByNetwork
-  | DeclinedByNetwork
-  | NotSentToNetwork
-  | ReversedAfterApproval
-  | UnrecognizedChargeOutcomeNetworkStatus T.Text
-  deriving (Show, Generic)
-instance J.FromJSON ChargeOutcomeNetworkStatus where
-  parseJSON (J.String "approved_by_network")     = return ApprovedByNetwork
-  parseJSON (J.String "declined_by_network")     = return DeclinedByNetwork
-  parseJSON (J.String "not_sent_to_network")     = return NotSentToNetwork
-  parseJSON (J.String "reversed_after_approval") = return ReversedAfterApproval
-  parseJSON (J.String str)                       = return $ UnrecognizedChargeOutcomeNetworkStatus str
-  parseJSON _                                    = return $ UnrecognizedChargeOutcomeNetworkStatus ""
-data ChargeOutcomeRiskLevel
-  = Normal
-  | Elevated
-  | Highest
-  | NotAssessed
-  | UnknownRiskLevel
-  deriving (Show, Generic)
-instance J.FromJSON ChargeOutcomeRiskLevel where
-  parseJSON (J.String "normal")       = return Normal
-  parseJSON (J.String "elevated")     = return Elevated
-  parseJSON (J.String "highest")      = return Highest
-  parseJSON (J.String "not_assessed") = return NotAssessed
-  parseJSON (J.String "unknown")      = return UnknownRiskLevel
-  parseJSON _ = mempty
-data ChargeOutcomeType
-  = Authorized
-  | ManualReview
-  | IssuerDeclined
-  | Blocked
-  | Invalid
-  deriving (Show, Generic)
-instance J.FromJSON ChargeOutcomeType where
-  parseJSON (J.String "authorized")      = return Authorized
-  parseJSON (J.String "manual_review")   = return ManualReview
-  parseJSON (J.String "issuer_declined") = return IssuerDeclined
-  parseJSON (J.String "blocked")         = return Blocked
-  parseJSON (J.String "invalid")         = return Invalid
-  parseJSON _ = mempty
-data ChargeOutcomeReason
-  = HighestRiskLevel
-  | ElevatedRiskLevel
-  | Rule
-  | OtherReason T.Text
-  deriving (Show, Generic)
-instance J.FromJSON ChargeOutcomeReason where
-  parseJSON (J.String "highest_risk_level")  = return HighestRiskLevel
-  parseJSON (J.String "elevated_risk_level") = return ElevatedRiskLevel
-  parseJSON (J.String "rule")                = return Rule
-  parseJSON _ = mempty
-data ChargeOutcome = ChargeOutcome
-  { chargeOutcomeNetworkStatus :: ChargeOutcomeNetworkStatus
-  , chargeOutcomeReason        :: Maybe ChargeOutcomeReason
-  , chargeOutcomeRiskLevel     :: ChargeOutcomeRiskLevel
-  , chargeOutcomeSellerMessage :: String
-  , chargeOutcomeType          :: ChargeOutcomeType
-  } deriving (Show, Generic)
-$(deriveFromJSON' ''ChargeOutcome)
-data Charge = Charge
-  { chargeId                  :: ChargeId
-  , chargeAmount              :: Int
-  , chargeAmountRefunded      :: Int
-  , chargeCaptured            :: Bool
-  , chargeCreated             :: StripeTime
-  , chargeCurrency            :: CurrencyCode
-  , chargeCustomer            :: Maybe CustomerId
-  , chargeDescription         :: Maybe String
-  , chargeDestination         :: Maybe AccountId
-  , chargeFailureCode         :: Maybe StripeErrorCode
-  , chargeFailureMessage      :: Maybe String
-  , chargeInvoice             :: Maybe InvoiceId
-  , chargeLivemode            :: Bool
-  , chargeMetadata            :: Metadata
-  , chargeOnBehalfOf          :: Maybe AccountId
-  , chargeOutcome             :: ChargeOutcome
-  , chargePaid                :: Bool
-  , chargeReceiptEmail        :: Maybe String
-  , chargeReceiptNumber       :: Maybe String
-  , chargeRefunded            :: Bool
-  , chargeStatementDescriptor :: Maybe StatementDescriptor
-  , chargeStatus              :: ChargeStatus
-  } deriving (Show, Generic)
-$(deriveFromJSON' ''Charge)
-  -- , chargeRefunds :: {
-  --     Object :: List,
-  --     Data :: [...],
-  --     HasMore :: False,
-  --     TotalCount :: 0,
-  --     Url :: /v1/Charges/Ch1BS9Tl2EZvKYlo2CRwnFr7F6/Refunds
-  --   },
-  -- , chargeSource :: {...} -- Source = Card | BA
-  -- , chargeApplication :: Maybe    -- NOTE expandable "ID of the Connect application that created to charge"
-  -- , chargeApplicationFee :: Maybe -- NOTE Connect
-  -- , chargeBalanceTransaction ::   -- NOTE expandable "ID of the balance transaction that describes the impact of this charge on your account balance (not including refunds or disputes)."
-  -- , chargeDispute :: Null,
-  -- , chargeFraudDetails :: { },
-  --
-  -- -- Relay, Radar, etc.
-  -- , chargeOrder :: Null,
-  -- , chargeReview :: Null,
-  -- , chargeShipping :: Null, -- expandable
-  -- , chargeSourceTransfer :: Null,
-  -- , chargeTransferGroup :: Null
-
-chargePrice :: Charge -> Price
-chargePrice Charge{..} = Price chargeCurrency chargeAmount
 
 data Customer = Customer
   { customerId          :: CustomerId

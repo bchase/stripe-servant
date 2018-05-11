@@ -21,6 +21,9 @@ library
                      , Stripe.Error
                      , Stripe.Helpers
                      , Stripe.Util
+                     , Stripe.Data.Id
+                     , Stripe.Data.Card
+                     , Stripe.Data.Charge
   build-depends:       base >= 4.7 && < 5
                      , aeson
                      , aeson-casing
