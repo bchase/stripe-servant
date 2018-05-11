@@ -12,6 +12,7 @@
 module Stripe
   ( module Stripe
   , module Stripe.Types
+  , module Stripe.Error -- TODO in collect in `Types`?
   , module Stripe.Helpers
   ) where
 
@@ -33,6 +34,7 @@ import           Servant.API
 import           Servant.Client              (client)
 
 import           Stripe.Types
+import           Stripe.Error
 import           Stripe.Helpers
 import           Stripe.Util                 (fromJsonString)
 
