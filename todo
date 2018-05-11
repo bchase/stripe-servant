@@ -1,94 +1,71 @@
 
+  TODO
+    [ ] compile w/ -Wall
+    [ ] TODOs
+    [ ] snake case okay?
+    [ ] ADT for Strip(Scalar/List/Destroy)? (also, `stripeRunner` et al)
+    [ ] add detail to `StripeFailure` to track the source of failure
+    [ ] something other than `type` synonym for e.g. `StripeClient`?
+    [ ] use `deriveFromJSON'` more universally
+    [ ] normalize e.g. `min...Req`, `empty...Req`
+    [ ] means of pinpointing errors within chained `Stripe`?
+    [ ] test/live key checks
+
   refactor / mv / cleanup
     [ ] get rid of leading `stripe*` and `Stripe*`?
     [ ] rename e.g. PostS, CreateS
     [ ] String -> Text
-    [ ] mv things to e.g. src/Stripe/Charge.hs
+    [ ] mv StripeTime/Interval/CurrencyCode
+    [ ] mv most of `Stripe` to `Stripe.API` and just reexport public API via this module
+    [ ] mv resource types & their instances to own files
+    [ ] mv things to e.g. Resource/Customer.hs, Request/Customer.hs
     [ ] F.ToForm -> ToForm
     [ ] selective exports
     [ ] refactor out the common parts of the API types, esp "v1" & resource names
     [ ] quasi quotes for JSON stuff? (grep for snake_case)
+    [ ] TH `deriveToForm` (grep below)
+    [ ] TH `*Id` types & instances
 
-  misc
-    [ ] snake case okay?
-    [ ] TODOs
-    [ ] compile w/ -Wall
+  README notes
+    [ ] US/USD only right now, but built as an ADT
+    [ ] impove -- probably plenty of places TH could be used
+    [ ] warn -- it's possible to set a connect app fee w/o connect header
 
   ???
     [ ] look at Charge data type properties
-
-  README
-    cleanup
-      [ ] check links
-      [ ] renamed `stripe-client` (& exe)?
-    notes
-      [ ] US/USD only right now, but built as an ADT
-      [ ] impove -- probably plenty of places TH could be used
-      [ ] warn -- it's possible to set a connect app fee w/o connect header
+  ? [ ] rename `StripeErrorCode` to `CardErrorCode`
 
 
 
 
 
 
+  README resources
+    - resources
+      * Refunds
+      * Events
+      * Subscriptions
+        - Subscriptions
+        - Invoices
+        - Invoice Items
+        - Coupons
+        - Discounts (needed?)
+        - Subscription Items (needed?)
+        - Tokens (needed?)
+      * Connect
+        - Account
+        - Application Fees
+        - Application Fee Refund
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-  TODO
-    - clean up test/
-    - ADT for Strip(Scalar/List/Destroy)? (also, `stripeRunner` et al)
-    - add detail to `StripeFailure` to track the source of failure
-    - something other than `type` synonym for e.g. `StripeClient`?
-    - use `deriveFromJSON'` more universally
-    - normalize e.g. `min...Req`, `empty...Req`
-    - means of pinpointing errors within chained `Stripe`?
-
-    GENERAL STRIPE
-    \ * errors -- better Either (status codes; decode fail is currently a `Failure`)
-    \ * metadata
-    . * ADTs for e.g. `status`
-      * events (webhooks)
-      * test Connect
-      * Connect fees
-      * expanding
-      ? `Unrecognized* jsonStr` constructor for all ADTs (FromJSON)?
-      ? idempotency
-      ! flesh out data types (Charge/Customer/Card/BankAccount)
-      - sharing Customers (Connect, via Tokens)
-      - resources
-        * Refunds
-        * Events
-        * Subscriptions
-          - Subscriptions
-          - Invoices
-          - Invoice Items
-          - Coupons
-          - Discounts (needed?)
-          - Subscription Items (needed?)
-          - Tokens (needed?)
-        * Connect
-          - Account
-          - Application Fees
-          - Application Fee Refund
-    CLEANUP
-      - mv resource types & their instances to own files
-      - TH `deriveToForm` (grep below)
-      - TH `*Id` types & instances
-      - mv things to e.g. Resource/Customer.hs, Request/Customer.hs
-      - mv StripeTime/Interval/CurrencyCode
-      - test/live key checks
-      - mv most of this to `Stripe.API` and just reexport public API via this module
-      ? rename `StripeErrorCode` to `CardErrorCode`
-      ? change `String` to `Text`
-
+  GENERAL STRIPE
+  \ - errors -- better Either (status codes; decode fail is currently a `Failure`)
+  \ - metadata
+  . - ADTs for e.g. `status`
+    - events (webhooks)
+    - test Connect
+    - Connect fees
+    - expanding
+    ? `Unrecognized* jsonStr` constructor for all ADTs (FromJSON)?
+    ? idempotency
+    ! flesh out data types (Charge/Customer/Card/BankAccount)
+    - sharing Customers (Connect, via Tokens)
