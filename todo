@@ -1,7 +1,52 @@
 
+  refactor / mv / cleanup
+    [ ] get rid of leading `stripe*` and `Stripe*`?
+    [ ] rename e.g. PostS, CreateS
+    [ ] String -> Text
+    [ ] mv things to e.g. src/Stripe/Charge.hs
+    [ ] F.ToForm -> ToForm
+    [ ] selective exports
+    [ ] refactor out the common parts of the API types, esp "v1" & resource names
+    [ ] quasi quotes for JSON stuff? (grep for snake_case)
+
+  misc
+    [ ] snake case okay?
+    [ ] TODOs
+    [ ] compile w/ -Wall
+
+  ???
+    [ ] look at Charge data type properties
+
+  README
+    cleanup
+      [ ] check links
+      [ ] renamed `stripe-client` (& exe)?
+    notes
+      [ ] US/USD only right now, but built as an ADT
+      [ ] impove -- probably plenty of places TH could be used
+      [ ] warn -- it's possible to set a connect app fee w/o connect header
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   TODO
     - clean up test/
-    - get rid of leading `stripe*` and `Stripe*`?
     - ADT for Strip(Scalar/List/Destroy)? (also, `stripeRunner` et al)
     - add detail to `StripeFailure` to track the source of failure
     - something other than `type` synonym for e.g. `StripeClient`?
