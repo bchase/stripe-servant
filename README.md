@@ -113,18 +113,17 @@ type PostS a = Post '[JSON] (StripeScalarResp  a)
 type CreateS req resp = req -> StripeClient (StripeScalarResp  resp)
 ```
 
-
-So above we see that using [`Servant.Client.client`](https://hackage.haskell.org/package/servant-client-0.13.0.1/docs/Servant-Client.html#v:client), we can generate functions that provide us with a `StripeClient resp`.
-
-Next, we'll want to go from these `StripeClient`s to the `Stripe` monad:
+So above we see that using [`Servant.Client.client`](https://hackage.haskell.org/package/servant-client-0.13.0.1/docs/Servant-Client.html#v:client), we can generate functions that provide us with a `StripeClient resp`:
 
 ```haskell
--- first off, the shape of Stripe responses vary:
---   * scalar  (read, create, update, etc.)
---   * list    (additionally contains the metadata `has_more`)
---   * destroy (returns only the ID, along with the metadata `deleted`)
---
--- this metadata, the `RequestId`, and the data is contained in the following types:
+createCharge :: ChargeCreateReq -> StripeClient (StripeScalarResp Charge)
+```
+
+Here `StripeClient` contains a `StripeScalarResp`, which is the raw Servant [`Headers`](http://hackage.haskell.org/package/servant-0.13.0.1/docs/Servant-API-ResponseHeaders.html#t:Headers), but this will eventually gets converted into a `StripeScalar` for us. (More on this in a minute.)
+
+Based on the kind of request though, our response type will vary among these three:
+
+```haskell
 data StripeScalar a = StripeScalar
   { stripeScalarRequestId :: RequestId
   , stripeScalarData      :: a
@@ -138,11 +137,17 @@ data StripeList a = StripeList
 
 data StripeDestroy id = StripeDestroy
   { stripeDestroyRequestId :: RequestId
-  , stripeDestroyId        :: id
   , stripeDestroyDeleted   :: Bool
+  , stripeDestroyId        :: id
   }
+```
 
--- so if we're interested in the `RequestId` or metadata, we can use these functions:
+These types contain the metadata for the request, which _always_ includes a `RequestId`, but will also contain more fields for the last two types.
+
+With that out of the way, let's see how we get at our data and metadata. We'll accomplish this when we move into the `Stripe` monad:
+
+```haskell
+-- if we're interested in the `RequestId` or metadata, we can use these functions:
 stripeS' :: StripeConnect -> StripeClient (StripeScalarResp  a) -> Stripe (StripeScalar  a)
 stripeL' :: StripeConnect -> StripeClient (StripeListResp    a) -> Stripe (StripeList    a)
 stripeD' :: StripeConnect -> StripeClient (StripeDestroyResp a) -> Stripe (StripeDestroy a)
@@ -165,7 +170,7 @@ All together now!
 
 ```haskell
 config :: StripeConfig
-config = StripeConfig StripeVersion'2017'08'15 (StripeSecretKey "sk_test_BQokikJOvBiI2HlWgH4olfQ2")
+config = StripeConfig StripeVersion'2017'08'15 $ StripeSecretKey "sk_test_BQokikJOvBiI2HlWgH4olfQ2"
 
 test :: IO (Either StripeFailure Customer)
 test = do
