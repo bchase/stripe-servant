@@ -3,7 +3,7 @@
 The Stripe API (partially) defined in Haskell as a Servant API type
 
 
-### :fire: :warning: :fire: USE [dmjio/stripe](https://github.com/dmjio/stripe) INSTEAD :fire: :warning: :fire:
+### :bangbang: :fire: :warning: :fire: USE [dmjio/stripe](https://github.com/dmjio/stripe) INSTEAD :fire: :warning: :fire: :bangbang:
 
 You're almost certainly looking for [dmjio/stripe](https://github.com/dmjio/stripe), but I started this project because I needed two things that it didn't offer:
 
