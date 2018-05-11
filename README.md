@@ -19,14 +19,14 @@ Consider yourself disclaimed!
 
 ## Stripe Version
 
-This package currently targets Stripe API version [`2017-08-15`](https://stripe.com/docs/upgrades#2017-08-15) and you can find copies of the documentation for this version in [`bchase/stripe-docs`](https://github.com/bchase/stripe-docs/tree/master/v2017-08-15).
+This package currently targets Stripe API version [`2017-08-15`](https://stripe.com/docs/upgrades#2017-08-15) and you can find copies of the documentation for that Stripe version in [`bchase/stripe-docs`](https://github.com/bchase/stripe-docs/tree/master/v2017-08-15).
 
 A `StripeVersion` data type is also provided, but it currently only serves to set the [`Stripe-Version`](https://stripe.com/docs/api#versioning) header appropriately.
 
 
 ## Usage
 
-`app/Main.hs` contains some example usage:
+[`app/Main.hs`](https://github.com/bchase/stripe-servant/blob/master/app/Main.hs) contains some example usage:
 
 ```haskell
 createAndChargeAndDeleteCustomer :: Stripe (Customer, Charge, [Charge], Bool)
@@ -113,15 +113,15 @@ type PostS a = Post '[JSON] (StripeScalarResp  a)
 type CreateS req resp = req -> StripeClient (StripeScalarResp  resp)
 ```
 
-So above we see that using [`Servant.Client.client`](https://hackage.haskell.org/package/servant-client-0.13.0.1/docs/Servant-Client.html#v:client), we can generate functions that provide us with a `StripeClient resp`:
+Here we've used [`Servant.Client.client`](https://hackage.haskell.org/package/servant-client-0.13.0.1/docs/Servant-Client.html#v:client) to generate functions that will provide us with a `StripeClient resp`. Here's the type signature again, for reference:
 
 ```haskell
 createCharge :: ChargeCreateReq -> StripeClient (StripeScalarResp Charge)
 ```
 
-Here `StripeClient` contains a `StripeScalarResp`, which is the raw Servant [`Headers`](http://hackage.haskell.org/package/servant-0.13.0.1/docs/Servant-API-ResponseHeaders.html#t:Headers), but this will eventually gets converted into a `StripeScalar` for us. (More on this in a minute.)
+This `StripeClient` contains a `StripeScalarResp`, which is the raw Servant [`Headers`](http://hackage.haskell.org/package/servant-0.13.0.1/docs/Servant-API-ResponseHeaders.html#t:Headers), but this eventually gets converted into a `StripeScalar` for us. (More on this in a minute.)
 
-Based on the kind of request though, our response type will vary among these three:
+Based on the kind of request, our response type will vary among these three:
 
 ```haskell
 data StripeScalar a = StripeScalar
@@ -144,7 +144,7 @@ data StripeDestroy id = StripeDestroy
 
 These types contain the metadata for the request, which _always_ includes a `RequestId`, but will also contain more fields for the last two types.
 
-With that out of the way, let's see how we get at our data and metadata. We'll accomplish this when we move into the `Stripe` monad:
+Moving on, we'll get ourselves into the `Stripe` monad:
 
 ```haskell
 -- if we're interested in the `RequestId` or metadata, we can use these functions:
