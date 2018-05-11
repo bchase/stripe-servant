@@ -11,10 +11,8 @@ module Stripe.Types where
 
 import qualified Data.Text            as T
 import           Data.Char            (toLower)
-import           Control.Monad.Reader (MonadReader, ReaderT, runReaderT, asks,
-                                       MonadIO, liftIO)
-import           Control.Monad.Except (MonadError, throwError,
-                                       ExceptT, runExceptT)
+import           Control.Monad.Reader (MonadIO, MonadReader, ReaderT, runReaderT)
+import           Control.Monad.Except (MonadError, ExceptT, runExceptT)
 import           GHC.Generics         (Generic)
 
 import qualified Data.Aeson         as J

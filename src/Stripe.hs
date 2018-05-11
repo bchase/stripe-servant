@@ -552,13 +552,13 @@ instance F.ToForm ChargeCreateReq where
      in addMetadataToForm chargeCreateMetadata . toForm' $ req
 
 chargeCreateReq :: Price -> Payer -> ChargeCreateReq
-chargeCreateReq (Price curr amount) payer =
+chargeCreateReq price payer =
   case payer of
-    PCustomer cust          -> (req amount curr) { chargeCreateCustomer = Just cust }
-    PCustomerCard cust card -> (req amount curr) { chargeCreateCustomer = Just cust, chargeCreateSource = Just $ SourceCard card }
-    PToken tok              -> (req amount curr) { chargeCreateSource = Just $ SourceToken tok }
+    PCustomer cust          -> (req price) { chargeCreateCustomer = Just cust }
+    PCustomerCard cust card -> (req price) { chargeCreateCustomer = Just cust, chargeCreateSource = Just $ SourceCard card }
+    PToken tok              -> (req price) { chargeCreateSource = Just $ SourceToken tok }
   where
-    req amount curr = ChargeCreateReq
+    req (Price curr amount) = ChargeCreateReq
       { chargeCreateAmount              = amount
       , chargeCreateCurrency            = curr
       , chargeCreateCustomer            = Nothing

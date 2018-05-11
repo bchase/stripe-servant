@@ -1,6 +1,5 @@
 
   TODO
-    [ ] compile w/ -Wall
     [ ] TODOs
     [ ] snake case okay?
     [ ] ADT for Strip(Scalar/List/Destroy)? (also, `stripeRunner` et al)

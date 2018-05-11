@@ -22,12 +22,9 @@ module Stripe.Helpers
   , deriveFromJSON'
   ) where
 
-import qualified Data.Text                   as T
 import           Data.Either                 (either)
-import           Control.Monad.Except        (MonadError, throwError,
-                                              ExceptT, runExceptT)
+import           Control.Monad.Except        (throwError)
 import           Control.Monad.Reader        (asks, liftIO)
-import           GHC.Generics                (Generic)
 import           Language.Haskell.TH.Syntax  as TH
 
 import           Data.Aeson.Casing           (snakeCase)
