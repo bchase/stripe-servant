@@ -1,29 +1,31 @@
 
-  TODO
-    [ ] TODOs
-    [ ] snake case okay?
-    [ ] ADT for Strip(Scalar/List/Destroy)? (also, `stripeRunner` et al)
-    [ ] add detail to `StripeFailure` to track the source of failure
-    [ ] something other than `type` synonym for e.g. `StripeClient`?
-    [ ] use `deriveFromJSON'` more universally
-    [ ] normalize e.g. `min...Req`, `empty...Req`
-    [ ] means of pinpointing errors within chained `Stripe`?
-    [ ] test/live key checks
-
   refactor / mv / cleanup
-    [ ] get rid of leading `stripe*` and `Stripe*`?
-    [ ] rename e.g. PostS, CreateS
-    [ ] String -> Text
     [ ] mv StripeTime/Interval/CurrencyCode
     [ ] mv most of `Stripe` to `Stripe.API` and just reexport public API via this module
     [ ] mv resource types & their instances to own files
     [ ] mv things to e.g. Resource/Customer.hs, Request/Customer.hs
     [ ] F.ToForm -> ToForm
     [ ] selective exports
-    [ ] refactor out the common parts of the API types, esp "v1" & resource names
     [ ] quasi quotes for JSON stuff? (grep for snake_case)
-    [ ] TH `deriveToForm` (grep below)
-    [ ] TH `*Id` types & instances
+
+  TODO
+    [ ] get rid of leading `stripe*` and `Stripe*`?
+    [ ] rename e.g. PostS, CreateS
+    [ ] normalize e.g. `min...Req`, `empty...Req`
+    [ ] something other than `type` synonym for e.g. `StripeClient`?
+    [ ] use `deriveFromJSON'` more universally
+    [ ] test/live key checks
+    [\] TODOs
+
+  investigate
+    [ ] String -> Text
+    [ ] handle `mempty` for FromJSON
+    [ ] means of pinpointing errors within chained `Stripe`?
+      [ ] add detail to `StripeFailure` to track the source of failure
+
+  TH
+    [ ] `deriveToForm`
+    [ ] `*Id` types & instances
 
   README notes
     [ ] US/USD only right now, but built as an ADT

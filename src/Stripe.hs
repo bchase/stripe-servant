@@ -66,18 +66,20 @@ instance J.FromJSON StripeTime where
   parseJSON _ = mempty
 
 newtype Metadata = Metadata { unMetadata :: HM.HashMap T.Text T.Text } deriving (Show, Generic)
+
 metadata :: [(T.Text, T.Text)] -> Metadata
 metadata = Metadata . HM.fromList
+
 instance J.FromJSON Metadata where
   parseJSON (J.Object obj) = return . Metadata . HM.map valToText $ obj
     where
-      valToText v = -- TODO case here
-        case v of
-          J.String txt -> txt
-          _ -> "" -- TODO shouldnt ever be anything but Text
+      valToText (J.String txt) = txt
+      valToText _              = ""
   parseJSON _ = mempty
+
 instance ToHttpApiData Metadata where
   toQueryParam _ = "" -- TODO ... handling via `addMetadataToForm`
+
 addMetadataToForm :: Maybe Metadata -> F.Form -> F.Form
 addMetadataToForm mMetadata form =
   let hm = HM.delete "metadata" . unForm $ form
@@ -87,6 +89,22 @@ addMetadataToForm mMetadata form =
   where
     keysToMetadataScopedKeys =
       HM.fromList . map (\(k, v) -> (T.concat ["metadata[", k, "]"], [v])) . HM.toList
+
+
+
+newtype StatementDescriptor = StatementDescriptor { unStatementDescriptor :: T.Text } deriving (Show, Generic)
+
+statementDescriptor :: String -> Maybe StatementDescriptor
+statementDescriptor str =
+  if length str <= 22
+     then Just . StatementDescriptor . T.pack $ str
+     else Nothing
+
+instance ToHttpApiData StatementDescriptor where
+  toQueryParam = unStatementDescriptor
+
+instance J.FromJSON StatementDescriptor where
+  parseJSON = fromJsonString StatementDescriptor
 
 
 
@@ -102,7 +120,6 @@ newtype CustomerId    = CustomerId    { unCustomerId    :: T.Text } deriving (Eq
 newtype InvoiceId     = InvoiceId     { unInvoiceId     :: T.Text } deriving (Eq, Show, Generic)
 newtype PlanId        = PlanId        { unPlanId        :: T.Text } deriving (Eq, Show, Generic)
 
--- TODO rename StripeToken
 newtype Token = Token { unToken :: T.Text } deriving (Show, Generic)
 
 instance J.FromJSON AccountId where
@@ -139,7 +156,7 @@ instance ToHttpApiData PlanId where
 instance ToHttpApiData Token where
   toUrlPiece = unToken
 
-data BankAccountStatus -- TODO mv
+data BankAccountStatus
   = New
   | Validated
   | Verified
@@ -153,7 +170,7 @@ instance J.FromJSON BankAccountStatus where
   parseJSON (J.String "verification_failed") = return VerificationFailed
   parseJSON (J.String "errored")             = return Errored
   parseJSON _ = mempty
-data BankAccountHolderType -- TODO mv
+data BankAccountHolderType
   = Individual
   | Company
   deriving (Show, Generic)
@@ -243,7 +260,7 @@ data Card = Card
   , cardCustomer           :: CustomerId
   , cardCvcCheck           :: Maybe Check
   , cardDynamicLast4       :: Maybe String
-  , cardExpMonth           :: Int -- TODO `Month`?
+  , cardExpMonth           :: Int
   , cardExpYear            :: Int
   , cardFingerprint        :: String
   , cardFunding            :: CardFundingType
@@ -347,11 +364,10 @@ data Charge = Charge
   , chargeReceiptEmail        :: Maybe String
   , chargeReceiptNumber       :: Maybe String
   , chargeRefunded            :: Bool
-  , chargeStatementDescriptor :: Maybe String
+  , chargeStatementDescriptor :: Maybe StatementDescriptor
   , chargeStatus              :: ChargeStatus
   } deriving (Show, Generic)
 $(deriveFromJSON' ''Charge)
-  -- -- TODO
   -- , chargeRefunds :: {
   --     Object :: List,
   --     Data :: [...],
@@ -360,12 +376,12 @@ $(deriveFromJSON' ''Charge)
   --     Url :: /v1/Charges/Ch1BS9Tl2EZvKYlo2CRwnFr7F6/Refunds
   --   },
   -- , chargeSource :: {...} -- Source = Card | BA
-  -- , chargeApplication :: Maybe -- TODO expandable "ID of the Connect application that created to charge"
-  -- , chargeApplicationFee :: Maybe -- TODO Connect
-  -- , chargeBalanceTransaction :: -- TODO expandable "ID of the balance transaction that describes the impact of this charge on your account balance (not including refunds or disputes)."
+  -- , chargeApplication :: Maybe    -- NOTE expandable "ID of the Connect application that created to charge"
+  -- , chargeApplicationFee :: Maybe -- NOTE Connect
+  -- , chargeBalanceTransaction ::   -- NOTE expandable "ID of the balance transaction that describes the impact of this charge on your account balance (not including refunds or disputes)."
   -- , chargeDispute :: Null,
   -- , chargeFraudDetails :: { },
-
+  --
   -- -- Relay, Radar, etc.
   -- , chargeOrder :: Null,
   -- , chargeReview :: Null,
@@ -473,7 +489,7 @@ data PlanCreateReq = PlanCreateReq
   , planCreateCurrency            :: CurrencyCode
   , planCreateInterval            :: Interval
   , planCreateIntervalCount       :: Maybe Int
-  , planCreateStatementDescriptor :: Maybe String
+  , planCreateStatementDescriptor :: Maybe StatementDescriptor
   , planCreateTrialPeriodDays     :: Maybe Int
   , planCreateMetadata            :: Maybe Metadata
   } deriving (Show, Generic)
@@ -508,14 +524,14 @@ emptyPlanUpdateReq :: PlanUpdateReq
 emptyPlanUpdateReq = PlanUpdateReq Nothing Nothing Nothing
 
 
-data Payer -- TODO rename `StripeSource`?
-  = PCustomer     CustomerId
-  | PCustomerCard CustomerId CardId
-  | PToken        Token
+data Source
+  = SCustomer     CustomerId
+  | SCustomerCard CustomerId CardId
+  | SToken        Token
   deriving (Show, Generic)
 
 -- TODO check okay GeneralizedNewtypeDeriving -- ToHttpApiData -- WARNING: Do not derive this using DeriveAnyClass as the generated instance will loop indefinitely.
-newtype ConnectApplicationFee = ConnectApplicationFee { unFeeInCents :: Int } deriving (Show, Generic, ToHttpApiData) -- TODO mv
+newtype ConnectApplicationFee = ConnectApplicationFee { unFeeInCents :: Int } deriving (Show, Generic, ToHttpApiData)
 feeInCents :: Int -> ConnectApplicationFee
 feeInCents = ConnectApplicationFee
 
@@ -533,13 +549,13 @@ instance ToHttpApiData SourceId where
 data ChargeCreateReq = ChargeCreateReq
   { chargeCreateAmount              :: Int
   , chargeCreateCurrency            :: CurrencyCode
+  , chargeCreateCapture             :: Bool             -- NOTE: True by default          (set accordingly in `chargeCreateReq`)
   , chargeCreateCustomer            :: Maybe CustomerId -- NOTE: ONE OF THESE IS REQUIRED (enforced by `chargeCreateReq`)
   , chargeCreateSource              :: Maybe SourceId   -- NOTE: ONE OF THESE IS REQUIRED (enforced by `chargeCreateReq`)
   , chargeCreateApplicationFee      :: Maybe ConnectApplicationFee
-  , chargeCreateCapture             :: Maybe Bool -- TODO Bool w/ default? "immediately capture the charge, default true"
   , chargeCreateDescription         :: Maybe String
   , chargeCreateReceiptEmail        :: Maybe String
-  , chargeCreateStatementDescriptor :: Maybe String -- up to 22 chars TODO DUP2 enforce?
+  , chargeCreateStatementDescriptor :: Maybe StatementDescriptor
   , chargeCreateMetadata            :: Maybe Metadata
   -- , destination    -- CONNECT ONLY -- handled w/ header
   -- , transfer_group -- CONNECT ONLY
@@ -551,20 +567,20 @@ instance F.ToForm ChargeCreateReq where
     let toForm' = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 12 }
      in addMetadataToForm chargeCreateMetadata . toForm' $ req
 
-chargeCreateReq :: Price -> Payer -> ChargeCreateReq
-chargeCreateReq price payer =
-  case payer of
-    PCustomer cust          -> (req price) { chargeCreateCustomer = Just cust }
-    PCustomerCard cust card -> (req price) { chargeCreateCustomer = Just cust, chargeCreateSource = Just $ SourceCard card }
-    PToken tok              -> (req price) { chargeCreateSource = Just $ SourceToken tok }
+chargeCreateReq :: Price -> Source -> ChargeCreateReq
+chargeCreateReq price source =
+  case source of
+    SCustomer cust          -> (req price) { chargeCreateCustomer = Just cust }
+    SCustomerCard cust card -> (req price) { chargeCreateCustomer = Just cust, chargeCreateSource = Just $ SourceCard card }
+    SToken tok              -> (req price) { chargeCreateSource = Just $ SourceToken tok }
   where
     req (Price curr amount) = ChargeCreateReq
       { chargeCreateAmount              = amount
       , chargeCreateCurrency            = curr
+      , chargeCreateCapture             = True
       , chargeCreateCustomer            = Nothing
       , chargeCreateSource              = Nothing
       , chargeCreateApplicationFee      = Nothing
-      , chargeCreateCapture             = Nothing
       , chargeCreateDescription         = Nothing
       , chargeCreateReceiptEmail        = Nothing
       , chargeCreateStatementDescriptor = Nothing
@@ -589,7 +605,7 @@ emptyChargeUpdateReq = ChargeUpdateReq Nothing Nothing Nothing
 data ChargeCaptureReq = ChargeCaptureReq
   { chargeCaptureAmount              :: Maybe Int
   , chargeCaptureReceiptEmail        :: Maybe String
-  , chargeCaptureStatementDescriptor :: Maybe String -- 22 chars -- TODO DUP2
+  , chargeCaptureStatementDescriptor :: Maybe StatementDescriptor
   -- , chargeCaptureApplicationFee      :: Maybe ConnectApplicationFee
   -- , chargeCaptureDestination         :: Maybe { amount :: Int }
   } deriving (Show, Generic)
@@ -597,6 +613,7 @@ instance F.ToForm ChargeCaptureReq where
   toForm = (\n -> F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop (length . reverse . takeWhile (/= '.') . reverse . show $ n) }) ''BankAccountCreate -- TODO DUP1
 chargeCaptureReq :: ChargeCaptureReq
 chargeCaptureReq = ChargeCaptureReq Nothing Nothing Nothing
+
 
 
 ---- STRIPE API TYPE ----

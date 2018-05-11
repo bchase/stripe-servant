@@ -21,7 +21,7 @@ createAndChargeAndDeleteCustomer = do
   where
     custReq = (customerCreateReq (Token "tok_visa")) { customerCreateEmail = Just "test@example.com" }
 
-    chargeReq Customer{customerId} = chargeCreateReq (Price USD 10000) (PCustomer customerId)
+    chargeReq Customer{customerId} = chargeCreateReq (Price USD 10000) (SCustomer customerId)
 
 
 main :: IO ()

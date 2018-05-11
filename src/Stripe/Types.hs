@@ -295,32 +295,36 @@ type DestroyS id          = id ->        StripeClient          (StripeDestroyRes
 
 -- -- CODES (e.g. COUNTRY, CURRENCY) -- --
 
-data CountryCode -- TODO add more
+data CountryCode
   = US
   | UnrecognizedCountryCode T.Text
   deriving (Show, Generic)
+
 instance J.FromJSON CountryCode where
   parseJSON (J.String "US") = return US
   parseJSON (J.String str)  = return . UnrecognizedCountryCode $ str
   parseJSON _ = mempty
-instance ToHttpApiData CountryCode where
-  toQueryParam = T.pack . show
-  -- toQueryParam (UnrecognizedCountryCode code) = code -- TODO
 
--- ISO4217
-data CurrencyCode -- TODO add more
+instance ToHttpApiData CountryCode where
+  toQueryParam (UnrecognizedCountryCode code) = code
+  toQueryParam code = T.pack . show $ code
+
+
+data CurrencyCode -- ISO4217
   = USD
   | JPY
   | UnrecognizedCurrencyCode T.Text
   deriving (Show, Generic)
+
 instance J.FromJSON CurrencyCode where
   parseJSON (J.String "usd") = return USD
   parseJSON (J.String "jpy") = return JPY
   parseJSON (J.String str)   = return . UnrecognizedCurrencyCode $ str
   parseJSON _ = mempty
+
 instance ToHttpApiData CurrencyCode where
-  toQueryParam = T.pack . map toLower . show
-  -- toQueryParam (UnrecognizedCurrencyCode code) = code -- TODO
+  toQueryParam (UnrecognizedCurrencyCode code) = code
+  toQueryParam code = T.pack . map toLower . show $ code
 
 
 
