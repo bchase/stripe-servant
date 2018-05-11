@@ -19,7 +19,7 @@ Consider yourself disclaimed!
 
 ## Stripe Version
 
-This package currently targets Stripe API version [`2017-08-15`](https://stripe.com/docs/upgrades#2017-08-15) and you can find copies of the documentation for this version in [`stripe-docs/`](https://github.com/bchase/stripe-servant/tree/master/stripe-docs) inside this repository.
+This package currently targets Stripe API version [`2017-08-15`](https://stripe.com/docs/upgrades#2017-08-15) and you can find copies of the documentation for this version in [`bchase/stripe-docs`](https://github.com/bchase/stripe-docs/tree/master/v2017-08-15).
 
 A `StripeVersion` data type is also provided, but it currently only serves to set the [`Stripe-Version`](https://stripe.com/docs/api#versioning) header appropriately.
 
