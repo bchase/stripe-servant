@@ -8,7 +8,7 @@ import           GHC.Generics   (Generic)
 
 import           Data.Aeson     as J
 
-import           Stripe.Helpers (deriveFromJSON')
+import           Stripe.Util    (deriveFromJSON')
 import           Stripe.Data.Id (BankAccountId, AccountId)
 import           Stripe.Types   (CurrencyCode (..), CountryCode (..),
                                  Metadata (..))

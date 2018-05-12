@@ -7,7 +7,7 @@ module Stripe.Data.Plan where
 
 import           GHC.Generics   (Generic)
 
-import           Stripe.Helpers (deriveFromJSON')
+import           Stripe.Util    (deriveFromJSON')
 import           Stripe.Data.Id (PlanId)
 import           Stripe.Types   (StripeTime (..), Interval (..), Price (..),
                                  CurrencyCode (..), Metadata (..))

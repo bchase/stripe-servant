@@ -10,7 +10,7 @@ import           GHC.Generics   (Generic)
 
 import           Data.Aeson     as J
 
-import           Stripe.Helpers (deriveFromJSON')
+import           Stripe.Util    (deriveFromJSON')
 import           Stripe.Error   (StripeErrorCode)
 import           Stripe.Data.Id (ChargeId, CustomerId, AccountId, InvoiceId)
 import           Stripe.Types   (StripeTime (..), CurrencyCode (..), Price(..),

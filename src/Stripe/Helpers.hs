@@ -19,16 +19,12 @@ module Stripe.Helpers
   , stripeD'
   , paginate
   , unpaginated
-  , deriveFromJSON'
   ) where
 
 import           Data.Either                 (either)
 import           Control.Monad.Except        (throwError)
 import           Control.Monad.Reader        (asks, liftIO)
-import           Language.Haskell.TH.Syntax  as TH
 
-import           Data.Aeson.Casing           (snakeCase)
-import           Data.Aeson.TH               (Options (..), defaultOptions, deriveFromJSON)
 import           Servant.API
 import           Servant.Client              (ClientEnv (ClientEnv), Scheme (Https),
                                               BaseUrl (BaseUrl), runClientM)
@@ -76,14 +72,6 @@ paginate pagination clientM =
     set p (By            num) = p { paginateBy            = Just . By'            $ num }
     set p (StartingAfter id') = p { paginateStartingAfter = Just . StartingAfter' $ id' }
     set p (EndingBefore  id') = p { paginateEndingBefore  = Just . EndingBefore'  $ id' }
-
-
-
----- JSON HELPERS ----
-
-deriveFromJSON' :: TH.Name -> TH.Q [TH.Dec]
-deriveFromJSON' n = deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop (moduleNameLength n) } n where
-  moduleNameLength = length . takeWhile (/= '.') . reverse . show
 
 
 

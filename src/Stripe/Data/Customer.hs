@@ -6,7 +6,7 @@ module Stripe.Data.Customer where
 
 import           GHC.Generics   (Generic)
 
-import           Stripe.Helpers (deriveFromJSON')
+import           Stripe.Util    (deriveFromJSON')
 import           Stripe.Data.Id (CustomerId)
 
 

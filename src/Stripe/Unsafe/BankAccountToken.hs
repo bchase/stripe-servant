@@ -17,7 +17,7 @@ import           Servant.Client              (client)
 
 import           Stripe.API.HTTP (StripeHeaders, Body, Create, PostJ)
 import           Stripe.Data.Id  (Token)
-import           Stripe.Helpers  (deriveFromJSON')
+import           Stripe.Util     (deriveFromJSON')
 
 
 
