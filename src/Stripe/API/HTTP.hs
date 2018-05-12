@@ -9,12 +9,11 @@ module Stripe.API.HTTP where
 
 import           GHC.Generics       (Generic)
 
-import           Data.Aeson.Casing  (snakeCase)
-import           Data.Aeson.TH      (Options (..), defaultOptions, deriveFromJSON)
 import           Servant.Client     (ClientM)
 import           Servant.API        ((:>), QueryParam, Capture, Header, Headers,
                                      ReqBody, FormUrlEncoded, JSON, Get, Post, Delete)
 
+import           Stripe.Util        (deriveFromJSON')
 import           Stripe.Types       (StripeAccountId, StripeSecretKey,
                                      StripeVersion, PaginationLimit,
                                      PaginationStartingAfter, PaginationEndingBefore)
@@ -67,6 +66,7 @@ type ScalarResp   a = Headers '[Header "Request-Id" String]              a
 type ListResp     a = Headers '[Header "Request-Id" String] (ListJSON    a)
 type DestroyResp id = Headers '[Header "Request-Id" String] (DeleteJSON id)
 
+
 data ListJSON a = ListJSON
   { listJsonObject  :: String
   , listJsonUrl     :: String
@@ -80,11 +80,9 @@ data DeleteJSON id = DeleteJSON
   } deriving ( Show, Generic, Functor )
 
 
--- TODO
--- $(deriveFromJSON' ''ListJSON)
--- $(deriveFromJSON' ''DeleteJSON)
-$(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 8  } ''ListJSON)
-$(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 10 } ''DeleteJSON)
+$(deriveFromJSON' ''ListJSON)
+
+$(deriveFromJSON' ''DeleteJSON)
 
 
 
