@@ -3,7 +3,7 @@
 {-# LANGUAGE DuplicateRecordFields      #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE NamedFieldPuns             #-}
-{-# LANGUAGE OverloadedLists            #-}
+{-# LANGUAGE OverloadedLists            #-} -- TODO rm? (mv'd to Request.BankAccount)
 {-# LANGUAGE OverloadedStrings          #-}
 {-# LANGUAGE RecordWildCards            #-}
 {-# LANGUAGE TemplateHaskell            #-}
@@ -21,6 +21,7 @@ module Stripe
   , module Stripe.Data.Charge
   , module Stripe.Data.Customer
   , module Stripe.Data.Plan
+  , module Stripe.API.Request.BankAccount
   , module Stripe.API.Request.Charge
   ) where
 
@@ -44,6 +45,7 @@ import           Stripe.Data.Charge
 import           Stripe.Data.Customer
 import           Stripe.Data.Plan
 import           Stripe.API.HTTP
+import           Stripe.API.Request.BankAccount
 import           Stripe.API.Request.Charge
 
 
@@ -57,33 +59,6 @@ import           Stripe.API.Request.Charge
 ---- STRIPE API DATA TYPES ----
 
 -- Requests
-
-data BankAccountCreate = BankAccountCreate
-  { bankAccountCreateSource :: Token
-  } deriving (Generic)
-instance F.ToForm BankAccountCreate where
-  toForm = (\n -> F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop (length . reverse . takeWhile (/= '.') . reverse . show $ n) }) ''BankAccountCreate -- TODO DUP1 TH deriveToForm
-minBankAccountCreateReq :: Token -> BankAccountCreate
-minBankAccountCreateReq token = BankAccountCreate token
-
-data BankAccountUpdateReq = BankAccountUpdateReq
-  { bankAccountUpdateAccountHolderName :: Maybe String
-  , bankAccountUpdateAccountHolderType :: Maybe String
-  } deriving (Generic)
-instance F.ToForm BankAccountUpdateReq where
-  toForm = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 17 }
-emptyBankAccountUpdateReq :: BankAccountUpdateReq
-emptyBankAccountUpdateReq = BankAccountUpdateReq Nothing Nothing
-
-data BankAccountVerifyReq = BankAccountVerifyReq
-  { bankAccountVerifyAmount1 :: Int
-  , bankAccountVerifyAmount2 :: Int
-  } deriving (Generic)
-instance F.ToForm BankAccountVerifyReq where
-  toForm req =
-    [ ("amounts[]", toQueryParam . bankAccountVerifyAmount1 $ req)
-    , ("amounts[]", toQueryParam . bankAccountVerifyAmount2 $ req)
-    ]
 
 data CardCreateReq = CardCreateReq
   { cardCreateSource :: Token
