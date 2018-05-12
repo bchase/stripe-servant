@@ -17,6 +17,7 @@ module Stripe.Helpers
   , stripeS'
   , stripeL'
   , stripeD'
+  , stripe'
   , paginate
   , unpaginated
   ) where
@@ -30,28 +31,49 @@ import           Servant.Client              (ClientEnv (ClientEnv), Scheme (Htt
                                               BaseUrl (BaseUrl), runClientM)
 import           Network.HTTP.Client.TLS     (newTlsManagerWith, tlsManagerSettings)
 
-import           Stripe.API.HTTP
+import           Stripe.API.HTTP             hiding (getReqId)
 import           Stripe.Types
 import           Stripe.Error                (stripeError)
 import           Stripe.Data                 (StripeScalar (..), StripeList (..),
-                                              StripeDestroy (..), StripeData (stripeData))
+                                              StripeDestroy (..), Resp (..))
 
 
 
 ---- Client RUNNERS ----
 
-stripeS :: StripeConnect -> Client (ScalarResp a) -> Stripe a
-stripeS connect = fmap stripeData . stripeS' connect
-stripeL :: StripeConnect -> Client (ListResp a) -> Stripe a
-stripeL connect = fmap stripeData . stripeL' connect
-stripeD :: StripeConnect -> Client (DestroyResp a) -> Stripe a
-stripeD connect = fmap stripeData . stripeD' connect
+stripe' :: ( ToData d ) => Connect -> Client (ScalarResp (d a)) -> Stripe (Resp a)
+stripe' connect client = do
+  (ver, key) <- asks $ (,) <$> configVersion <*> configSecretKey
 
-stripeS' :: StripeConnect -> Client (ScalarResp a) -> Stripe (StripeScalar a)
+  let client' = client (Just key) (Just ver) (toMaybe connect)
+  eStripe <- liftIO $ runClientM client' =<< clientEnv
+
+  either (throwError . stripeError) (return . toResp) eStripe
+
+  where
+    toResp (Headers x hs) = Resp (getReqId hs) (toMetadata x) (toData x)
+
+    toMaybe  WithoutConnect    = Nothing
+    toMaybe (WithConnect acct) = Just acct
+
+    clientEnv = do
+      manager <- newTlsManagerWith tlsManagerSettings
+      let url = BaseUrl Https "api.stripe.com" 443 ""
+      return $ ClientEnv manager url
+
+
+stripeS :: Connect -> Client (ScalarResp a) -> Stripe a
+stripeS connect = fmap stripeScalarData . stripeS' connect
+stripeL :: Connect -> Client (ListResp a) -> Stripe a
+stripeL connect = fmap stripeListData . stripeL' connect
+stripeD :: Connect -> Client (DestroyResp a) -> Stripe a
+stripeD connect = fmap stripeDestroyId . stripeD' connect
+
+stripeS' :: Connect -> Client (ScalarResp a) -> Stripe (StripeScalar a)
 stripeS' connect = scalar . stripe connect
-stripeL' :: StripeConnect -> Client (ListResp a) -> Stripe (StripeList a)
+stripeL' :: Connect -> Client (ListResp a) -> Stripe (StripeList a)
 stripeL' connect = list . stripe connect
-stripeD' :: StripeConnect -> Client (DestroyResp a) -> Stripe (StripeDestroy a)
+stripeD' :: Connect -> Client (DestroyResp a) -> Stripe (StripeDestroy a)
 stripeD' connect = destroyed . stripe connect
 
 
@@ -77,11 +99,11 @@ paginate pagination clientM =
 
 ---- PRIVATE ----
 
-stripe :: StripeConnect -> Client a -> Stripe a
+stripe :: Connect -> Client a -> Stripe a
 stripe connect client = do
-  (ver, key) <- asks $ (,) <$> stripeVersion <*> stripeSecretKey
+  (ver, key) <- asks $ (,) <$> configVersion <*> configSecretKey
 
-  let client' = client (toMaybe connect) (Just key) (Just ver)
+  let client' = client (Just key) (Just ver) (toMaybe connect)
   eStripe <- liftIO $ runClientM client' =<< clientEnv
 
   either (throwError . stripeError) return eStripe
@@ -103,7 +125,7 @@ list :: Stripe (ListResp a) -> Stripe (StripeList a)
 list = fmap (\(Headers ListJSON{..} hs) -> StripeList (getReqId hs) listJsonHasMore listJsonData)
 
 destroyed :: Stripe (DestroyResp id) -> Stripe (StripeDestroy id)
-destroyed = fmap (\(Headers DeleteJSON{..} hs) -> StripeDestroy (getReqId hs) deleteJsonId deleteJsonDeleted)
+destroyed = fmap (\(Headers DeleteJSON{..} hs) -> StripeDestroy (getReqId hs) deleteJsonDeleted deleteJsonId)
 
 
 getReqId :: HList '[Header "Request-Id" String] -> String

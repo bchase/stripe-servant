@@ -13,7 +13,7 @@ import           Data.Aeson     as J
 import           Stripe.Util    (deriveFromJSON')
 import           Stripe.Error   (StripeErrorCode)
 import           Stripe.Data.Id (ChargeId, CustomerId, AccountId, InvoiceId)
-import           Stripe.Types   (StripeTime (..), CurrencyCode (..), Price(..),
+import           Stripe.Types   (Time (..), CurrencyCode (..), Price(..),
                                  Metadata (..), StatementDescriptor (..))
 
 
@@ -23,7 +23,7 @@ data Charge = Charge
   , chargeAmount              :: Int
   , chargeAmountRefunded      :: Int
   , chargeCaptured            :: Bool
-  , chargeCreated             :: StripeTime
+  , chargeCreated             :: Time
   , chargeCurrency            :: CurrencyCode
   , chargeCustomer            :: Maybe CustomerId
   , chargeDescription         :: Maybe String

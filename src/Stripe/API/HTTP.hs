@@ -1,31 +1,38 @@
-{-# LANGUAGE DataKinds         #-}
-{-# LANGUAGE DeriveGeneric     #-}
-{-# LANGUAGE DeriveFunctor     #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE TemplateHaskell   #-}
-{-# LANGUAGE TypeOperators     #-}
+{-# LANGUAGE DataKinds           #-}
+{-# LANGUAGE DeriveGeneric       #-}
+{-# LANGUAGE DeriveFunctor       #-}
+{-# LANGUAGE FlexibleInstances   #-}
+{-# LANGUAGE OverloadedStrings   #-}
+{-# LANGUAGE RecordWildCards     #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TemplateHaskell     #-}
+{-# LANGUAGE TypeOperators       #-}
+{-# LANGUAGE TypeFamilies        #-}
+
+{-# OPTIONS_GHC -fno-warn-orphans #-} -- TODO
 
 module Stripe.API.HTTP where
 
 import           GHC.Generics       (Generic)
 
 import           Servant.Client     (ClientM)
-import           Servant.API        ((:>), QueryParam, Capture, Header, Headers,
+import           Servant.API        ((:>), QueryParam, Capture, Header (..), Headers (..), HList (..),
                                      ReqBody, FormUrlEncoded, JSON, Get, Post, Delete)
 
 import           Stripe.Util        (deriveFromJSON')
-import           Stripe.Types       (StripeAccountId, StripeSecretKey,
-                                     StripeVersion, PaginationLimit,
+import           Stripe.Data.Id     (AccountId)
+import           Stripe.Data        (Resp (..), RespMetadata (..))
+import           Stripe.Types       (SecretKey, Version, PaginationLimit,
                                      PaginationStartingAfter, PaginationEndingBefore)
 
 
 
 ---- CLIENT ----
 
-type Client resp =
-     Maybe StripeAccountId
-  -> Maybe StripeSecretKey
-  -> Maybe StripeVersion
+type Client resp =   -- `Maybe`s due to `Servant.Header`
+     Maybe SecretKey -- REQUIRED (own secret key)
+  -> Maybe Version   --          (set via Config)
+  -> Maybe AccountId -- OPTIONAL (Connect account)
   -> ClientM resp
 
 type PaginatedClient resp =
@@ -43,9 +50,9 @@ type Id id = Capture "id" id
 type Body a = ReqBody '[FormUrlEncoded] a
 
 type ReqHeaders a =
-     Header "Stripe-Account" StripeAccountId
-  :> Header "Authorization"  StripeSecretKey
-  :> Header "Stripe-Version" StripeVersion
+     Header "Authorization"  SecretKey
+  :> Header "Stripe-Version" Version
+  :> Header "Stripe-Account" AccountId
   :> a
 
 type PaginationQP a =
@@ -65,10 +72,41 @@ type Delete' a =               ReqHeaders (Delete '[JSON] (DestroyResp a))
 
 type RespHeaders a = Headers '[Header "Request-Id" String] a
 
+type ScalarResp'  a = RespHeaders (ScalarJSON  a)
+
 type ScalarResp   a = RespHeaders              a
 type ListResp     a = RespHeaders (ListJSON    a)
 type DestroyResp id = RespHeaders (DeleteJSON id)
 
+
+class ToData f where
+  toData     :: f a -> a
+  toMetadata :: f a -> RespMetadata
+
+instance ToData ScalarJSON where
+  toData = scalarJsonData
+  toMetadata _ = ScalarMeta
+
+instance ToData ListJSON where
+  toData = listJsonData
+  toMetadata ListJSON{..} = ListMeta listJsonHasMore
+
+instance ToData DeleteJSON where
+  toData = deleteJsonId
+  toMetadata DeleteJSON{..} = DestroyMeta deleteJsonDeleted
+
+
+foo :: Headers '[] a -> Resp a
+foo = undefined
+getReqId :: HList '[Header "Request-Id" String] -> String
+getReqId ((Header id' :: Header "Request-Id" String) `HCons` HNil) = id'
+getReqId _ = ""
+
+
+
+data ScalarJSON a = ScalarJSON
+  { scalarJsonData :: a
+  } deriving ( Show, Generic, Functor )
 
 data ListJSON a = ListJSON
   { listJsonHasMore :: Bool

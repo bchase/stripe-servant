@@ -9,7 +9,7 @@ import           GHC.Generics   (Generic)
 
 import           Stripe.Util    (deriveFromJSON')
 import           Stripe.Data.Id (PlanId)
-import           Stripe.Types   (StripeTime (..), Interval (..), Price (..),
+import           Stripe.Types   (Time (..), Interval (..), Price (..),
                                  CurrencyCode (..), Metadata (..))
 
 
@@ -17,7 +17,7 @@ import           Stripe.Types   (StripeTime (..), Interval (..), Price (..),
 data Plan = Plan
   { planId                  :: PlanId
   , planAmount              :: Int
-  , planCreated             :: StripeTime
+  , planCreated             :: Time
   , planCurrency            :: CurrencyCode
   , planInterval            :: Interval
   , planIntervalCount       :: Int

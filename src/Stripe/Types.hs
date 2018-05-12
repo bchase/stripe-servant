@@ -26,60 +26,64 @@ import qualified Web.Internal.FormUrlEncoded as F
 
 import           Stripe.Error
 import           Stripe.Util        (fromJsonString)
-import           Stripe.Data.Id     (BankAccountId (..), CardId (..),
+import           Stripe.Data.Id     (AccountId (..), BankAccountId (..), CardId (..),
                                      CustomerId (..), Token (..))
+
+
+
+---- `Stripe` MONAD ---- TODO mv Stripe? Stripe.Config?
+
+newtype Stripe a = Stripe { runStripe :: ReaderT Config ( ExceptT StripeFailure IO ) a }
+  deriving ( Functor, Applicative, Monad, MonadReader Config, MonadError StripeFailure, MonadIO )
+
+
+data Config = Config
+  { configVersion   :: Version
+  , configSecretKey :: SecretKey
+  }
+
+newtype SecretKey = SecretKey { unSecretKey :: T.Text }
+
+data Version = Version'2017'08'15
+
+
+stripeIO :: Config -> Stripe a -> IO (Either StripeFailure a)
+stripeIO cfg = runExceptT . flip runReaderT cfg . runStripe
+
+
+instance ToHttpApiData SecretKey where
+  toUrlPiece = mappend "Bearer " . unSecretKey
+
+instance ToHttpApiData Version where
+  toUrlPiece Version'2017'08'15 = "2017-08-15"
 
 
 
 ---- STRIPE CONNECT ----
 
-data StripeConnect
+data Connect
   = WithoutConnect
-  | WithConnect StripeAccountId
+  | WithConnect AccountId
 
--- TODO check okay GeneralizedNewtypeDeriving -- ToHttpApiData -- WARNING: Do not derive this using DeriveAnyClass as the generated instance will loop indefinitely.
+-- TODO check okay GeneralizedNewtypeDeriving ToHttpApiData
+-- docs: "WARNING: Do not derive this using DeriveAnyClass as the generated instance will loop indefinitely."
 newtype ConnectApplicationFee = ConnectApplicationFee { feeInCents :: Int } deriving ( Show, Generic, ToHttpApiData )
 
 
 
--- TODO mv with `Stripe` below
-newtype StripeSecretKey = StripeSecretKey { unStripeSecretKey :: T.Text }
-newtype StripeAccountId = StripeAccountId { unStripeAccountId :: T.Text }
-data    StripeVersion   = StripeVersion'2017'08'15
-instance ToHttpApiData StripeSecretKey where
-  toUrlPiece = mappend "Bearer " . unStripeSecretKey
-instance ToHttpApiData StripeAccountId where
-  toUrlPiece = unStripeAccountId
-instance ToHttpApiData StripeVersion where
-  toUrlPiece StripeVersion'2017'08'15 = "2017-08-15"
--- -- `Stripe` MONAD -- -- TODO mv Stripe? Stripe.Config?
-
-data StripeConfig = StripeConfig
-  { stripeVersion   :: StripeVersion
-  , stripeSecretKey :: StripeSecretKey
-  }
-
-newtype Stripe a = Stripe { runStripe :: ReaderT StripeConfig ( ExceptT StripeFailure IO ) a }
-  deriving ( Functor, Applicative, Monad, MonadReader StripeConfig, MonadError StripeFailure, MonadIO )
-
-stripeIO :: StripeConfig -> Stripe a -> IO (Either StripeFailure a)
-stripeIO cfg = runExceptT . flip runReaderT cfg . runStripe
-
-
-
--- -- SOURCES -- --
+---- SOURCES ----
 
 data Source
   = SCustomer     CustomerId
   | SCustomerCard CustomerId CardId
   | SToken        Token
-  deriving (Show, Generic)
+  deriving ( Show, Generic )
 
 data SourceId
   = SourceToken Token
   | SourceCard  CardId
   | SourceBank  BankAccountId
-  deriving (Show, Generic)
+  deriving ( Show, Generic )
 
 instance ToHttpApiData SourceId where
   toQueryParam (SourceToken tok)  = unToken tok
@@ -88,16 +92,16 @@ instance ToHttpApiData SourceId where
 
 
 
--- -- TIMES -- --
+---- TIMES ----
 
-data StripeTime = StripeTime
-  { getPOSIXTime :: Int
-  , getUTCTime :: Time.UTCTime
-  } deriving (Eq, Show, Generic)
+data Time = Time
+  { timePOSIX :: Int
+  , timeUTC   :: Time.UTCTime
+  } deriving ( Eq, Show, Generic )
 
-instance J.FromJSON StripeTime where
+instance J.FromJSON Time where
   parseJSON (J.Number sci) =
-    return $ StripeTime (int sci) (Time.posixSecondsToUTCTime . int $ sci)
+    return $ Time (int sci) (Time.posixSecondsToUTCTime . int $ sci)
     where
       int :: (Num a) => Scientific -> a
       int = fromInteger . coefficient
@@ -105,9 +109,9 @@ instance J.FromJSON StripeTime where
 
 
 
--- -- METADATA -- --
+---- METADATA ----
 
-newtype Metadata = Metadata { unMetadata :: HM.HashMap T.Text T.Text } deriving (Show, Generic)
+newtype Metadata = Metadata { unMetadata :: HM.HashMap T.Text T.Text } deriving ( Show, Generic )
 
 metadata :: [(T.Text, T.Text)] -> Metadata
 metadata = Metadata . HM.fromList
@@ -134,13 +138,13 @@ addMetadataToForm mMetadata form =
 
 
 
--- -- GENERIC IDS -- --
+---- GENERIC IDS ----
 
-newtype ResourceId = ResourceId T.Text deriving (Show, Generic, J.FromJSON)
+newtype ResourceId = ResourceId T.Text deriving ( Show, Generic, J.FromJSON )
 
 
 
--- -- PAGINATION -- --
+---- PAGINATION ----
 
 data PaginationOpt
   = By            Int
@@ -166,7 +170,7 @@ instance ToHttpApiData PaginationEndingBefore where
 
 
 
--- -- INTERVALS -- --
+---- INTERVALS ----
 
 data Interval
   = Day
@@ -187,12 +191,12 @@ instance ToHttpApiData Interval where
 
 
 
--- -- CODES (e.g. COUNTRY, CURRENCY) -- --
+---- CODES (e.g. COUNTRY, CURRENCY) ----
 
 data CountryCode
   = US
   | UnrecognizedCountryCode T.Text
-  deriving (Show, Generic)
+  deriving ( Show, Generic )
 
 instance J.FromJSON CountryCode where
   parseJSON (J.String "US") = return US
@@ -208,7 +212,7 @@ data CurrencyCode -- ISO4217
   = USD
   | JPY
   | UnrecognizedCurrencyCode T.Text
-  deriving (Show, Generic)
+  deriving ( Show, Generic )
 
 instance J.FromJSON CurrencyCode where
   parseJSON (J.String "usd") = return USD
@@ -222,9 +226,9 @@ instance ToHttpApiData CurrencyCode where
 
 
 
--- -- STATEMENT DESCRIPTORS -- --
+---- STATEMENT DESCRIPTORS ----
 
-newtype StatementDescriptor = StatementDescriptor { unStatementDescriptor :: T.Text } deriving (Show, Generic)
+newtype StatementDescriptor = StatementDescriptor { unStatementDescriptor :: T.Text } deriving ( Show, Generic )
 
 statementDescriptor :: String -> Maybe StatementDescriptor
 statementDescriptor str =
@@ -240,7 +244,7 @@ instance J.FromJSON StatementDescriptor where
 
 
 
--- -- PRICES -- --
+---- PRICES ----
 
 data Price = Price
   { stripeCurrency :: CurrencyCode

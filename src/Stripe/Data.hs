@@ -1,11 +1,25 @@
 {-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE DeriveFunctor     #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards   #-}
 
 module Stripe.Data where
 
 import           GHC.Generics       (Generic)
 
+
+
+data Resp a = Resp
+  { stripeRequestId :: String
+  , stripeMetadata  :: RespMetadata
+  , stripeData      :: a
+  } deriving ( Show, Generic, Functor )
+
+data RespMetadata
+  = ScalarMeta
+  | ListMeta    { listHasMore    :: Bool }
+  | DestroyMeta { destroyDeleted :: Bool }
+  deriving ( Show, Generic )
 
 
 data StripeScalar a = StripeScalar
@@ -21,20 +35,21 @@ data StripeList a = StripeList
 
 data StripeDestroy id = StripeDestroy
   { stripeDestroyRequestId :: String
-  , stripeDestroyId        :: id
   , stripeDestroyDeleted   :: Bool
+  , stripeDestroyId        :: id
   } deriving ( Show, Generic, Functor )
 
-class StripeData s where
-  stripeReqId :: s a -> String
-  stripeData  :: s a -> a
 
-instance StripeData StripeScalar where
-  stripeReqId = stripeScalarRequestId
-  stripeData  = stripeScalarData
-instance StripeData StripeList where
-  stripeReqId = stripeListRequestId
-  stripeData  = stripeListData
-instance StripeData StripeDestroy where
-  stripeReqId = stripeDestroyRequestId
-  stripeData  = stripeDestroyId
+-- class StripeData s where
+--   stripeReqId :: s a -> String
+--   stripeData  :: s a -> a
+--
+-- instance StripeData StripeScalar where
+--   stripeReqId = stripeScalarRequestId
+--   stripeData  = stripeScalarData
+-- instance StripeData StripeList where
+--   stripeReqId = stripeListRequestId
+--   stripeData  = stripeListData
+-- instance StripeData StripeDestroy where
+--   stripeReqId = stripeDestroyRequestId
+--   stripeData  = stripeDestroyId
