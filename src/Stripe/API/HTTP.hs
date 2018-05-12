@@ -41,10 +41,10 @@ type PaginatedClient resp =
 type Id   t = Capture "id" t
 type Body t = ReqBody '[FormUrlEncoded] t
 
-type GetJL   a = Get    '[JSON] (ListResp    a)
-type GetJS   a = Get    '[JSON] (ScalarResp  a)
-type PostJ   a = Post   '[JSON] (ScalarResp  a)
-type DeleteJ a = Delete '[JSON] (DestroyResp a)
+type GetL    a = StripePaginationQueryParams (StripeHeaders (Get    '[JSON] (ListResp    a)))
+type Get'    a =                              StripeHeaders (Get    '[JSON] (ScalarResp  a))
+type Post'   a =                              StripeHeaders (Post   '[JSON] (ScalarResp  a))
+type Delete' a =                              StripeHeaders (Delete '[JSON] (DestroyResp a))
 
 type StripeHeaders resp =
      Header "Stripe-Account" StripeAccountId

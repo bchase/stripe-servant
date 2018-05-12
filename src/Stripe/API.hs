@@ -23,10 +23,8 @@ import           Stripe.API.Request.Card
 import           Stripe.API.Request.Charge
 import           Stripe.API.Request.Customer
 import           Stripe.API.Request.Plan
-import           Stripe.API.HTTP (Id, StripeHeaders, Body,
-                                  StripePaginationQueryParams,
-                                  Create, Read, Update, Destroy, List,
-                                  GetJS, GetJL, PostJ, DeleteJ)
+import           Stripe.API.HTTP (Id, Body, GetL, Get', Post', Delete',
+                                  Create, Read, Update, Destroy, List)
 
 
 
@@ -67,78 +65,78 @@ type PlanAPI
   :<|> PlanList
 
 
-type ChargeCreate  = "v1" :> "charges" :> Body ChargeCreateReq :> StripeHeaders (PostJ Charge)
-type ChargeRead    = "v1" :> "charges" :> Id ChargeId :> StripeHeaders (GetJS Charge)
-type ChargeUpdate  = "v1" :> "charges" :> Id ChargeId :> Body ChargeUpdateReq :> StripeHeaders (PostJ Charge)
-type ChargeList    = "v1" :> "charges" :> StripePaginationQueryParams (StripeHeaders (GetJL [Charge]))
-type ChargeCapture = "v1" :> "charges" :> Id ChargeId :> "capture" :> Body ChargeCaptureReq :> StripeHeaders (PostJ Charge)
+type ChargeCreate  = "v1" :> "charges" :> Body ChargeCreateReq :> Post' Charge
+type ChargeRead    = "v1" :> "charges" :> Id ChargeId :> Get' Charge
+type ChargeUpdate  = "v1" :> "charges" :> Id ChargeId :> Body ChargeUpdateReq :> Post' Charge
+type ChargeList    = "v1" :> "charges" :> GetL [Charge]
+type ChargeCapture = "v1" :> "charges" :> Id ChargeId :> "capture" :> Body ChargeCaptureReq :> Post' Charge
 
-type CustomerCreate  = "v1" :> "customers" :> Body CustomerCreateReq :> StripeHeaders (PostJ Customer)
-type CustomerRead    = "v1" :> "customers" :> Id CustomerId :> StripeHeaders (GetJS Customer)
-type CustomerUpdate  = "v1" :> "customers" :> Id CustomerId :> Body CustomerUpdateReq :> StripeHeaders (PostJ Customer)
-type CustomerDestroy = "v1" :> "customers" :> Id CustomerId :> StripeHeaders (DeleteJ CustomerId)
-type CustomerList    = "v1" :> "customers" :> StripePaginationQueryParams (StripeHeaders (GetJL [Customer]))
+type CustomerCreate  = "v1" :> "customers" :> Body CustomerCreateReq :> Post' Customer
+type CustomerRead    = "v1" :> "customers" :> Id CustomerId :> Get' Customer
+type CustomerUpdate  = "v1" :> "customers" :> Id CustomerId :> Body CustomerUpdateReq :> Post' Customer
+type CustomerDestroy = "v1" :> "customers" :> Id CustomerId :> Delete' CustomerId
+type CustomerList    = "v1" :> "customers" :> GetL [Customer]
 
-type CustomerCardCreate  = "v1" :> "customers" :> Id CustomerId :> "cards" :> Body CardCreateReq :> StripeHeaders (PostJ Card)
-type CustomerCardRead    = "v1" :> "customers" :> Id CustomerId :> "cards" :> Id CardId :> StripeHeaders (GetJS Card)
-type CustomerCardUpdate  = "v1" :> "customers" :> Id CustomerId :> "cards" :> Id CardId :> Body CardUpdateReq :> StripeHeaders (PostJ Card)
-type CustomerCardDestroy = "v1" :> "customers" :> Id CustomerId :> "cards" :> Id CardId :> StripeHeaders (DeleteJ CardId)
-type CustomerCardList    = "v1" :> "customers" :> Id CustomerId :> "cards" :> StripePaginationQueryParams (StripeHeaders (GetJL [Card]))
+type CustomerCardCreate  = "v1" :> "customers" :> Id CustomerId :> "cards" :> Body CardCreateReq :> Post' Card
+type CustomerCardRead    = "v1" :> "customers" :> Id CustomerId :> "cards" :> Id CardId :> Get' Card
+type CustomerCardUpdate  = "v1" :> "customers" :> Id CustomerId :> "cards" :> Id CardId :> Body CardUpdateReq :> Post' Card
+type CustomerCardDestroy = "v1" :> "customers" :> Id CustomerId :> "cards" :> Id CardId :> Delete' CardId
+type CustomerCardList    = "v1" :> "customers" :> Id CustomerId :> "cards" :> GetL [Card]
 
-type CustomerBankAccountCreate  = "v1" :> "customers" :> Id CustomerId :> "bank_accounts" :> Body BankAccountCreate :> StripeHeaders (PostJ BankAccount)
-type CustomerBankAccountRead    = "v1" :> "customers" :> Id CustomerId :> "bank_accounts" :> Id BankAccountId :> StripeHeaders (GetJS BankAccount)
-type CustomerBankAccountUpdate  = "v1" :> "customers" :> Id CustomerId :> "bank_accounts" :> Id BankAccountId :> Body BankAccountUpdateReq :> StripeHeaders (PostJ BankAccount)
-type CustomerBankAccountDestroy = "v1" :> "customers" :> Id CustomerId :> "bank_accounts" :> Id BankAccountId :> StripeHeaders (DeleteJ BankAccountId)
-type CustomerBankAccountList    = "v1" :> "customers" :> Id CustomerId :> "bank_accounts" :> StripePaginationQueryParams (StripeHeaders (GetJL [BankAccount]))
-type CustomerBankAccountVerify  = "v1" :> "customers" :> Id CustomerId :> "bank_accounts" :> Id BankAccountId :> "verify" :> Body BankAccountVerifyReq :> StripeHeaders (PostJ BankAccount)
+type CustomerBankAccountCreate  = "v1" :> "customers" :> Id CustomerId :> "bank_accounts" :> Body BankAccountCreate :> Post' BankAccount
+type CustomerBankAccountRead    = "v1" :> "customers" :> Id CustomerId :> "bank_accounts" :> Id BankAccountId :> Get' BankAccount
+type CustomerBankAccountUpdate  = "v1" :> "customers" :> Id CustomerId :> "bank_accounts" :> Id BankAccountId :> Body BankAccountUpdateReq :> Post' BankAccount
+type CustomerBankAccountDestroy = "v1" :> "customers" :> Id CustomerId :> "bank_accounts" :> Id BankAccountId :> Delete' BankAccountId
+type CustomerBankAccountList    = "v1" :> "customers" :> Id CustomerId :> "bank_accounts" :> GetL [BankAccount]
+type CustomerBankAccountVerify  = "v1" :> "customers" :> Id CustomerId :> "bank_accounts" :> Id BankAccountId :> "verify" :> Body BankAccountVerifyReq :> Post' BankAccount
 
-type PlanCreate  = "v1" :> "plans" :> Body PlanCreateReq :> StripeHeaders (PostJ Plan)
-type PlanRead    = "v1" :> "plans" :> Id PlanId :> StripeHeaders (GetJS Plan)
-type PlanUpdate  = "v1" :> "plans" :> Id PlanId :> Body PlanUpdateReq :> StripeHeaders (PostJ Plan)
-type PlanDestroy = "v1" :> "plans" :> Id PlanId :> StripeHeaders (DeleteJ PlanId)
-type PlanList    = "v1" :> "plans" :> StripePaginationQueryParams (StripeHeaders (GetJL [Plan]))
+type PlanCreate  = "v1" :> "plans" :> Body PlanCreateReq :> Post' Plan
+type PlanRead    = "v1" :> "plans" :> Id PlanId :> Get' Plan
+type PlanUpdate  = "v1" :> "plans" :> Id PlanId :> Body PlanUpdateReq :> Post' Plan
+type PlanDestroy = "v1" :> "plans" :> Id PlanId :> Delete' PlanId
+type PlanList    = "v1" :> "plans" :> GetL [Plan]
 
 
 
 ---- ENDPOINT FUNCTIONS ----
 
-createCustomer :: Create CustomerCreateReq Customer
-readCustomer :: Read CustomerId Customer
-updateCustomer :: Update CustomerId CustomerUpdateReq Customer
+createCustomer  :: Create  CustomerCreateReq             Customer
+readCustomer    :: Read    CustomerId                    Customer
+updateCustomer  :: Update  CustomerId CustomerUpdateReq  Customer
 destroyCustomer :: Destroy CustomerId
-listCustomers :: List [Customer]
+listCustomers   :: List                                 [Customer]
 createCustomer :<|> readCustomer :<|> updateCustomer :<|> destroyCustomer :<|> listCustomers =
   client (Proxy :: Proxy CustomerAPI)
 
-createCustomerCard :: CustomerId -> Create CardCreateReq Card
-readCustomerCard :: CustomerId -> Read CardId Card
-updateCustomerCard :: CustomerId -> Update CardId CardUpdateReq Card
+createCustomerCard  :: CustomerId -> Create  CardCreateReq         Card
+readCustomerCard    :: CustomerId -> Read    CardId                Card
+updateCustomerCard  :: CustomerId -> Update  CardId CardUpdateReq  Card
 destroyCustomerCard :: CustomerId -> Destroy CardId
-listCustomerCards :: CustomerId -> List [Card]
+listCustomerCards   :: CustomerId -> List                         [Card]
 createCustomerCard :<|> readCustomerCard :<|> updateCustomerCard :<|> destroyCustomerCard :<|> listCustomerCards =
   client (Proxy :: Proxy CustomerCardAPI)
 
-createCustomerBankAccount :: CustomerId -> Create BankAccountCreate BankAccount
-readCustomerBankAccount :: CustomerId -> Read BankAccountId BankAccount
-updateCustomerBankAccount :: CustomerId -> Update BankAccountId BankAccountUpdateReq BankAccount
+createCustomerBankAccount  :: CustomerId -> Create  BankAccountCreate                   BankAccount
+readCustomerBankAccount    :: CustomerId -> Read    BankAccountId                       BankAccount
+updateCustomerBankAccount  :: CustomerId -> Update  BankAccountId BankAccountUpdateReq  BankAccount
 destroyCustomerBankAccount :: CustomerId -> Destroy BankAccountId
-listCustomerBankAccounts :: CustomerId -> List [BankAccount]
-verifyCustomerBankAccount :: CustomerId -> Update BankAccountId BankAccountVerifyReq BankAccount
+listCustomerBankAccounts   :: CustomerId -> List                                       [BankAccount]
+verifyCustomerBankAccount  :: CustomerId -> Update  BankAccountId BankAccountVerifyReq  BankAccount
 createCustomerBankAccount :<|> readCustomerBankAccount :<|> updateCustomerBankAccount :<|> destroyCustomerBankAccount :<|> listCustomerBankAccounts :<|> verifyCustomerBankAccount =
   client (Proxy :: Proxy CustomerBankAccountAPI)
 
-createPlan :: Create PlanCreateReq Plan
-readPlan :: Read PlanId Plan
-updatePlan :: Update PlanId PlanUpdateReq Plan
+createPlan  :: Create  PlanCreateReq         Plan
+readPlan    :: Read    PlanId                Plan
+updatePlan  :: Update  PlanId PlanUpdateReq  Plan
 destroyPlan :: Destroy PlanId
-listPlans :: List [Plan]
+listPlans   :: List                         [Plan]
 createPlan :<|> readPlan :<|> updatePlan :<|> destroyPlan :<|> listPlans =
   client (Proxy :: Proxy PlanAPI)
 
-createCharge :: Create ChargeCreateReq Charge
-readCharge :: Read ChargeId Charge
-updateCharge :: Update ChargeId ChargeUpdateReq Charge
-listCharges :: List [Charge]
-captureCharge :: ChargeId -> Create ChargeCaptureReq Charge
+createCharge  ::             Create ChargeCreateReq           Charge
+readCharge    ::             Read   ChargeId                  Charge
+updateCharge  ::             Update ChargeId ChargeUpdateReq  Charge
+listCharges   ::             List                            [Charge]
+captureCharge :: ChargeId -> Create ChargeCaptureReq          Charge
 createCharge :<|> readCharge :<|> updateCharge :<|> listCharges :<|> captureCharge =
   client (Proxy :: Proxy ChargeAPI)

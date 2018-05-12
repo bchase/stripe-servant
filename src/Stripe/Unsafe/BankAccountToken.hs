@@ -15,7 +15,7 @@ import qualified Web.Internal.FormUrlEncoded as F
 import           Servant.API                 ((:>))
 import           Servant.Client              (client)
 
-import           Stripe.API.HTTP (StripeHeaders, Body, Create, PostJ)
+import           Stripe.API.HTTP (Body, Create, Post')
 import           Stripe.Data.Id  (Token)
 import           Stripe.Util     (deriveFromJSON')
 
@@ -26,7 +26,7 @@ import           Stripe.Util     (deriveFromJSON')
 ---- !!!           (provided for testing purposes)            !!! ----
 ---- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ----
 
-type BankAccountTokenCreate = "v1" :> "tokens" :> Body BankAccountTokenCreateReq :> StripeHeaders (PostJ BankAccountToken)
+type BankAccountTokenCreate = "v1" :> "tokens" :> Body BankAccountTokenCreateReq :> Post' BankAccountToken
 
 createBankAccountToken :: Create BankAccountTokenCreateReq BankAccountToken
 createBankAccountToken = client (Proxy :: Proxy BankAccountTokenCreate)
