@@ -9,6 +9,9 @@
     [ ] quasi quotes for JSON stuff? (grep for snake_case)
 
   TODO
+    [ ] get rid of `qualified` in Data.*
+    [ ] exposed-modules ... Stripe.Data and not all children (re-export them)?
+    [ ] mv `deriveFromJSON'` to Stripe.Util
     [ ] get rid of leading `stripe*` and `Stripe*`?
     [ ] rename e.g. PostS, CreateS
     [ ] normalize e.g. `min...Req`, `empty...Req`
@@ -16,6 +19,7 @@
     [ ] use `deriveFromJSON'` more universally
     [ ] test/live key checks
     [\] TODOs
+    [ ] String -> RequestId (was a `type` in Stripe.Types)
 
   investigate
     [ ] String -> Text
@@ -27,21 +31,20 @@
     [ ] `deriveToForm`
     [ ] `*Id` types & instances
 
-  README notes
+  README
+    [ ] flesh out Customer and Plan
+  ? [ ] usage expl -> wiki
+    [ ] newbie getting started instructions
     [ ] US/USD only right now, but built as an ADT
-    [ ] impove -- probably plenty of places TH could be used
+    [ ] warn -- failures in the middle of chaining `Stripe`s
     [ ] warn -- it's possible to set a connect app fee w/o connect header
+    [ ] impove -- probably plenty of places TH could be used
 
   ???
     [ ] look at Charge data type properties
   ? [ ] rename `StripeErrorCode` to `CardErrorCode`
 
-
-
-
-
-
-  README resources
+  README -- roadmap
     - resources
       * Refunds
       * Events

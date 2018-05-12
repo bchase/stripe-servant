@@ -14,15 +14,18 @@ module Stripe
   , module Stripe.Types
   , module Stripe.Error
   , module Stripe.Helpers
-  , module Stripe.Data.Id
+  , module Stripe.Data.Id -- TODO maybe don't re-export Data.*?
+  , module Stripe.Data.BankAccount
+  , module Stripe.Data.Card
   , module Stripe.Data.Charge
+  , module Stripe.Data.Customer
+  , module Stripe.Data.Plan
   ) where
 
 import           Prelude                     hiding (ReadS)
 import           Data.Proxy                  (Proxy (Proxy))
 import           GHC.Generics                (Generic)
 
-import           Data.Aeson                  as J
 import           Data.Aeson.Casing           (snakeCase)
 import           Web.Internal.FormUrlEncoded (toForm)
 import qualified Web.Internal.FormUrlEncoded as F
@@ -33,8 +36,11 @@ import           Stripe.Types
 import           Stripe.Error
 import           Stripe.Helpers
 import           Stripe.Data.Id
+import           Stripe.Data.BankAccount
 import           Stripe.Data.Card
 import           Stripe.Data.Charge
+import           Stripe.Data.Customer
+import           Stripe.Data.Plan
 
 
 
@@ -44,9 +50,9 @@ import           Stripe.Data.Charge
 -- Stripe.Types         -- common types, a leaf dep
 --
 -- -- Resources
--- [ ] Stripe.BankAccount
+-- [X] Stripe.BankAccount
 -- [X] Stripe.Card
--- [ ] Stripe.Customer
+-- [X] Stripe.Customer
 -- [X] Stripe.Charge
 -- [ ] Stripe.Plan
 --
@@ -60,71 +66,6 @@ import           Stripe.Data.Charge
 ---- STRIPE API DATA TYPES ----
 
 
-data BankAccountStatus
-  = New
-  | Validated
-  | Verified
-  | VerificationFailed
-  | Errored
-  deriving (Show)
-instance J.FromJSON BankAccountStatus where
-  parseJSON (J.String "new")                 = return New
-  parseJSON (J.String "validated")           = return Validated
-  parseJSON (J.String "verified")            = return Verified
-  parseJSON (J.String "verification_failed") = return VerificationFailed
-  parseJSON (J.String "errored")             = return Errored
-  parseJSON _ = mempty
-data BankAccountHolderType
-  = Individual
-  | Company
-  deriving (Show, Generic)
-instance J.FromJSON BankAccountHolderType where
-  parseJSON (J.String "individual") = return Individual
-  parseJSON (J.String "company")    = return Company
-  parseJSON _ = mempty
-data BankAccount = BankAccount
-  { bankAccountId                 :: BankAccountId
-  , bankAccountAccount            :: Maybe AccountId
-  , bankAccountAccountHolderName  :: String
-  , bankAccountAccountHolderType  :: BankAccountHolderType
-  , bankAccountBankName           :: String
-  , bankAccountCountry            :: CountryCode
-  , bankAccountCurrency           :: CurrencyCode
-  , bankAccountDefaultForCurrency :: Maybe Bool
-  , bankAccountFingerprint        :: String
-  , bankAccountLast4              :: String
-  , bankAccountMetadata           :: Metadata
-  , bankAccountRoutingNumber      :: String
-  , bankAccountStatus             :: BankAccountStatus
-  } deriving (Show, Generic)
-$(deriveFromJSON' ''BankAccount)
-
-
-
-data Customer = Customer
-  { customerId          :: CustomerId
-  , customerDescription :: Maybe String
-  , customerEmail       :: Maybe String
-  } deriving (Show, Generic)
-$(deriveFromJSON' ''Customer)
-
-data Plan = Plan
-  { planId                  :: PlanId
-  , planAmount              :: Int
-  , planCreated             :: StripeTime
-  , planCurrency            :: CurrencyCode
-  , planInterval            :: Interval
-  , planIntervalCount       :: Int
-  , planLivemode            :: Bool
-  , planMetadata            :: Metadata
-  , planName                :: String
-  , planStatementDescriptor :: Maybe String
-  , planTrialPeriodDays     :: Maybe Int
-  } deriving (Show, Generic)
-$(deriveFromJSON' ''Plan)
-
-planPrice :: Plan -> Price
-planPrice Plan{..} = Price planCurrency planAmount
 
 -- Requests
 

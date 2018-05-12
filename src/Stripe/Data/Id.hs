@@ -12,6 +12,7 @@ import           Servant.API  (ToHttpApiData (toQueryParam, toUrlPiece))
 import           Stripe.Util  (fromJsonString)
 
 
+
 newtype AccountId     = AccountId     { unAccountId     :: T.Text } deriving ( Eq, Show, Generic )
 newtype BankAccountId = BankAccountId { unBankAccountId :: T.Text } deriving ( Eq, Show, Generic )
 newtype CardId        = CardId        { unCardId        :: T.Text } deriving ( Eq, Show, Generic )
@@ -19,6 +20,10 @@ newtype ChargeId      = ChargeId      { unChargeId      :: T.Text } deriving ( E
 newtype CustomerId    = CustomerId    { unCustomerId    :: T.Text } deriving ( Eq, Show, Generic )
 newtype InvoiceId     = InvoiceId     { unInvoiceId     :: T.Text } deriving ( Eq, Show, Generic )
 newtype PlanId        = PlanId        { unPlanId        :: T.Text } deriving ( Eq, Show, Generic )
+
+
+
+---- FromJSON INSTANCES ----
 
 instance J.FromJSON AccountId where
   parseJSON = fromJsonString AccountId
@@ -51,6 +56,7 @@ instance ToHttpApiData InvoiceId where
   toQueryParam = unInvoiceId
 instance ToHttpApiData PlanId where
   toQueryParam = unPlanId
+
 
 
 -- TODO mv
