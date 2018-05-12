@@ -38,45 +38,46 @@ type PaginatedClient resp =
 
 ---- REQUESTS ----
 
-type Id   t = Capture "id" t
-type Body t = ReqBody '[FormUrlEncoded] t
+type Id id = Capture "id" id
 
-type GetL    a = StripePaginationQueryParams (StripeHeaders (Get    '[JSON] (ListResp    a)))
-type Get'    a =                              StripeHeaders (Get    '[JSON] (ScalarResp  a))
-type Post'   a =                              StripeHeaders (Post   '[JSON] (ScalarResp  a))
-type Delete' a =                              StripeHeaders (Delete '[JSON] (DestroyResp a))
+type Body a = ReqBody '[FormUrlEncoded] a
 
-type StripeHeaders resp =
+type ReqHeaders a =
      Header "Stripe-Account" StripeAccountId
   :> Header "Authorization"  StripeSecretKey
   :> Header "Stripe-Version" StripeVersion
-  :> resp
+  :> a
 
-type StripePaginationQueryParams resp =
+type PaginationQP a =
      QueryParam "limit"          PaginationLimit
   :> QueryParam "starting_after" PaginationStartingAfter
   :> QueryParam "ending_before"  PaginationEndingBefore
-  :> resp
+  :> a
+
+type GetL    a = PaginationQP (ReqHeaders (Get    '[JSON] (ListResp    a)))
+type Get'    a =               ReqHeaders (Get    '[JSON] (ScalarResp  a))
+type Post'   a =               ReqHeaders (Post   '[JSON] (ScalarResp  a))
+type Delete' a =               ReqHeaders (Delete '[JSON] (DestroyResp a))
 
 
 
 ---- RESPONSES ----
 
-type ScalarResp   a = Headers '[Header "Request-Id" String]              a
-type ListResp     a = Headers '[Header "Request-Id" String] (ListJSON    a)
-type DestroyResp id = Headers '[Header "Request-Id" String] (DeleteJSON id)
+type RespHeaders a = Headers '[Header "Request-Id" String] a
+
+type ScalarResp   a = RespHeaders              a
+type ListResp     a = RespHeaders (ListJSON    a)
+type DestroyResp id = RespHeaders (DeleteJSON id)
 
 
 data ListJSON a = ListJSON
-  { listJsonObject  :: String
-  , listJsonUrl     :: String
-  , listJsonHasMore :: Bool
+  { listJsonHasMore :: Bool
   , listJsonData    :: a
   } deriving ( Show, Generic, Functor )
 
 data DeleteJSON id = DeleteJSON
-  { deleteJsonId      :: id
-  , deleteJsonDeleted :: Bool
+  { deleteJsonDeleted :: Bool
+  , deleteJsonId      :: id
   } deriving ( Show, Generic, Functor )
 
 
