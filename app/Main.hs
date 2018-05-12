@@ -9,12 +9,12 @@ import           Stripe
 
 createAndChargeAndDeleteCustomer :: Stripe (Customer, Charge, [Charge], Bool)
 createAndChargeAndDeleteCustomer = do
-  cust    <- stripeS WithoutConnect . createCustomer $ custReq
-  charge  <- stripeS WithoutConnect . createCharge   $ chargeReq cust
+  cust    <- stripe WithoutConnect . createCustomer $ custReq
+  charge  <- stripe WithoutConnect . createCharge   $ chargeReq cust
 
-  charges <- stripeL WithoutConnect . paginate [ By 10 ] $ listCharges
+  charges <- stripe WithoutConnect . paginate [ By 10 ] $ listCharges
 
-  deleted <- fmap stripeDestroyDeleted . stripeD' WithoutConnect . destroyCustomer $ customerId cust
+  deleted <- fmap (destroyDeleted . stripeMetadata) . stripe' WithoutConnect . destroyCustomer $ customerId cust
 
   return (cust, charge, charges, deleted)
 

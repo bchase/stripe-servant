@@ -1,13 +1,14 @@
-{-# LANGUAGE DataKinds           #-}
-{-# LANGUAGE DeriveGeneric       #-}
-{-# LANGUAGE DeriveFunctor       #-}
-{-# LANGUAGE FlexibleInstances   #-}
-{-# LANGUAGE OverloadedStrings   #-}
-{-# LANGUAGE RecordWildCards     #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE TemplateHaskell     #-}
-{-# LANGUAGE TypeOperators       #-}
-{-# LANGUAGE TypeFamilies        #-}
+{-# LANGUAGE DataKinds                  #-}
+{-# LANGUAGE DeriveGeneric              #-}
+{-# LANGUAGE DeriveFunctor              #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE FlexibleInstances          #-}
+{-# LANGUAGE OverloadedStrings          #-}
+{-# LANGUAGE RecordWildCards            #-}
+{-# LANGUAGE ScopedTypeVariables        #-}
+{-# LANGUAGE TemplateHaskell            #-}
+{-# LANGUAGE TypeOperators              #-}
+{-# LANGUAGE TypeFamilies               #-}
 
 {-# OPTIONS_GHC -fno-warn-orphans #-} -- TODO
 
@@ -15,13 +16,13 @@ module Stripe.API.HTTP where
 
 import           GHC.Generics       (Generic)
 
+import           Data.Aeson         (FromJSON)
 import           Servant.Client     (ClientM)
-import           Servant.API        ((:>), QueryParam, Capture, Header (..), Headers (..), HList (..),
+import           Servant.API        ((:>), QueryParam, Capture, Header, Headers,
                                      ReqBody, FormUrlEncoded, JSON, Get, Post, Delete)
 
 import           Stripe.Util        (deriveFromJSON')
 import           Stripe.Data.Id     (AccountId)
-import           Stripe.Data        (Resp (..), RespMetadata (..))
 import           Stripe.Types       (SecretKey, Version, PaginationLimit,
                                      PaginationStartingAfter, PaginationEndingBefore)
 
@@ -70,13 +71,26 @@ type Delete' a =               ReqHeaders (Delete '[JSON] (DestroyResp a))
 
 ---- RESPONSES ----
 
+data Resp a = Resp
+  { stripeRequestId :: String
+  , stripeMetadata  :: RespMetadata
+  , stripeData      :: a
+  } deriving ( Show, Generic, Functor )
+
+data RespMetadata
+  = ScalarMeta
+  | ListMeta    { listHasMore    :: Bool }
+  | DestroyMeta { destroyDeleted :: Bool }
+  deriving ( Show, Generic )
+
+
+
 type RespHeaders a = Headers '[Header "Request-Id" String] a
 
-type ScalarResp'  a = RespHeaders (ScalarJSON  a)
-
-type ScalarResp   a = RespHeaders              a
+type ScalarResp   a = RespHeaders (ScalarJSON  a)
 type ListResp     a = RespHeaders (ListJSON    a)
 type DestroyResp id = RespHeaders (DeleteJSON id)
+
 
 
 class ToData f where
@@ -96,17 +110,9 @@ instance ToData DeleteJSON where
   toMetadata DeleteJSON{..} = DestroyMeta deleteJsonDeleted
 
 
-foo :: Headers '[] a -> Resp a
-foo = undefined
-getReqId :: HList '[Header "Request-Id" String] -> String
-getReqId ((Header id' :: Header "Request-Id" String) `HCons` HNil) = id'
-getReqId _ = ""
 
-
-
-data ScalarJSON a = ScalarJSON
-  { scalarJsonData :: a
-  } deriving ( Show, Generic, Functor )
+newtype ScalarJSON a = ScalarJSON { scalarJsonData :: a }
+  deriving ( Show, Generic, Functor, FromJSON )
 
 data ListJSON a = ListJSON
   { listJsonHasMore :: Bool
