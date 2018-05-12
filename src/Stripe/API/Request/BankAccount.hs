@@ -18,17 +18,17 @@ import           Stripe.Data.Id (Token)
 
 data BankAccountCreate = BankAccountCreate
   { bankAccountCreateSource :: Token
-  } deriving (Generic)
+  } deriving ( Generic )
 
 data BankAccountUpdateReq = BankAccountUpdateReq
   { bankAccountUpdateAccountHolderName :: Maybe String
   , bankAccountUpdateAccountHolderType :: Maybe String
-  } deriving (Generic)
+  } deriving ( Generic )
 
 data BankAccountVerifyReq = BankAccountVerifyReq
   { bankAccountVerifyAmount1 :: Int
   , bankAccountVerifyAmount2 :: Int
-  } deriving (Generic)
+  } deriving ( Generic )
 
 
 
