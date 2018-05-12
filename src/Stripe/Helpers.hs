@@ -37,6 +37,8 @@ import           Network.HTTP.Client.TLS     (newTlsManagerWith, tlsManagerSetti
 import           Stripe.API.HTTP
 import           Stripe.Types
 import           Stripe.Error                (stripeError)
+import           Stripe.Data                 (StripeScalar (..), StripeList (..),
+                                              StripeDestroy (..), StripeData (stripeData))
 
 
 

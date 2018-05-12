@@ -5,6 +5,7 @@ module Stripe
   , module Stripe.Types
   , module Stripe.Error
   , module Stripe.Helpers
+  , module Stripe.Data
   , module Stripe.Data.Id -- TODO maybe don't re-export Data.*?
   , module Stripe.Data.BankAccount
   , module Stripe.Data.Card
@@ -21,6 +22,7 @@ module Stripe
 import           Stripe.Types
 import           Stripe.Error
 import           Stripe.Helpers
+import           Stripe.Data
 import           Stripe.Data.Id
 import           Stripe.Data.BankAccount
 import           Stripe.Data.Card
