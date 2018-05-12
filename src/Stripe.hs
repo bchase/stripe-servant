@@ -1,14 +1,3 @@
-{-# LANGUAGE DataKinds                  #-}
-{-# LANGUAGE DeriveGeneric              #-}
-{-# LANGUAGE DuplicateRecordFields      #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE NamedFieldPuns             #-}
-{-# LANGUAGE OverloadedLists            #-} -- TODO rm? (mv'd to Request.BankAccount)
-{-# LANGUAGE OverloadedStrings          #-}
-{-# LANGUAGE RecordWildCards            #-}
-{-# LANGUAGE TemplateHaskell            #-}
-{-# LANGUAGE TypeOperators              #-}
-
 module Stripe
   ( module Stripe
   , module Stripe.API
@@ -45,9 +34,9 @@ import           Stripe.API.Request.Card
 import           Stripe.API.Request.Charge
 import           Stripe.API.Request.Customer
 import           Stripe.API.Request.Plan
+import           Stripe.Unsafe.BankAccountToken (BankAccountToken (BankAccountToken))
 
 
 
--- Stripe.API      -- API type & funcs
--- Stripe.API.HTTP -- req / resp / data / client -- TODO mv data, e.g. StripeScalar
--- Stripe.Error    -- `Stripe.Data.Error` instead?
+unsafe :: Token -> BankAccountToken -- TODO rm (compiles BankAccountToken above)
+unsafe = BankAccountToken

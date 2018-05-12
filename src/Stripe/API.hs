@@ -8,15 +8,10 @@ module Stripe.API where
 
 import           Prelude                     hiding (ReadS)
 import           Data.Proxy                  (Proxy (Proxy))
-import           GHC.Generics                (Generic)
 
-import           Data.Aeson.Casing           (snakeCase)
-import           Web.Internal.FormUrlEncoded (toForm)
-import qualified Web.Internal.FormUrlEncoded as F
 import           Servant.API
 import           Servant.Client              (client)
 
-import           Stripe.Helpers
 import           Stripe.Data.Id
 import           Stripe.Data.BankAccount
 import           Stripe.Data.Card
@@ -144,30 +139,3 @@ listCharges :: ListS [Charge]
 captureCharge :: ChargeId -> CreateS ChargeCaptureReq Charge
 createCharge :<|> readCharge :<|> updateCharge :<|> listCharges :<|> captureCharge =
   client (Proxy :: Proxy ChargeAPI)
-
-
-
--- -- CURRENTLY FOR TESTING ONLY -- -- TODO mv
-
--- Create Bank Account Token --
-
-data BankAccountToken = BankAccountToken
-  { bankAccountTokenId :: Token
-  } deriving (Show, Generic)
-$(deriveFromJSON' ''BankAccountToken)
-
-data BankAccountTokenCreateReq = BankAccountTokenCreateReq
-  { bankAccountTokenCreateCountry           :: String
-  , bankAccountTokenCreateCurrency          :: String
-  , bankAccountTokenCreateAccountHolderName :: String
-  , bankAccountTokenCreateAccountHolderType :: String
-  , bankAccountTokenCreateRoutingNumber     :: String
-  , bankAccountTokenCreateAccountNumber     :: String
-  } deriving (Generic)
-instance F.ToForm BankAccountTokenCreateReq where
-  toForm = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = (\v -> "bank_account[" ++ v ++ "]") . snakeCase . drop 22 }
-
-type BankAccountTokenCreate = "v1" :> "tokens" :> RBody BankAccountTokenCreateReq :> StripeHeaders (PostS BankAccountToken)
-
-createBankAccountToken :: CreateS BankAccountTokenCreateReq BankAccountToken
-createBankAccountToken = client (Proxy :: Proxy BankAccountTokenCreate)

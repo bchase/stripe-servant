@@ -1,5 +1,7 @@
 
   refactor / mv / cleanup
+    [ ] `Stripe.Data.Error` instead?
+    [ ] mv e.g. StripeScalar from API.HTTP
     [ ] mv StripeTime/Interval/CurrencyCode
     [ ] mv most of `Stripe` to `Stripe.API` and just reexport public API via this module
     [ ] mv resource types & their instances to own files
