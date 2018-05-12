@@ -10,6 +10,7 @@
 
   TODO
     [ ] get rid of `qualified` in Data.*
+    [ ] explicit exports
     [ ] exposed-modules ... Stripe.Data and not all children (re-export them)?
     [ ] mv `deriveFromJSON'` to Stripe.Util
     [ ] get rid of leading `stripe*` and `Stripe*`?
@@ -20,6 +21,7 @@
     [ ] test/live key checks
     [\] TODOs
     [ ] String -> RequestId (was a `type` in Stripe.Types)
+    [ ] tests
 
   investigate
     [ ] String -> Text

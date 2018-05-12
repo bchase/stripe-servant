@@ -34,6 +34,7 @@ import           Servant.Client              (ClientEnv (ClientEnv), Scheme (Htt
                                               BaseUrl (BaseUrl), runClientM)
 import           Network.HTTP.Client.TLS     (newTlsManagerWith, tlsManagerSettings)
 
+import           Stripe.API.HTTP
 import           Stripe.Types
 import           Stripe.Error                (stripeError)
 

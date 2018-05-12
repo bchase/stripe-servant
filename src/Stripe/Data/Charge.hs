@@ -105,6 +105,7 @@ chargePrice Charge{..} = Price chargeCurrency chargeAmount
 ---- FromJSON INSTANCES ----
 
 $(deriveFromJSON' ''Charge)
+
 $(deriveFromJSON' ''ChargeOutcome)
 
 instance J.FromJSON ChargeStatus where
@@ -112,6 +113,7 @@ instance J.FromJSON ChargeStatus where
   parseJSON (J.String "pending")   = return Pending
   parseJSON (J.String "failed")    = return Failed
   parseJSON _ = mempty
+
 instance J.FromJSON ChargeOutcomeNetworkStatus where
   parseJSON (J.String "approved_by_network")     = return ApprovedByNetwork
   parseJSON (J.String "declined_by_network")     = return DeclinedByNetwork
@@ -119,6 +121,7 @@ instance J.FromJSON ChargeOutcomeNetworkStatus where
   parseJSON (J.String "reversed_after_approval") = return ReversedAfterApproval
   parseJSON (J.String str)                       = return $ UnrecognizedChargeOutcomeNetworkStatus str
   parseJSON _                                    = return $ UnrecognizedChargeOutcomeNetworkStatus ""
+
 instance J.FromJSON ChargeOutcomeRiskLevel where
   parseJSON (J.String "normal")       = return Normal
   parseJSON (J.String "elevated")     = return Elevated
@@ -126,6 +129,7 @@ instance J.FromJSON ChargeOutcomeRiskLevel where
   parseJSON (J.String "not_assessed") = return NotAssessed
   parseJSON (J.String "unknown")      = return UnknownRiskLevel
   parseJSON _ = mempty
+
 instance J.FromJSON ChargeOutcomeType where
   parseJSON (J.String "authorized")      = return Authorized
   parseJSON (J.String "manual_review")   = return ManualReview
@@ -133,6 +137,7 @@ instance J.FromJSON ChargeOutcomeType where
   parseJSON (J.String "blocked")         = return Blocked
   parseJSON (J.String "invalid")         = return Invalid
   parseJSON _ = mempty
+
 instance J.FromJSON ChargeOutcomeReason where
   parseJSON (J.String "highest_risk_level")  = return HighestRiskLevel
   parseJSON (J.String "elevated_risk_level") = return ElevatedRiskLevel

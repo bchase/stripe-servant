@@ -11,6 +11,7 @@
 
 module Stripe
   ( module Stripe
+  , module Stripe.API.HTTP
   , module Stripe.Types
   , module Stripe.Error
   , module Stripe.Helpers
@@ -20,6 +21,7 @@ module Stripe
   , module Stripe.Data.Charge
   , module Stripe.Data.Customer
   , module Stripe.Data.Plan
+  , module Stripe.API.Request.Charge
   ) where
 
 import           Prelude                     hiding (ReadS)
@@ -41,31 +43,18 @@ import           Stripe.Data.Card
 import           Stripe.Data.Charge
 import           Stripe.Data.Customer
 import           Stripe.Data.Plan
+import           Stripe.API.HTTP
+import           Stripe.API.Request.Charge
 
 
 
--- Stripe.API           -- API type & funcs
--- Stripe.API.Request   -- Headers, QSP, etc.
--- Stripe.API.Response  -- Headers / JSON
--- Stripe.Types         -- common types, a leaf dep
---
--- -- Resources
--- [X] Stripe.BankAccount
--- [X] Stripe.Card
--- [X] Stripe.Customer
--- [X] Stripe.Charge
--- [ ] Stripe.Plan
---
--- -- mv?
--- Stripe.Error   -- `Stripe.Data.Error` instead?
--- Stripe.Helpers
--- Stripe.Util
+-- Stripe.API      -- API type & funcs
+-- Stripe.API.HTTP -- req / resp / data / client -- TODO mv data, e.g. StripeScalar
+-- Stripe.Error    -- `Stripe.Data.Error` instead?
 
 
 
 ---- STRIPE API DATA TYPES ----
-
-
 
 -- Requests
 
@@ -172,97 +161,6 @@ instance F.ToForm PlanUpdateReq where
      in addMetadataToForm planUpdateMetadata . toForm' $ req
 emptyPlanUpdateReq :: PlanUpdateReq
 emptyPlanUpdateReq = PlanUpdateReq Nothing Nothing Nothing
-
-
-data Source
-  = SCustomer     CustomerId
-  | SCustomerCard CustomerId CardId
-  | SToken        Token
-  deriving (Show, Generic)
-
--- TODO check okay GeneralizedNewtypeDeriving -- ToHttpApiData -- WARNING: Do not derive this using DeriveAnyClass as the generated instance will loop indefinitely.
-newtype ConnectApplicationFee = ConnectApplicationFee { unFeeInCents :: Int } deriving (Show, Generic, ToHttpApiData)
-feeInCents :: Int -> ConnectApplicationFee
-feeInCents = ConnectApplicationFee
-
-data SourceId
-  = SourceToken Token
-  | SourceCard  CardId
-  | SourceBank  BankAccountId
-  deriving (Show, Generic)
-
-instance ToHttpApiData SourceId where
-  toQueryParam (SourceToken tok)  = unToken tok
-  toQueryParam (SourceCard  card) = unCardId card
-  toQueryParam (SourceBank  ba)   = unBankAccountId ba
-
-data ChargeCreateReq = ChargeCreateReq
-  { chargeCreateAmount              :: Int
-  , chargeCreateCurrency            :: CurrencyCode
-  , chargeCreateCapture             :: Bool             -- NOTE: True by default          (set accordingly in `chargeCreateReq`)
-  , chargeCreateCustomer            :: Maybe CustomerId -- NOTE: ONE OF THESE IS REQUIRED (enforced by `chargeCreateReq`)
-  , chargeCreateSource              :: Maybe SourceId   -- NOTE: ONE OF THESE IS REQUIRED (enforced by `chargeCreateReq`)
-  , chargeCreateApplicationFee      :: Maybe ConnectApplicationFee
-  , chargeCreateDescription         :: Maybe String
-  , chargeCreateReceiptEmail        :: Maybe String
-  , chargeCreateStatementDescriptor :: Maybe StatementDescriptor
-  , chargeCreateMetadata            :: Maybe Metadata
-  -- , destination    -- CONNECT ONLY -- handled w/ header
-  -- , transfer_group -- CONNECT ONLY
-  -- , on_behalf_of   -- CONNECT ONLY
-  -- , shipping       -- dictionary
-  } deriving (Show, Generic)
-instance F.ToForm ChargeCreateReq where
-  toForm req@ChargeCreateReq{chargeCreateMetadata} =
-    let toForm' = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 12 }
-     in addMetadataToForm chargeCreateMetadata . toForm' $ req
-
-chargeCreateReq :: Price -> Source -> ChargeCreateReq
-chargeCreateReq price source =
-  case source of
-    SCustomer cust          -> (req price) { chargeCreateCustomer = Just cust }
-    SCustomerCard cust card -> (req price) { chargeCreateCustomer = Just cust, chargeCreateSource = Just $ SourceCard card }
-    SToken tok              -> (req price) { chargeCreateSource = Just $ SourceToken tok }
-  where
-    req (Price curr amount) = ChargeCreateReq
-      { chargeCreateAmount              = amount
-      , chargeCreateCurrency            = curr
-      , chargeCreateCapture             = True
-      , chargeCreateCustomer            = Nothing
-      , chargeCreateSource              = Nothing
-      , chargeCreateApplicationFee      = Nothing
-      , chargeCreateDescription         = Nothing
-      , chargeCreateReceiptEmail        = Nothing
-      , chargeCreateStatementDescriptor = Nothing
-      , chargeCreateMetadata            = Nothing
-      }
-
-data ChargeUpdateReq = ChargeUpdateReq
-  { chargeUpdateDescription  :: Maybe String
-  , chargeUpdateReceiptEmail :: Maybe String
-  , chargeUpdateMetadata     :: Maybe Metadata
-  -- , fraud_details  :: Maybe {...}
-  -- , shipping       :: Maybe {...}
-  -- , transfer_group :: Maybe ... -- Connect only
-  } deriving (Show, Generic)
-instance F.ToForm ChargeUpdateReq where
-  toForm req@ChargeUpdateReq{chargeUpdateMetadata} =
-    let toForm' = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 12 }
-     in addMetadataToForm chargeUpdateMetadata . toForm' $ req
-emptyChargeUpdateReq :: ChargeUpdateReq
-emptyChargeUpdateReq = ChargeUpdateReq Nothing Nothing Nothing
-
-data ChargeCaptureReq = ChargeCaptureReq
-  { chargeCaptureAmount              :: Maybe Int
-  , chargeCaptureReceiptEmail        :: Maybe String
-  , chargeCaptureStatementDescriptor :: Maybe StatementDescriptor
-  -- , chargeCaptureApplicationFee      :: Maybe ConnectApplicationFee
-  -- , chargeCaptureDestination         :: Maybe { amount :: Int }
-  } deriving (Show, Generic)
-instance F.ToForm ChargeCaptureReq where
-  toForm = (\n -> F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop (length . reverse . takeWhile (/= '.') . reverse . show $ n) }) ''BankAccountCreate -- TODO DUP1
-chargeCaptureReq :: ChargeCaptureReq
-chargeCaptureReq = ChargeCaptureReq Nothing Nothing Nothing
 
 
 
