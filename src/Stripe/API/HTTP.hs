@@ -23,31 +23,29 @@ import           Stripe.Types       (StripeAccountId, StripeSecretKey,
 
 ---- CLIENT ----
 
-type RunnableStripeClient a = ClientM a
-
-type StripeClient resp =
+type Client resp =
      Maybe StripeAccountId
   -> Maybe StripeSecretKey
   -> Maybe StripeVersion
-  -> RunnableStripeClient resp
+  -> ClientM resp
 
-type StripeClientPaginated resp =
+type PaginatedClient resp =
      Maybe PaginationLimit
   -> Maybe PaginationStartingAfter
   -> Maybe PaginationEndingBefore
-  -> StripeClient resp
+  -> Client resp
 
 
 
 ---- REQUESTS ----
 
-type CapId t = Capture "id" t
-type RBody t = ReqBody '[FormUrlEncoded] t
+type Id   t = Capture "id" t
+type Body t = ReqBody '[FormUrlEncoded] t
 
-type GetListS a = Get    '[JSON] (StripeListResp    a)
-type GetShowS a = Get    '[JSON] (StripeScalarResp  a)
-type PostS    a = Post   '[JSON] (StripeScalarResp  a)
-type DeleteS  a = Delete '[JSON] (StripeDestroyResp a)
+type GetJL   a = Get    '[JSON] (ListResp    a)
+type GetJS   a = Get    '[JSON] (ScalarResp  a)
+type PostJ   a = Post   '[JSON] (ScalarResp  a)
+type DeleteJ a = Delete '[JSON] (DestroyResp a)
 
 type StripeHeaders resp =
      Header "Stripe-Account" StripeAccountId
@@ -65,32 +63,35 @@ type StripePaginationQueryParams resp =
 
 ---- RESPONSES ----
 
-type StripeScalarResp   a = Headers '[Header "Request-Id" String]                    a
-type StripeListResp     a = Headers '[Header "Request-Id" String] (StripeListJSON    a)
-type StripeDestroyResp id = Headers '[Header "Request-Id" String] (StripeDeleteJSON id)
+type ScalarResp   a = Headers '[Header "Request-Id" String]              a
+type ListResp     a = Headers '[Header "Request-Id" String] (ListJSON    a)
+type DestroyResp id = Headers '[Header "Request-Id" String] (DeleteJSON id)
 
-data StripeListJSON a = StripeListJSON
-  { stripeListJsonObject  :: String
-  , stripeListJsonUrl     :: String
-  , stripeListJsonHasMore :: Bool
-  , stripeListJsonData    :: a
+data ListJSON a = ListJSON
+  { listJsonObject  :: String
+  , listJsonUrl     :: String
+  , listJsonHasMore :: Bool
+  , listJsonData    :: a
   } deriving ( Show, Generic, Functor )
 
-data StripeDeleteJSON id = StripeDeleteJSON
-  { stripeDeleteJsonId      :: id
-  , stripeDeleteJsonDeleted :: Bool
+data DeleteJSON id = DeleteJSON
+  { deleteJsonId      :: id
+  , deleteJsonDeleted :: Bool
   } deriving ( Show, Generic, Functor )
 
-$(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 14 } ''StripeListJSON)
 
-$(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 16 } ''StripeDeleteJSON)
+-- TODO
+-- $(deriveFromJSON' ''ListJSON)
+-- $(deriveFromJSON' ''DeleteJSON)
+$(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 8  } ''ListJSON)
+$(deriveFromJSON defaultOptions { fieldLabelModifier = snakeCase . drop 10 } ''DeleteJSON)
 
 
 
 ---- ACTIONS ----
 
-type ListS           resp =              StripeClientPaginated (StripeListResp    resp)
-type CreateS     req resp =       req -> StripeClient          (StripeScalarResp  resp)
-type UpdateS  id req resp = id -> req -> StripeClient          (StripeScalarResp  resp)
-type ReadS    id     resp = id ->        StripeClient          (StripeScalarResp  resp)
-type DestroyS id          = id ->        StripeClient          (StripeDestroyResp   id)
+type List           resp =              PaginatedClient (ListResp    resp)
+type Create     req resp =       req -> Client          (ScalarResp  resp)
+type Update  id req resp = id -> req -> Client          (ScalarResp  resp)
+type Read    id     resp = id ->        Client          (ScalarResp  resp)
+type Destroy id          = id ->        Client          (DestroyResp   id)

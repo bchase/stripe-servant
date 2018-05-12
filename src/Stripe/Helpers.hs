@@ -42,30 +42,30 @@ import           Stripe.Data                 (StripeScalar (..), StripeList (..)
 
 
 
----- StripeClient RUNNERS ----
+---- Client RUNNERS ----
 
-stripeS :: StripeConnect -> StripeClient (StripeScalarResp a) -> Stripe a
+stripeS :: StripeConnect -> Client (ScalarResp a) -> Stripe a
 stripeS connect = fmap stripeData . stripeS' connect
-stripeL :: StripeConnect -> StripeClient (StripeListResp a) -> Stripe a
+stripeL :: StripeConnect -> Client (ListResp a) -> Stripe a
 stripeL connect = fmap stripeData . stripeL' connect
-stripeD :: StripeConnect -> StripeClient (StripeDestroyResp a) -> Stripe a
+stripeD :: StripeConnect -> Client (DestroyResp a) -> Stripe a
 stripeD connect = fmap stripeData . stripeD' connect
 
-stripeS' :: StripeConnect -> StripeClient (StripeScalarResp a) -> Stripe (StripeScalar a)
+stripeS' :: StripeConnect -> Client (ScalarResp a) -> Stripe (StripeScalar a)
 stripeS' connect = scalar . stripe connect
-stripeL' :: StripeConnect -> StripeClient (StripeListResp a) -> Stripe (StripeList a)
+stripeL' :: StripeConnect -> Client (ListResp a) -> Stripe (StripeList a)
 stripeL' connect = list . stripe connect
-stripeD' :: StripeConnect -> StripeClient (StripeDestroyResp a) -> Stripe (StripeDestroy a)
+stripeD' :: StripeConnect -> Client (DestroyResp a) -> Stripe (StripeDestroy a)
 stripeD' connect = destroyed . stripe connect
 
 
 
 ---- PAGINATION HELPERS ----
 
-unpaginated :: StripeClientPaginated (StripeListResp a) -> StripeClient (StripeListResp a)
+unpaginated :: PaginatedClient (ListResp a) -> Client (ListResp a)
 unpaginated = paginate []
 
-paginate :: [PaginationOpt] -> StripeClientPaginated (StripeListResp a) -> StripeClient (StripeListResp a)
+paginate :: [PaginationOpt] -> PaginatedClient (ListResp a) -> Client (ListResp a)
 paginate pagination clientM =
   let PaginationOpts{paginateBy, paginateStartingAfter, paginateEndingBefore} = buildPagination pagination
    in clientM paginateBy paginateStartingAfter paginateEndingBefore
@@ -89,7 +89,7 @@ deriveFromJSON' n = deriveFromJSON defaultOptions { fieldLabelModifier = snakeCa
 
 ---- PRIVATE ----
 
-stripe :: StripeConnect -> StripeClient a -> Stripe a
+stripe :: StripeConnect -> Client a -> Stripe a
 stripe connect client = do
   (ver, key) <- asks $ (,) <$> stripeVersion <*> stripeSecretKey
 
@@ -108,14 +108,14 @@ stripe connect client = do
       return $ ClientEnv manager url
 
 
-scalar :: Stripe (StripeScalarResp a) -> Stripe (StripeScalar a)
+scalar :: Stripe (ScalarResp a) -> Stripe (StripeScalar a)
 scalar = fmap (\(Headers x hs) -> StripeScalar (getReqId hs) x)
 
-list :: Stripe (StripeListResp a) -> Stripe (StripeList a)
-list = fmap (\(Headers StripeListJSON{..} hs) -> StripeList (getReqId hs) stripeListJsonHasMore stripeListJsonData)
+list :: Stripe (ListResp a) -> Stripe (StripeList a)
+list = fmap (\(Headers ListJSON{..} hs) -> StripeList (getReqId hs) listJsonHasMore listJsonData)
 
-destroyed :: Stripe (StripeDestroyResp id) -> Stripe (StripeDestroy id)
-destroyed = fmap (\(Headers StripeDeleteJSON{..} hs) -> StripeDestroy (getReqId hs) stripeDeleteJsonId stripeDeleteJsonDeleted)
+destroyed :: Stripe (DestroyResp id) -> Stripe (StripeDestroy id)
+destroyed = fmap (\(Headers DeleteJSON{..} hs) -> StripeDestroy (getReqId hs) deleteJsonId deleteJsonDeleted)
 
 
 getReqId :: HList '[Header "Request-Id" String] -> String
