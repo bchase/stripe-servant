@@ -22,7 +22,10 @@ module Stripe
   , module Stripe.Data.Customer
   , module Stripe.Data.Plan
   , module Stripe.API.Request.BankAccount
+  , module Stripe.API.Request.Card
   , module Stripe.API.Request.Charge
+  , module Stripe.API.Request.Customer
+  , module Stripe.API.Request.Plan
   ) where
 
 import           Prelude                     hiding (ReadS)
@@ -46,7 +49,10 @@ import           Stripe.Data.Customer
 import           Stripe.Data.Plan
 import           Stripe.API.HTTP
 import           Stripe.API.Request.BankAccount
+import           Stripe.API.Request.Card
 import           Stripe.API.Request.Charge
+import           Stripe.API.Request.Customer
+import           Stripe.API.Request.Plan
 
 
 
@@ -54,88 +60,6 @@ import           Stripe.API.Request.Charge
 -- Stripe.API.HTTP -- req / resp / data / client -- TODO mv data, e.g. StripeScalar
 -- Stripe.Error    -- `Stripe.Data.Error` instead?
 
-
-
----- STRIPE API DATA TYPES ----
-
--- Requests
-
-data CardCreateReq = CardCreateReq
-  { cardCreateSource :: Token
-  } deriving (Generic)
-instance F.ToForm CardCreateReq where
-  toForm = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 10 }
-minCardCreateReq :: Token -> CardCreateReq
-minCardCreateReq token = CardCreateReq token
-
-data CardUpdateReq = CardUpdateReq
-  { cardUpdateExpMonth :: Maybe Int
-  , cardUpdateExpYear  :: Maybe Int
-  } deriving (Generic)
-instance F.ToForm CardUpdateReq where
-  toForm = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 10 }
-emptyCardUpdateReq :: CardUpdateReq
-emptyCardUpdateReq = CardUpdateReq Nothing Nothing
-
-data CustomerCreateReq = CustomerCreateReq
-  { customerCreateSource      :: Token
-  , customerCreateEmail       :: Maybe String
-  , customerCreateDescription :: Maybe String
-  } deriving (Generic)
-instance F.ToForm CustomerCreateReq where
-  toForm = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 14 }
-customerCreateReq :: Token -> CustomerCreateReq
-customerCreateReq token = CustomerCreateReq token Nothing Nothing
-
-data CustomerUpdateReq = CustomerUpdateReq
-  { customerUpdateEmail       :: Maybe String
-  , customerUpdateDescription :: Maybe String
-  } deriving (Generic)
-instance F.ToForm CustomerUpdateReq where
-  toForm = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 14 }
-emptyCustomerUpdateReq :: CustomerUpdateReq
-emptyCustomerUpdateReq = CustomerUpdateReq Nothing Nothing
-
-data PlanCreateReq = PlanCreateReq
-  { planCreateId                  :: PlanId
-  , planCreateName                :: String
-  , planCreateAmount              :: Int
-  , planCreateCurrency            :: CurrencyCode
-  , planCreateInterval            :: Interval
-  , planCreateIntervalCount       :: Maybe Int
-  , planCreateStatementDescriptor :: Maybe StatementDescriptor
-  , planCreateTrialPeriodDays     :: Maybe Int
-  , planCreateMetadata            :: Maybe Metadata
-  } deriving (Show, Generic)
-instance F.ToForm PlanCreateReq where
-  toForm req@PlanCreateReq{planCreateMetadata} =
-    let toForm' = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 10 }
-     in addMetadataToForm planCreateMetadata . toForm' $ req
-
-planCreateReq :: PlanId -> String -> Price -> Interval -> PlanCreateReq
-planCreateReq pid name (Price curr amount) intv = PlanCreateReq
-  { planCreateId                  = pid
-  , planCreateName                = name
-  , planCreateAmount              = amount
-  , planCreateCurrency            = curr
-  , planCreateInterval            = intv
-  , planCreateIntervalCount       = Nothing
-  , planCreateStatementDescriptor = Nothing
-  , planCreateTrialPeriodDays     = Nothing
-  , planCreateMetadata            = Nothing
-  }
-
-data PlanUpdateReq = PlanUpdateReq
-  { planUpdateName                :: Maybe String
-  , planUpdateStatementDescriptor :: Maybe String
-  , planUpdateMetadata            :: Maybe Metadata
-  } deriving (Show, Generic)
-instance F.ToForm PlanUpdateReq where
-  toForm req@PlanUpdateReq{planUpdateMetadata} =
-    let toForm' = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 10 }
-     in addMetadataToForm planUpdateMetadata . toForm' $ req
-emptyPlanUpdateReq :: PlanUpdateReq
-emptyPlanUpdateReq = PlanUpdateReq Nothing Nothing Nothing
 
 
 
