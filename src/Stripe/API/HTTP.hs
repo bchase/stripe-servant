@@ -10,8 +10,6 @@
 {-# LANGUAGE TypeOperators              #-}
 {-# LANGUAGE TypeFamilies               #-}
 
-{-# OPTIONS_GHC -fno-warn-orphans #-} -- TODO
-
 module Stripe.API.HTTP where
 
 import           GHC.Generics       (Generic)
