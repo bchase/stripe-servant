@@ -78,9 +78,9 @@ First, we generate `createCharge` with, essentially:
 type ChargeCreate = -- POST https://api.stripe.com/v1/charges
   "v1" :> "charges"
     :> ReqBody '[FormUrlEncoded] ChargeCreateReq
-    :> Header "Stripe-Account" AccountId
     :> Header "Authorization"  SecretKey
     :> Header "Stripe-Version" Version
+    :> Header "Stripe-Account" AccountId -- Connect account (optional)
     :> Post '[JSON] (ScalarResp Charge)
 
 createCharge :: ChargeCreateReq -> Client (ScalarResp Charge)
