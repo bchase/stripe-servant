@@ -30,8 +30,8 @@ data CustomerUpdateReq = CustomerUpdateReq
 customerCreateReq :: Token -> CustomerCreateReq
 customerCreateReq token = CustomerCreateReq token Nothing Nothing
 
-emptyCustomerUpdateReq :: CustomerUpdateReq
-emptyCustomerUpdateReq = CustomerUpdateReq Nothing Nothing
+customerUpdateReq :: CustomerUpdateReq
+customerUpdateReq = CustomerUpdateReq Nothing Nothing
 
 
 
