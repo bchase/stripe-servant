@@ -18,7 +18,7 @@ import           GHC.Generics       (Generic)
 
 import           Data.Aeson         (FromJSON)
 import           Servant.Client     (ClientM)
-import           Servant.API        ((:>), QueryParam, Capture, Header, Headers,
+import           Servant.API        ((:>), QueryParam, Capture, Header (..), Headers (..), HList (..),
                                      ReqBody, FormUrlEncoded, JSON, Get, Post, Delete)
 
 import           Stripe.Util        (deriveFromJSON')
@@ -91,21 +91,26 @@ type ScalarResp   a = RespHeaders (ScalarJSON  a)
 type ListResp     a = RespHeaders (ListJSON    a)
 type DestroyResp id = RespHeaders (DeleteJSON id)
 
+getReqId :: HList '[Header "Request-Id" String] -> String
+getReqId ((Header id' :: Header "Request-Id" String) `HCons` HNil) = id'
+getReqId _ = ""
 
 
-class ToData f where
-  toData     :: f a -> a
-  toMetadata :: f a -> RespMetadata
+class RespBody r where
+  toData     :: r a -> a
+  toMetadata :: r a -> RespMetadata
+  toResp :: RespHeaders (r a) -> Resp a
+  toResp (Headers x hs) = Resp (getReqId hs) (toMetadata x) (toData x)
 
-instance ToData ScalarJSON where
-  toData = scalarJsonData
+instance RespBody ScalarJSON where
+  toData       = scalarJsonData
   toMetadata _ = ScalarMeta
 
-instance ToData ListJSON where
+instance RespBody ListJSON where
   toData = listJsonData
   toMetadata ListJSON{..} = ListMeta listJsonHasMore
 
-instance ToData DeleteJSON where
+instance RespBody DeleteJSON where
   toData = deleteJsonId
   toMetadata DeleteJSON{..} = DestroyMeta deleteJsonDeleted
 

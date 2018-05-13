@@ -21,7 +21,6 @@ import           Data.Either                 (either)
 import           Control.Monad.Except        (throwError)
 import           Control.Monad.Reader        (asks, liftIO)
 
-import           Servant.API                 (Headers (..), Header (..), HList (..))
 import           Servant.Client              (ClientEnv (ClientEnv), Scheme (Https),
                                               BaseUrl (BaseUrl), runClientM)
 import           Network.HTTP.Client.TLS     (newTlsManagerWith, tlsManagerSettings)
@@ -35,10 +34,10 @@ import           Stripe.Error
 
 ---- Client RUNNERS ----
 
-stripe :: ( ToData d ) => Connect -> Client (RespHeaders (d a)) -> Stripe a
+stripe  :: ( RespBody rb ) => Connect -> Client (RespHeaders (rb a)) -> Stripe a
 stripe connect = fmap stripeData . stripe' connect
 
-stripe' :: ( ToData d ) => Connect -> Client (RespHeaders (d a)) -> Stripe (Resp a)
+stripe' :: ( RespBody rb ) => Connect -> Client (RespHeaders (rb a)) -> Stripe (Resp a)
 stripe' connect client = do
   (ver, key) <- asks $ (,) <$> configVersion <*> configSecretKey
 
@@ -50,12 +49,6 @@ stripe' connect client = do
   where
     toMaybe  WithoutConnect    = Nothing
     toMaybe (WithConnect acct) = Just acct
-
-    getReqId :: HList '[Header "Request-Id" String] -> String
-    getReqId ((Header id' :: Header "Request-Id" String) `HCons` HNil) = id'
-    getReqId _ = ""
-
-    toResp (Headers da hs) = Resp (getReqId hs) (toMetadata da) (toData da)
 
     clientEnv = do
       manager <- newTlsManagerWith tlsManagerSettings

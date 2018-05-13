@@ -163,10 +163,10 @@ Moving on, we'll get ourselves into the `Stripe` monad:
 
 ```haskell
 -- if we're interested in the req ID or metadata:
-stripe' :: ( ToData d ) => Connect -> Client (RespHeaders (d a)) -> Stripe (Resp a)
+stripe' :: ( RespBody rb ) => Connect -> Client (RespHeaders (rb a)) -> Stripe (Resp a)
 
 -- otherwise, we can go straight to `Stripe a`:
-stripe  :: ( ToData d ) => Connect -> Client (RespHeaders (d a)) -> Stripe a
+stripe  :: ( RespBody rb ) => Connect -> Client (RespHeaders (rb a)) -> Stripe a
 ```
 
 > The [`Stripe` monad](https://github.com/bchase/stripe-servant/blob/72535b1bc776b3b298a00277d9f068a5e6e43bfc/src/Stripe/Types.hs#L181-L182) in this package is modeled closely after [`AppT`](https://github.com/parsonsmatt/servant-persistent/blob/744e3960d23642466d9eca784853ac709e930360/src/Config.hs#L36-L40) from [parsonsmatt/servant-persistent](https://github.com/parsonsmatt/servant-persistent).
