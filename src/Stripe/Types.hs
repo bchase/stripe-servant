@@ -11,6 +11,7 @@ module Stripe.Types where
 
 import qualified Data.Text             as T
 import           Data.Char             (toLower)
+import           Data.List             (intercalate)
 import qualified Data.HashMap.Strict   as HM
 import           Data.Scientific       (Scientific, coefficient)
 import qualified Data.Time.Clock       as Time
@@ -247,12 +248,23 @@ instance J.FromJSON StatementDescriptor where
 ---- PRICES ----
 
 data Price = Price
-  { stripeCurrency :: CurrencyCode
-  , stripeAmount   :: Int
+  { priceCurrency :: CurrencyCode
+  , priceAmount   :: Int
   }
 
 instance Show Price where
-  show (Price (UnrecognizedCurrencyCode curr) amount) =
-    "$" ++ show amount ++ " (" ++ T.unpack curr ++ ")"
-  show (Price USD amount) = "$" ++ show amount
-  show (Price JPY amount) = "¥" ++ show amount
+  show (Price (UnrecognizedCurrencyCode curr) amt) =
+    "$" ++ show amt ++ " (" ++ T.unpack curr ++ ")"
+  show (Price JPY amt) = "¥" ++ commaSeparate amt -- TODO yen char not ASCII
+  show (Price USD amt) =
+    let (dollars, cents) = (amt `div` 100, amt `rem` 100)
+     in "$" ++ commaSeparate dollars ++ "." ++ show cents
+
+commaSeparate :: Int -> String
+commaSeparate =
+  intercalate "," . fmap reverse . reverse . groupsOf 3 . reverse . show
+  where
+    -- courtesy of https://stackoverflow.com/a/12876438 (with diagram)
+    groupsOf :: Int -> [a] -> [[a]]
+    groupsOf _ [] = []
+    groupsOf n xs = take n xs : groupsOf n (drop n xs)
