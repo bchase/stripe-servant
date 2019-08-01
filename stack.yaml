@@ -15,7 +15,7 @@
 # resolver:
 #  name: custom-snapshot
 #  location: "./custom-snapshot.yaml"
-resolver: lts-9.13
+resolver: lts-12.26
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -36,20 +36,11 @@ resolver: lts-9.13
 # non-dependency (i.e. a user package), and its test suites and benchmarks
 # will not be run. This is useful for tweaking upstream packages.
 packages:
-  - location:
-     git: git@github.com:haskell-servant/servant.git
-     commit: 6321859b63153dbea0ae97be1806ea7be36e7260
-    extra-dep: true
-    subdirs:
-      - 'servant'
-      - 'servant-server'
-      - 'servant-client'
-      - 'servant-client-core'
   - '.'
+
 # Dependency packages to be pulled from upstream that are not in the resolver
 # (e.g., acme-missiles-0.3)
-extra-deps:
-  - base-4.10.0.0
+extra-deps: []
 
 # Override default flag values for local packages and extra-deps
 flags: {}

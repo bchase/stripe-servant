@@ -14,7 +14,7 @@ import           GHC.Generics              (Generic)
 import qualified Data.Aeson         as J
 import           Data.Aeson.Casing  (snakeCase)
 import           Data.Aeson.TH      (Options (..), defaultOptions, deriveFromJSON)
-import           Servant.Client     (ServantError (..), Response (..))
+import           Servant.Client     (ServantError (..), Response, GenResponse (..))
 import qualified Network.HTTP.Types.Status as HTTP
 import qualified Network.HTTP.Types.Header as HTTP
 

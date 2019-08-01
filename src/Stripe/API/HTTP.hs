@@ -16,18 +16,25 @@ import           GHC.Generics       (Generic)
 
 import           Data.Aeson         (FromJSON)
 import           Servant.Client     (ClientM)
-import           Servant.API        ((:>), QueryParam, Capture, Header (..), Headers (..), HList (..),
-                                     ReqBody, FormUrlEncoded, JSON, Get, Post, Delete)
+import           Servant.API        ((:>), QueryParam, Capture, Header, Headers (..),
+                                     ReqBody, FormUrlEncoded, JSON, Get, Post, Delete,
+                                     getHeaders)
 
 import           Stripe.Util        (deriveFromJSON')
 import           Stripe.Data.Id     (AccountId)
 import           Stripe.Types       (SecretKey, Version, PaginationLimit,
                                      PaginationStartingAfter, PaginationEndingBefore)
 
+-- import qualified Data.ByteString    as B
+import qualified Data.Text          as T
+import qualified Data.Text.Encoding as TE
+
+
 
 
 ---- CLIENT ----
 
+-- TODO '[Required] https://hackage.haskell.org/package/servant-0.14.1/docs/Servant-API.html#t:Required
 type Client resp =   -- `Maybe`s due to `Servant.Header`
      Maybe SecretKey -- REQUIRED (own secret key)
   -> Maybe Version   --          (set via Config)
@@ -89,16 +96,20 @@ type ScalarResp   a = RespHeaders (ScalarJSON  a)
 type ListResp     a = RespHeaders (ListJSON    a)
 type DestroyResp id = RespHeaders (DeleteJSON id)
 
-getReqId :: HList '[Header "Request-Id" String] -> String
-getReqId ((Header id' :: Header "Request-Id" String) `HCons` HNil) = id'
-getReqId _ = ""
+getReqId :: Headers '[Header "Request-Id" String] a -> String
+getReqId hs =
+  let hs' = getHeaders hs
+   in getReqId' hs'
+  where
+    getReqId' [("Request_id", rid)] = T.unpack $ TE.decodeUtf8 rid
+    getReqId' _                     = ""
 
 
 class RespBody r where
   toData     :: r a -> a
   toMetadata :: r a -> RespMetadata
   toResp :: RespHeaders (r a) -> Resp a
-  toResp (Headers x hs) = Resp (getReqId hs) (toMetadata x) (toData x)
+  toResp hs@(Headers x _) = Resp (getReqId hs) (toMetadata x) (toData x)
 
 instance RespBody ScalarJSON where
   toData       = scalarJsonData

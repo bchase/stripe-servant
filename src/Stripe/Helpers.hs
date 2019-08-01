@@ -53,7 +53,8 @@ stripe' connect client = do
     clientEnv = do
       manager <- newTlsManagerWith tlsManagerSettings
       let url = BaseUrl Https "api.stripe.com" 443 ""
-      return $ ClientEnv manager url
+      return $ ClientEnv manager url Nothing
+
 
 
 

@@ -49,9 +49,9 @@ library
                      , http-client-tls
                      , http-types
                      , mtl >= 2.2.1 && < 2.3
-                     , servant >= 0.12 && < 0.13
-                     , servant-server >= 0.12 && < 0.13
-                     , servant-client >= 0.12 && < 0.13
+                     , servant >= 0.14 && < 0.15
+                     , servant-server >= 0.14 && < 0.15
+                     , servant-client >= 0.14 && < 0.15
                      , scientific
                      , template-haskell
                      , text
