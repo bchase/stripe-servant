@@ -3,6 +3,9 @@
 
 module Main where
 
+import           System.Environment (getEnv)
+import qualified Data.Text          as T
+
 import           Stripe
 
 
@@ -26,8 +29,9 @@ createAndChargeAndDeleteCustomer = do
 
 main :: IO ()
 main = do
+  key <- SecretKey . T.pack <$> getEnv "STRIPE_CLIENT_SECRET"
+
   let ver    = Version'2017'08'15
-      key    = SecretKey "sk_test_BQokikJOvBiI2HlWgH4olfQ2"
       config = Config ver key
 
   eResp <- stripeIO config createAndChargeAndDeleteCustomer
