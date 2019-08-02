@@ -258,7 +258,12 @@ instance Show Price where
   show (Price JPY amt) = "¥" ++ commaSeparate amt -- TODO yen char not ASCII
   show (Price USD amt) =
     let (dollars, cents) = (amt `div` 100, amt `rem` 100)
-     in "$" ++ commaSeparate dollars ++ "." ++ show cents
+     in "$" ++ commaSeparate dollars ++ "." ++ zeroPad2 (show cents)
+
+zeroPad2 :: String -> String
+zeroPad2 [  ] = ['0', '0']
+zeroPad2 [ch] = ['0',  ch]
+zeroPad2  cs  = cs
 
 commaSeparate :: Int -> String
 commaSeparate =
