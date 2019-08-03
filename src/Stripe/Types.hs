@@ -165,9 +165,9 @@ data PaginationOpts = PaginationOpts
 instance ToHttpApiData PaginationLimit where
   toUrlPiece (By' num) = T.pack . show $ num
 instance ToHttpApiData PaginationStartingAfter where
-  toUrlPiece (StartingAfter' (ResourceId id')) = T.pack . show $ id'
+  toUrlPiece (StartingAfter' (ResourceId id')) = id'
 instance ToHttpApiData PaginationEndingBefore where
-  toUrlPiece (EndingBefore' (ResourceId id')) = T.pack . show $ id'
+  toUrlPiece (EndingBefore' (ResourceId id')) = id'
 
 
 
