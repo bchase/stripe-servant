@@ -13,14 +13,16 @@ import           Stripe.Util  (fromJsonString)
 
 
 
-newtype AccountId      = AccountId      { unAccountId      :: T.Text } deriving ( Eq, Show, Generic )
-newtype BankAccountId  = BankAccountId  { unBankAccountId  :: T.Text } deriving ( Eq, Show, Generic )
-newtype CardId         = CardId         { unCardId         :: T.Text } deriving ( Eq, Show, Generic )
-newtype ChargeId       = ChargeId       { unChargeId       :: T.Text } deriving ( Eq, Show, Generic )
-newtype CustomerId     = CustomerId     { unCustomerId     :: T.Text } deriving ( Eq, Show, Generic )
-newtype InvoiceId      = InvoiceId      { unInvoiceId      :: T.Text } deriving ( Eq, Show, Generic )
-newtype PlanId         = PlanId         { unPlanId         :: T.Text } deriving ( Eq, Show, Generic )
-newtype SubscriptionId = SubscriptionId { unSubscriptionId :: T.Text } deriving ( Eq, Show, Generic )
+newtype AccountId          = AccountId          { unAccountId          :: T.Text } deriving ( Eq, Show, Generic )
+newtype BankAccountId      = BankAccountId      { unBankAccountId      :: T.Text } deriving ( Eq, Show, Generic )
+newtype CardId             = CardId             { unCardId             :: T.Text } deriving ( Eq, Show, Generic )
+newtype ChargeId           = ChargeId           { unChargeId           :: T.Text } deriving ( Eq, Show, Generic )
+newtype CouponId           = CouponId           { unCouponId           :: T.Text } deriving ( Eq, Show, Generic )
+newtype CustomerId         = CustomerId         { unCustomerId         :: T.Text } deriving ( Eq, Show, Generic )
+newtype InvoiceId          = InvoiceId          { unInvoiceId          :: T.Text } deriving ( Eq, Show, Generic )
+newtype PlanId             = PlanId             { unPlanId             :: T.Text } deriving ( Eq, Show, Generic )
+newtype SubscriptionId     = SubscriptionId     { unSubscriptionId     :: T.Text } deriving ( Eq, Show, Generic )
+newtype SubscriptionItemId = SubscriptionItemId { unSubscriptionItemId :: T.Text } deriving ( Eq, Show, Generic )
 
 
 
@@ -36,12 +38,16 @@ instance J.FromJSON ChargeId where
   parseJSON = fromJsonString ChargeId
 instance J.FromJSON CustomerId where
   parseJSON = fromJsonString CustomerId
+instance J.FromJSON CouponId where
+  parseJSON = fromJsonString CouponId
 instance J.FromJSON InvoiceId where
   parseJSON = fromJsonString InvoiceId
 instance J.FromJSON PlanId where
   parseJSON = fromJsonString PlanId
 instance J.FromJSON SubscriptionId where
   parseJSON = fromJsonString SubscriptionId
+instance J.FromJSON SubscriptionItemId where
+  parseJSON = fromJsonString SubscriptionItemId
 instance J.FromJSON Token where
   parseJSON = fromJsonString Token
 
@@ -53,6 +59,8 @@ instance ToHttpApiData CardId where
   toQueryParam = unCardId
 instance ToHttpApiData ChargeId where
   toQueryParam = unChargeId
+instance ToHttpApiData CouponId where
+  toQueryParam = unCouponId
 instance ToHttpApiData CustomerId where
   toQueryParam = unCustomerId
 instance ToHttpApiData InvoiceId where
@@ -61,6 +69,8 @@ instance ToHttpApiData PlanId where
   toQueryParam = unPlanId
 instance ToHttpApiData SubscriptionId where
   toQueryParam = unSubscriptionId
+instance ToHttpApiData SubscriptionItemId where
+  toQueryParam = unSubscriptionItemId
 
 
 

@@ -7,7 +7,7 @@ module Stripe.API.Request.Subscription
   ( SubscriptionCreateReq (..)
   , subscriptionCreateReq
 
-  , SubscriptionItem
+  , SubscriptionItemCreateReq
   , subItem
   , subItem'
   ) where
@@ -24,16 +24,16 @@ import qualified Web.Internal.FormUrlEncoded as F
 
 
 
-data SubscriptionItem = SubscriptionItem
-  { subscriptionItemPlan     :: PlanId
-  , subscriptionItemQuantity :: Int -- NOTE: required, ie >0
+data SubscriptionItemCreateReq = SubscriptionItemCreateReq
+  { subscriptionItemCreatePlan     :: PlanId
+  , subscriptionItemCreateQuantity :: Int -- NOTE: required, ie >0
   } deriving ( Show, Generic )
 
 data SubscriptionCreateReq = SubscriptionCreateReq
   { subscriptionCreateCustomer               :: CustomerId
-  , subscriptionCreateItems                  :: [SubscriptionItem] -- NOTE: required (non-empty)
-  , subscriptionCreateApplicationFreePercent :: Maybe Float        -- NOTE: 0-100%, to 2 decimal places
-  , subscriptionCreateTaxPercent             :: Maybe Float        -- NOTE: 0-100%, to 4 decimal places
+  , subscriptionCreateItems                  :: [SubscriptionItemCreateReq] -- NOTE: required (non-empty)
+  , subscriptionCreateApplicationFreePercent :: Maybe Float                 -- NOTE: 0-100%, to 2 decimal places
+  , subscriptionCreateTaxPercent             :: Maybe Float                 -- NOTE: 0-100%, to 4 decimal places
   , subscriptionCreateTrialEnd               :: Maybe Time
   , subscriptionCreateTrialPeriodDays        :: Maybe Int
   , subscriptionCreateCoupon                 :: Maybe String
@@ -44,13 +44,13 @@ data SubscriptionCreateReq = SubscriptionCreateReq
 
 ---- HELPERS ----
 
-subItem :: PlanId -> SubscriptionItem
+subItem :: PlanId -> SubscriptionItemCreateReq
 subItem plan = subItem' plan 1
 
-subItem' :: PlanId -> Int -> SubscriptionItem
-subItem' = SubscriptionItem
+subItem' :: PlanId -> Int -> SubscriptionItemCreateReq
+subItem' = SubscriptionItemCreateReq
 
-subscriptionCreateReq :: CustomerId -> [SubscriptionItem] -> SubscriptionCreateReq
+subscriptionCreateReq :: CustomerId -> [SubscriptionItemCreateReq] -> SubscriptionCreateReq
 subscriptionCreateReq cust items = SubscriptionCreateReq
   { subscriptionCreateCustomer               = cust
   , subscriptionCreateItems                  = items
@@ -73,9 +73,9 @@ instance F.ToForm SubscriptionCreateReq where
       . addItemsToForm    subscriptionCreateItems
       $ toForm' req
 
-instance S.ToHttpApiData SubscriptionItem where
+instance S.ToHttpApiData SubscriptionItemCreateReq where
   toQueryParam _ = "" -- TODO ... handling via `addItemsToForm`
-addItemsToForm :: [SubscriptionItem] -> F.Form -> F.Form
+addItemsToForm :: [SubscriptionItemCreateReq] -> F.Form -> F.Form
 addItemsToForm items form = F.Form . HM.union items' $ orig
   where
     orig = HM.delete "items" . F.unForm $ form
@@ -83,9 +83,9 @@ addItemsToForm items form = F.Form . HM.union items' $ orig
     items' :: HM.HashMap T.Text [T.Text]
     items' = HM.fromList . concat . map conv . zip [0..] $ items
 
-    conv :: (Int, SubscriptionItem) -> [(T.Text, [T.Text])]
-    conv (idx, SubscriptionItem{..}) =
+    conv :: (Int, SubscriptionItemCreateReq) -> [(T.Text, [T.Text])]
+    conv (idx, SubscriptionItemCreateReq{..}) =
       let idx' = T.pack $ show idx
-       in [ (T.concat ["items[", idx', "][plan]"],      [unPlanId subscriptionItemPlan])
-          , (T.concat ["items[", idx', "][quantity]"],  [T.pack $ show subscriptionItemQuantity])
+       in [ (T.concat ["items[", idx', "][plan]"],      [unPlanId subscriptionItemCreatePlan])
+          , (T.concat ["items[", idx', "][quantity]"],  [T.pack $ show subscriptionItemCreateQuantity])
           ]

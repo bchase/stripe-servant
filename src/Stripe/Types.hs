@@ -25,10 +25,12 @@ import           Servant.API
 import           Web.Internal.FormUrlEncoded (unForm)
 import qualified Web.Internal.FormUrlEncoded as F
 
+import           Stripe.Util        (deriveFromJSON')
 import           Stripe.Error
 import           Stripe.Util        (fromJsonString)
 import           Stripe.Data.Id     (AccountId (..), BankAccountId (..), CardId (..),
-                                     CustomerId (..), Token (..))
+                                     CustomerId (..), CouponId (..), SubscriptionId (..),
+                                     Token (..))
 
 
 
@@ -280,3 +282,68 @@ commaSeparate =
     groupsOf :: Int -> [a] -> [[a]]
     groupsOf _ [] = []
     groupsOf n xs = take n xs : groupsOf n (drop n xs)
+
+
+
+---- SUBSCRIPTIONS ----
+
+data SubscriptionStatus
+  = Trialing
+  | Active
+  | PastDue
+  | Canceled
+  | Unpaid
+  deriving ( Show, Generic )
+
+instance J.FromJSON SubscriptionStatus where
+  parseJSON (J.String "trialing") = return Trialing
+  parseJSON (J.String "active")   = return Active
+  parseJSON (J.String "past_due") = return PastDue
+  parseJSON (J.String "canceled") = return Canceled
+  parseJSON (J.String "unpaid")   = return Unpaid
+  parseJSON _                     = mempty
+
+
+---- COUPONS & DISCOUNTS ---
+
+data CouponDuration
+  = Forever
+  | Once
+  | Repeating
+  deriving ( Show, Generic )
+
+instance J.FromJSON CouponDuration where
+  parseJSON (J.String "forever")   = return Forever
+  parseJSON (J.String "once")      = return Once
+  parseJSON (J.String "repeating") = return Repeating
+  parseJSON _                      = mempty
+
+data Coupon = Coupon
+  { couponId               :: CouponId
+  , couponAmountOff        :: Int -- NOTE: positive
+  , couponPercentOff       :: Int -- NOTE: positive
+  , couponCurrency         :: CurrencyCode
+  , couponValid            :: Bool
+
+  , couponCreated          :: Time
+  , couponRedeemBy         :: Time
+  , couponDuration         :: CouponDuration
+  , couponDurationInMonths :: Maybe Int -- NOTE: positive -- "Number of months the coupon applies. Null if coupon duration is `forever` or `once`."
+
+  , couponMaxRedemptions   :: Int -- NOTE: positive
+  , couponTimeRedeemed     :: Int -- NOTE: non-negative
+  , couponLivemode         :: Bool
+  , couponMetadata         :: Metadata
+  } deriving ( Show, Generic )
+$(deriveFromJSON' ''Coupon)
+
+data Discount = Discount
+  { discountCustomer     :: CustomerId
+  , discountCoupon       :: Coupon
+  , discountStart        :: Time
+  , discountEnd          :: Time
+  , discountSubscription :: SubscriptionId
+  } deriving ( Show, Generic )
+$(deriveFromJSON' ''Discount)
+
+
