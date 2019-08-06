@@ -12,11 +12,13 @@ module Stripe
   , module Stripe.Data.Charge
   , module Stripe.Data.Customer
   , module Stripe.Data.Plan
+  , module Stripe.Data.Subscription
   , module Stripe.API.Request.BankAccount
   , module Stripe.API.Request.Card
   , module Stripe.API.Request.Charge
   , module Stripe.API.Request.Customer
   , module Stripe.API.Request.Plan
+  , module Stripe.API.Request.Subscription
   ) where
 
 import           Stripe.Types
@@ -29,6 +31,7 @@ import           Stripe.Data.Card
 import           Stripe.Data.Charge
 import           Stripe.Data.Customer
 import           Stripe.Data.Plan
+import           Stripe.Data.Subscription
 import           Stripe.API
 import           Stripe.API.HTTP
 import           Stripe.API.Request.BankAccount
@@ -36,6 +39,7 @@ import           Stripe.API.Request.Card
 import           Stripe.API.Request.Charge
 import           Stripe.API.Request.Customer
 import           Stripe.API.Request.Plan
+import           Stripe.API.Request.Subscription
 import           Stripe.Unsafe.BankAccountToken (BankAccountToken (BankAccountToken))
 
 

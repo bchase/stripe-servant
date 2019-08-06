@@ -29,12 +29,14 @@ library
                      , Stripe.API.Request.Charge
                      , Stripe.API.Request.Customer
                      , Stripe.API.Request.Plan
+                     , Stripe.API.Request.Subscription
                      , Stripe.Data.BankAccount
                      , Stripe.Data.Card
                      , Stripe.Data.Charge
                      , Stripe.Data.Customer
                      , Stripe.Data.Id
                      , Stripe.Data.Plan
+                     , Stripe.Data.Subscription
                      , Stripe.Unsafe.BankAccountToken
 
   build-depends:       base >= 4.7 && < 5

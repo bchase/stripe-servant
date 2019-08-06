@@ -18,11 +18,13 @@ import           Stripe.Data.Card
 import           Stripe.Data.Charge
 import           Stripe.Data.Customer
 import           Stripe.Data.Plan
+import           Stripe.Data.Subscription
 import           Stripe.API.Request.BankAccount
 import           Stripe.API.Request.Card
 import           Stripe.API.Request.Charge
 import           Stripe.API.Request.Customer
 import           Stripe.API.Request.Plan
+import           Stripe.API.Request.Subscription
 import           Stripe.API.HTTP (Id, Body, GetL, Get', Post', Delete',
                                   Create, Read, Update, Destroy, List)
 
@@ -64,6 +66,13 @@ type PlanAPI
   :<|> PlanDestroy
   :<|> PlanList
 
+type SubscriptionAPI
+     = SubscriptionCreate
+  -- :<|> SubscriptionRead
+  -- :<|> SubscriptionUpdate
+  -- :<|> SubscriptionDestroy
+  -- :<|> SubscriptionList
+
 
 type ChargeCreate  = "v1" :> "charges" :> Body ChargeCreateReq :> Post' Charge
 type ChargeRead    = "v1" :> "charges" :> Id ChargeId :> Get' Charge
@@ -95,6 +104,12 @@ type PlanRead    = "v1" :> "plans" :> Id PlanId :> Get' Plan
 type PlanUpdate  = "v1" :> "plans" :> Id PlanId :> Body PlanUpdateReq :> Post' Plan
 type PlanDestroy = "v1" :> "plans" :> Id PlanId :> Delete' PlanId
 type PlanList    = "v1" :> "plans" :> GetL [Plan]
+
+type SubscriptionCreate  = "v1" :> "subscriptions"                      :> Body SubscriptionCreateReq :> Post'   Subscription
+-- type SubscriptionRead    = "v1" :> "subscriptions" :> Id SubscriptionId                               :> Get'    Subscription
+-- type SubscriptionUpdate  = "v1" :> "subscriptions" :> Id SubscriptionId :> Body SubscriptionUpdateReq :> Post'   Subscription
+-- type SubscriptionDestroy = "v1" :> "subscriptions" :> Id SubscriptionId                               :> Delete' SubscriptionId
+-- type SubscriptionList    = "v1" :> "subscriptions"                                                    :> GetL   [Subscription]
 
 
 
@@ -140,3 +155,12 @@ listCharges   ::             List                            [Charge]
 captureCharge :: ChargeId -> Create ChargeCaptureReq          Charge
 createCharge :<|> readCharge :<|> updateCharge :<|> listCharges :<|> captureCharge =
   client (Proxy :: Proxy ChargeAPI)
+
+createSubscription  :: Create                 SubscriptionCreateReq  Subscription
+-- readSubscription    :: Read    SubscriptionId                        Subscription
+-- updateSubscription  :: Update  SubscriptionId SubscriptionUpdateReq  Subscription
+-- destroySubscription :: Destroy SubscriptionId
+-- listSubscriptions   :: List                                         [Subscription]
+-- createSubscription :<|> readSubscription :<|> updateSubscription :<|> listSubscriptions :<|> captureSubscription =
+createSubscription =
+  client (Proxy :: Proxy SubscriptionAPI)

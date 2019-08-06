@@ -13,13 +13,14 @@ import           Stripe.Util  (fromJsonString)
 
 
 
-newtype AccountId     = AccountId     { unAccountId     :: T.Text } deriving ( Eq, Show, Generic )
-newtype BankAccountId = BankAccountId { unBankAccountId :: T.Text } deriving ( Eq, Show, Generic )
-newtype CardId        = CardId        { unCardId        :: T.Text } deriving ( Eq, Show, Generic )
-newtype ChargeId      = ChargeId      { unChargeId      :: T.Text } deriving ( Eq, Show, Generic )
-newtype CustomerId    = CustomerId    { unCustomerId    :: T.Text } deriving ( Eq, Show, Generic )
-newtype InvoiceId     = InvoiceId     { unInvoiceId     :: T.Text } deriving ( Eq, Show, Generic )
-newtype PlanId        = PlanId        { unPlanId        :: T.Text } deriving ( Eq, Show, Generic )
+newtype AccountId      = AccountId      { unAccountId      :: T.Text } deriving ( Eq, Show, Generic )
+newtype BankAccountId  = BankAccountId  { unBankAccountId  :: T.Text } deriving ( Eq, Show, Generic )
+newtype CardId         = CardId         { unCardId         :: T.Text } deriving ( Eq, Show, Generic )
+newtype ChargeId       = ChargeId       { unChargeId       :: T.Text } deriving ( Eq, Show, Generic )
+newtype CustomerId     = CustomerId     { unCustomerId     :: T.Text } deriving ( Eq, Show, Generic )
+newtype InvoiceId      = InvoiceId      { unInvoiceId      :: T.Text } deriving ( Eq, Show, Generic )
+newtype PlanId         = PlanId         { unPlanId         :: T.Text } deriving ( Eq, Show, Generic )
+newtype SubscriptionId = SubscriptionId { unSubscriptionId :: T.Text } deriving ( Eq, Show, Generic )
 
 
 
@@ -39,6 +40,8 @@ instance J.FromJSON InvoiceId where
   parseJSON = fromJsonString InvoiceId
 instance J.FromJSON PlanId where
   parseJSON = fromJsonString PlanId
+instance J.FromJSON SubscriptionId where
+  parseJSON = fromJsonString SubscriptionId
 instance J.FromJSON Token where
   parseJSON = fromJsonString Token
 
@@ -56,6 +59,8 @@ instance ToHttpApiData InvoiceId where
   toQueryParam = unInvoiceId
 instance ToHttpApiData PlanId where
   toQueryParam = unPlanId
+instance ToHttpApiData SubscriptionId where
+  toQueryParam = unSubscriptionId
 
 
 
