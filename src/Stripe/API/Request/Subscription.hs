@@ -15,7 +15,7 @@ module Stripe.API.Request.Subscription
 import Data.Aeson.Casing (snakeCase)
 import GHC.Generics (Generic)
 import Stripe.Data.Id (PlanId (unPlanId), CustomerId)
-import Stripe.Types (Metadata, addMetadataToForm)
+import Stripe.Types (Time, Metadata, addMetadataToForm)
 
 import qualified Data.HashMap.Strict as HM
 import qualified Data.Text as T
@@ -30,9 +30,14 @@ data SubscriptionItem = SubscriptionItem
   } deriving ( Show, Generic )
 
 data SubscriptionCreateReq = SubscriptionCreateReq
-  { subscriptionCreateCustomer :: CustomerId
-  , subscriptionCreateItems    :: [SubscriptionItem] -- NOTE: required (non-empty)
-  , subscriptionCreateMetadata :: Maybe Metadata
+  { subscriptionCreateCustomer               :: CustomerId
+  , subscriptionCreateItems                  :: [SubscriptionItem] -- NOTE: required (non-empty)
+  , subscriptionCreateApplicationFreePercent :: Maybe Float        -- NOTE: 0-100%, to 2 decimal places
+  , subscriptionCreateTaxPercent             :: Maybe Float        -- NOTE: 0-100%, to 4 decimal places
+  , subscriptionCreateTrialEnd               :: Maybe Time
+  , subscriptionCreateTrialPeriodDays        :: Maybe Int
+  , subscriptionCreateCoupon                 :: Maybe String
+  , subscriptionCreateMetadata               :: Maybe Metadata
   } deriving ( Show, Generic )
 
 
@@ -47,9 +52,14 @@ subItem' = SubscriptionItem
 
 subscriptionCreateReq :: CustomerId -> [SubscriptionItem] -> SubscriptionCreateReq
 subscriptionCreateReq cust items = SubscriptionCreateReq
-  { subscriptionCreateCustomer = cust
-  , subscriptionCreateItems    = items
-  , subscriptionCreateMetadata = Nothing
+  { subscriptionCreateCustomer               = cust
+  , subscriptionCreateItems                  = items
+  , subscriptionCreateApplicationFreePercent = Nothing
+  , subscriptionCreateTaxPercent             = Nothing
+  , subscriptionCreateTrialEnd               = Nothing
+  , subscriptionCreateTrialPeriodDays        = Nothing
+  , subscriptionCreateCoupon                 = Nothing
+  , subscriptionCreateMetadata               = Nothing
   }
 
 

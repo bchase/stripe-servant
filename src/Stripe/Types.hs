@@ -100,6 +100,13 @@ data Time = Time
   , timeUTC   :: Time.UTCTime
   } deriving ( Eq, Show, Generic )
 
+time :: Time.UTCTime -> Time
+time t = Time s t
+  where s = floor $ Time.utcTimeToPOSIXSeconds t
+
+instance ToHttpApiData Time where
+  toQueryParam = T.pack . show . timePOSIX
+
 instance J.FromJSON Time where
   parseJSON (J.Number sci) =
     return $ Time (int sci) (Time.posixSecondsToUTCTime . int $ sci)
