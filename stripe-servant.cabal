@@ -30,6 +30,7 @@ library
                      , Stripe.API.Request.Customer
                      , Stripe.API.Request.Plan
                      , Stripe.API.Request.Subscription
+                     , Stripe.API.Request.SubscriptionItem
                      , Stripe.Data.BankAccount
                      , Stripe.Data.Card
                      , Stripe.Data.Charge

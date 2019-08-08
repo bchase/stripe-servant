@@ -19,6 +19,7 @@ module Stripe
   , module Stripe.API.Request.Customer
   , module Stripe.API.Request.Plan
   , module Stripe.API.Request.Subscription
+  , module Stripe.API.Request.SubscriptionItem
   ) where
 
 import           Stripe.Types
@@ -40,6 +41,7 @@ import           Stripe.API.Request.Charge
 import           Stripe.API.Request.Customer
 import           Stripe.API.Request.Plan
 import           Stripe.API.Request.Subscription
+import           Stripe.API.Request.SubscriptionItem
 import           Stripe.Unsafe.BankAccountToken (BankAccountToken (BankAccountToken))
 
 
