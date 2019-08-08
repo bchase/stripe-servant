@@ -24,7 +24,11 @@ createCustomerAndSubscribeToPlan = do
   subs   <- stripe WithoutConnect . paginate [] $ listSubscriptions
   _      <- stripe WithoutConnect . destroySubscription $ subscriptionId sub
   subs'  <- stripe WithoutConnect . paginate [] $ listSubscriptions
-  subs'' <- stripe WithoutConnect . paginate [] $ listSubscriptions' (subscriptionListReq { subscriptionListCustomer = Just $ customerId cust' })
+
+
+  let t = Time 1565259120 undefined
+      f = TimeFilterGT (GTE t)
+  subs'' <- stripe WithoutConnect . paginate [] $ listSubscriptions' (subscriptionListReq { subscriptionListCustomer = Just $ customerId cust', subscriptionListCreated = Just f })
 
   let id' = subscriptionId sub
       b1  = id' == subscriptionId sub'

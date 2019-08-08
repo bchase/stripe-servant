@@ -17,10 +17,13 @@ module Stripe.API.Request.Subscription
   ) where
 
 import Data.Aeson.Casing (snakeCase)
+import Data.Text (Text)
+import Data.Maybe (fromMaybe)
 import GHC.Generics (Generic)
 import Stripe.Data.Id (SubscriptionId, PlanId (unPlanId), CustomerId)
 import Stripe.Types (Time, Metadata, addMetadataToForm,
-                     SubscriptionStatus (..))
+                     SubscriptionStatus (..),
+                     TimeFilter, timeFilterToFormFields)
 
 import qualified Data.HashMap.Strict as HM
 import qualified Data.Text as T
@@ -52,7 +55,7 @@ data SubscriptionListReq = SubscriptionListReq
   , subscriptionListStatus        :: Maybe SubscriptionStatus
   , subscriptionListPlan          :: Maybe PlanId
   , subscriptionListCustomer      :: Maybe CustomerId
-  -- , subscriptionListCreated       :: Maybe TimeFilter -- TODO started below
+  , subscriptionListCreated       :: Maybe TimeFilter -- TODO `TimeFilter` mostly untested
   } deriving ( Show, Generic )
 
 
@@ -85,11 +88,19 @@ subscriptionListReq = SubscriptionListReq
   , subscriptionListStatus        = Nothing
   , subscriptionListPlan          = Nothing
   , subscriptionListCustomer      = Nothing
+  , subscriptionListCreated       = Nothing
   }
 
 
 
 ---- INSTANCES ----
+
+-- TODO use elsewhere e.g. `addItemsToForm`, `addMetadataToForm`
+addToForm :: Text -> [(Text, [Text])] -> F.Form -> F.Form
+addToForm key fs form = F.Form . HM.union hm' $ hm
+  where
+    hm  = HM.delete key . F.unForm $ form
+    hm' = HM.fromList fs
 
 instance S.ToHttpApiData SubscriptionItemCreateReq where
   toQueryParam _ = "" -- TODO ... handling via `addItemsToForm`
@@ -117,41 +128,9 @@ instance F.ToForm SubscriptionCreateReq where
       $ toForm' req
 
 instance F.ToForm SubscriptionListReq where
-  toForm = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 16 }
-
-
-
-
-
--- TODO
--- data TimeFilter
---   = TimeFilterAt    Time
---   | TimeFilterGT    (GTFilter Time)
---   | TimeFilterLT    (LTFilter Time)
---   | TimeFilterRange (GTFilter Time) (LTFilter Time)
---   deriving ( Show, Generic )
---
--- data GTFilter a
---   = GT  a
---   | GTE a
---   deriving ( Show, Generic )
---
--- data LTFilter a
---   = LT  a
---   | LTE a
---   deriving ( Show, Generic )
---
---
--- A filter on the list based on the object created field.
--- The value can be a string with an integer Unix timestamp, or it can be a dictionary with the following options:
---   gt optional
---   Return values where the created field is after this timestamp.
---
---   gte optional
---   Return values where the created field is after or equal to this timestamp.
---
---   lt optional
---   Return values where the created field is before this timestamp.
---
---   lte optional
---   Return values where the created field is before or equal to this timestamp.
+  toForm req@SubscriptionListReq{subscriptionListCreated} =
+    let toForm' = F.genericToForm $ F.defaultFormOptions { F.fieldLabelModifier = snakeCase . drop 16 }
+        key = "created"
+        fs  = fromMaybe [] $ timeFilterToFormFields key <$> subscriptionListCreated
+     in addToForm key fs
+      $ toForm' req

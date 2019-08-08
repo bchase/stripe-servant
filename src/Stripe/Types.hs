@@ -9,6 +9,7 @@
 
 module Stripe.Types where
 
+import           Data.Text             (Text)
 import qualified Data.Text             as T
 import           Data.Char             (toLower)
 import           Data.List             (intercalate)
@@ -353,3 +354,43 @@ data Discount = Discount
   , discountSubscription :: SubscriptionId
   } deriving ( Show, Generic )
 $(deriveFromJSON' ''Discount)
+
+
+
+---- TIME FILTERING ----
+
+data TimeFilter
+  = TimeFilterAt    Time
+  | TimeFilterGT    (GTFilter Time)
+  | TimeFilterLT    (LTFilter Time)
+  | TimeFilterRange (GTFilter Time) (LTFilter Time)
+  deriving ( Show, Generic )
+
+data GTFilter a
+  = GT' a
+  | GTE a
+  deriving ( Show, Generic )
+
+data LTFilter a
+  = LT' a
+  | LTE a
+  deriving ( Show, Generic )
+
+
+instance ToHttpApiData TimeFilter where
+  toQueryParam _ = "" -- TODO ... handling via `timeFilterToFormFields` + `addToForm`
+timeFilterToFormFields :: Text -> TimeFilter -> [(Text, [Text])]
+timeFilterToFormFields key (TimeFilterAt    t    ) = [(key, [toQueryParam t])]
+timeFilterToFormFields key (TimeFilterGT    gt   ) = let (k,v) = gt' gt in [(T.concat [key, "[", k, "]"], [toQueryParam v])]
+timeFilterToFormFields key (TimeFilterLT    lt   ) = let (k,v) = lt' lt in [(T.concat [key, "[", k, "]"], [toQueryParam v])]
+timeFilterToFormFields key (TimeFilterRange gt lt) =
+  let f1 = let (k1,v1) = gt' gt in (T.concat [key, "[", k1, "]"], [toQueryParam v1])
+      f2 = let (k2,v2) = lt' lt in (T.concat [key, "[", k2, "]"], [toQueryParam v2])
+   in [ f1, f2 ]
+
+gt' :: GTFilter Time -> (Text, Time)
+gt' (GT' t) = ("gt",  t)
+gt' (GTE t) = ("gte", t)
+lt' :: LTFilter Time -> (Text, Time)
+lt' (LT' t) = ("lt",  t)
+lt' (LTE t) = ("lte", t)
