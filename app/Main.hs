@@ -3,7 +3,6 @@
 
 module Main where
 
-import Control.Monad.IO.Class (liftIO)
 import System.Environment     (getEnv)
 
 import qualified Data.Text as T
@@ -11,22 +10,31 @@ import qualified Data.Text as T
 import Stripe
 
 
-createCustomerAndSubscribeToPlan :: Stripe (Customer, Plan, Subscription)
+createCustomerAndSubscribeToPlan :: Stripe (Customer, Plan, Subscription, (Bool, Bool, Bool, Bool, Int))
 createCustomerAndSubscribeToPlan = do
   cust  <- stripe WithoutConnect . createCustomer $ custReq
-  -- _     <- stripe WithoutConnect . createPlan $ planReq
+  cust' <- stripe WithoutConnect . createCustomer $ custReq
+
   plans <- stripe WithoutConnect . paginate [ By 10 ] $ listPlans
 
-  let plan@Plan{planId} = head plans -- TODO !!!
-  liftIO $ print plan
+  let (plan1:_) = plans
 
-  sub <- stripe WithoutConnect . createSubscription $ subReq cust planId
+  sub    <- stripe WithoutConnect . createSubscription . subReq cust $ planId plan1
+  sub'   <- stripe WithoutConnect . readSubscription $ subscriptionId sub
+  subs   <- stripe WithoutConnect . paginate [] $ listSubscriptions
+  _      <- stripe WithoutConnect . destroySubscription $ subscriptionId sub
+  subs'  <- stripe WithoutConnect . paginate [] $ listSubscriptions
+  subs'' <- stripe WithoutConnect . paginate [] $ listSubscriptions' (subscriptionListReq { subscriptionListCustomer = Just $ customerId cust' })
 
-  return (cust, plan, sub)
+  let id' = subscriptionId sub
+      b1  = id' == subscriptionId sub'
+      b2  = any (== id') . map subscriptionId $ subs
+      b3  = all (/= id') . map subscriptionId $ subs'
+      b4  = all (/= customerId cust) . map (subscriptionCustomer) $ subs''
+
+  return (cust, plan1, sub, (b1, b2, b3, b4, length subs''))
 
   where
-    -- planReq = planCreateReq (PlanId "test") "test" (Price USD 1000) Month
-
     custReq = (customerCreateReq (Token "tok_visa")) { customerCreateEmail = Just "test@example.com" }
 
     subReq Customer{customerId} plan = subscriptionCreateReq customerId $
@@ -47,7 +55,7 @@ main = do
     Left  (StripeErrorResponse   err  ) -> putStrLn "Stripe Error:"     >> print err
     Left  (StripeDecodeFailure   err _) -> putStrLn "Decode Failure:"   >> print err
     Left  (StripeConnectionError err  ) -> putStrLn "Connection Error:" >> print err
-    Right (_, _, sub)                   -> print sub
+    Right (_, _, sub, results)          -> print (sub, results)
 
 
 -- createAndChargeAndDeleteCustomer :: Stripe (Customer, Charge, [Charge], Bool)

@@ -67,10 +67,11 @@ type PaginationQP a =
   :> QueryParam "ending_before"  PaginationEndingBefore
   :> a
 
-type GetL    a = PaginationQP (ReqHeaders (Get    '[JSON] (ListResp    a)))
-type Get'    a =               ReqHeaders (Get    '[JSON] (ScalarResp  a))
-type Post'   a =               ReqHeaders (Post   '[JSON] (ScalarResp  a))
-type Delete' a =               ReqHeaders (Delete '[JSON] (DestroyResp a))
+type GetL     a = PaginationQP (ReqHeaders (Get    '[JSON] (ListResp    a)))
+type Get'     a =               ReqHeaders (Get    '[JSON] (ScalarResp  a))
+type Post'    a =               ReqHeaders (Post   '[JSON] (ScalarResp  a))
+type Delete'  a =               ReqHeaders (Delete '[JSON] (DestroyResp a))
+type Delete'' a =               ReqHeaders (Delete '[JSON] (ScalarResp  a))
 
 
 
@@ -147,8 +148,11 @@ $(deriveFromJSON' ''DeleteJSON)
 
 ---- ACTIONS ----
 
-type List           resp =              PaginatedClient (ListResp    resp)
-type Create     req resp =       req -> Client          (ScalarResp  resp)
-type Update  id req resp = id -> req -> Client          (ScalarResp  resp)
-type Read    id     resp = id ->        Client          (ScalarResp  resp)
-type Destroy id          = id ->        Client          (DestroyResp   id)
+type List            resp =              PaginatedClient (ListResp    resp)
+type Create      req resp =       req -> Client          (ScalarResp  resp)
+type Update   id req resp = id -> req -> Client          (ScalarResp  resp)
+type Read     id     resp = id ->        Client          (ScalarResp  resp)
+type Destroy  id          = id ->        Client          (DestroyResp   id)
+
+type List'       req resp =       req -> PaginatedClient (ListResp    resp)
+type Destroy' id     resp = id ->        Client          (ScalarResp  resp)

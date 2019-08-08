@@ -303,6 +303,14 @@ instance J.FromJSON SubscriptionStatus where
   parseJSON (J.String "unpaid")   = return Unpaid
   parseJSON _                     = mempty
 
+instance ToHttpApiData SubscriptionStatus where
+  toQueryParam Trialing = "trialing"
+  toQueryParam Active   = "active"
+  toQueryParam PastDue  = "past_due"
+  toQueryParam Canceled = "canceled"
+  toQueryParam Unpaid   = "unpaid"
+
+
 
 ---- COUPONS & DISCOUNTS ---
 
@@ -345,5 +353,3 @@ data Discount = Discount
   , discountSubscription :: SubscriptionId
   } deriving ( Show, Generic )
 $(deriveFromJSON' ''Discount)
-
-
